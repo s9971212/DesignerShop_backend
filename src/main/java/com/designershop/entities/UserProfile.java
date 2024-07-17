@@ -3,11 +3,15 @@ package com.designershop.entities;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -131,5 +135,28 @@ public class UserProfile {
 			return false;
 		UserProfile other = (UserProfile) obj;
 		return Objects.equals(userId, other.userId);
+	}
+
+	@PrePersist
+	@PreUpdate
+	public void handleEmptyStrings() {
+		if (StringUtils.isBlank(this.userName)) {
+			this.userName = null;
+		}
+		if (StringUtils.isBlank(this.gender)) {
+			this.gender = null;
+		}
+		if (Objects.isNull(this.birthday)) {
+			this.birthday = null;
+		}
+		if (StringUtils.isBlank(this.idCardNo)) {
+			this.idCardNo = null;
+		}
+		if (StringUtils.isBlank(this.homeNo)) {
+			this.homeNo = null;
+		}
+		if (StringUtils.isBlank(this.userPhoto)) {
+			this.userPhoto = null;
+		}
 	}
 }
