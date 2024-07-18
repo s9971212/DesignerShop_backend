@@ -115,14 +115,9 @@ public class UserProfile {
 	@Column(name = "facebookid", length = 10)
 	private String facebookId;
 
-	public UserProfile(String userId, String userType) {
-		this.userId = userId;
-		this.userType = userType;
-	}
-
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId);
+		return Objects.hash(userId, account, email, phoneNo);
 	}
 
 	@Override
@@ -134,7 +129,8 @@ public class UserProfile {
 		if (getClass() != obj.getClass())
 			return false;
 		UserProfile other = (UserProfile) obj;
-		return Objects.equals(userId, other.userId);
+		return Objects.equals(userId, other.userId) && Objects.equals(account, other.account)
+				&& Objects.equals(email, other.email) && Objects.equals(phoneNo, other.phoneNo);
 	}
 
 	@PrePersist

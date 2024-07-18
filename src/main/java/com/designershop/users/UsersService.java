@@ -1,9 +1,8 @@
 package com.designershop.users;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,7 +11,9 @@ import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserProfileRepository;
-import com.designershop.users.models.RegisterRequestModel;
+import com.designershop.users.models.RegisterUserRequestModel;
+import com.designershop.users.models.UpdateRequestModel;
+import com.designershop.users.models.UpdateUserRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
 
@@ -24,7 +25,7 @@ public class UsersService {
 
 	private final UserProfileRepository userProfileRepository;
 
-	public String register(RegisterRequestModel request) throws UserException {
+	public String registerUser(RegisterUserRequestModel request) throws UserException {
 		String account = request.getAccount();
 		String password = request.getPassword();
 		String passwordCheck = request.getPasswordCheck();
@@ -49,6 +50,18 @@ public class UsersService {
 
 		if (!phoneNo.matches("^09\\d{8}$")) {
 			throw new UserException("手機格式錯誤");
+		}
+
+		List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email,
+				phoneNo);
+		for (UserProfile userProfile : userProfileList) {
+			if (StringUtils.equals(account, userProfile.getAccount())) {
+				throw new UserException("此帳號已被註冊，請使用別的帳號");
+			} else if (StringUtils.equals(email, userProfile.getEmail())) {
+				throw new UserException("此Email已被註冊，請使用別的Email");
+			} else if (StringUtils.equals(phoneNo, userProfile.getPhoneNo())) {
+				throw new UserException("此手機已被註冊，請使用別的手機");
+			}
 		}
 
 		UserProfile userProfile = userProfileRepository.findMaxUserId();
@@ -78,7 +91,28 @@ public class UsersService {
 		userProfileCreate.setModifyDate(DateTimeFormatUtil.currentDateTimeFormat());
 
 		userProfileRepository.save(userProfileCreate);
-		
+
 		return account;
+	}
+
+	public UpdateUserRequestModel update(UpdateRequestModel request) {
+		String userId = request.getUserId();
+		String account = request.getAccount();
+
+		UserProfile userProfile = userProfileRepository.findByUserIdAndAccount(userId, account);
+
+		UpdateUserRequestModel response = new UpdateUserRequestModel();
+		response.setUserId(userProfile.getUserId());
+		response.setAccount(userProfile.getAccount());
+		response.setEmail(userProfile.getEmail());
+		response.setPhoneNo(userProfile.getPhoneNo());
+		response.setUserName(userProfile.getUserName());
+		response.setGender(userProfile.getGender());
+		response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+		response.setIdCardNo(userProfile.getIdCardNo());
+		response.setHomeNo(userProfile.getHomeNo());
+		response.setUserPhoto(userProfile.getUserPhoto());
+
+		return response;
 	}
 }

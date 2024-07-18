@@ -31,13 +31,15 @@ CREATE TABLE userprofile (
     googleid NVARCHAR(10) NULL,
     facebookid NVARCHAR(10) NULL,
     PRIMARY KEY (userId),
-    UNIQUE (account, email, phoneNo)
+    UNIQUE (account),
+    UNIQUE (email),
+    UNIQUE (phoneNo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 插入假資料到userProfile表中
 INSERT INTO userprofile (userid, usertype, account, password, email, phoneno, username, gender, birthday, idcardno, homeno, userphoto, registerdate, pwdchangeddate, pwdexpiredate, signonstatus, signoncomputer, pwderrorcount, modifyuser, modifydate, islock, lockdate, unlockdate, hash, refreshhash, googleid, facebookid)
 SELECT 
-    CONCAT('T', LPAD(FLOOR(RAND()*1000), 3, '0')),
+    CONCAT('T', LPAD(FLOOR(RAND()*1000), 2, '0')),
     CASE FLOOR(RAND()*3)
         WHEN 0 THEN 'A'
         WHEN 1 THEN 'B'
@@ -71,5 +73,5 @@ SELECT
 FROM
     information_schema.tables AS t1,
     information_schema.tables AS t2
-LIMIT 10;
+LIMIT 3;
 

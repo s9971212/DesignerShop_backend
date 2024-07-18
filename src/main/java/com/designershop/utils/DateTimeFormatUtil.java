@@ -37,4 +37,8 @@ public final class DateTimeFormatUtil {
 		return Timestamp.valueOf(localDateTime);
 	}
 
+	public static String localDateTimeFormat(Timestamp timestamp) {
+		LocalDateTime localDateTime = timestamp.toLocalDateTime();
+		return localDateTime.format(FULL_DATE_DASH_TIME);
+	}
 }

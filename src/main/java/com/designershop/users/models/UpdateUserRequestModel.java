@@ -5,13 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterRequestModel {
+public class UpdateUserRequestModel {
+
+	private String userId;
 
 	private String account;
-
-	private String password;
-
-	private String passwordCheck;
 
 	private String email;
 
