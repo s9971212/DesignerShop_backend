@@ -21,4 +21,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
 
 	@Query(value = "SELECT * FROM userprofile WHERE userid =:userId AND account =:account", nativeQuery = true)
 	UserProfile findByUserIdAndAccount(@Param("userId") String userId, @Param("account") String account);
+
+	@Query(value = "SELECT * FROM userprofile WHERE userid =:userId", nativeQuery = true)
+	UserProfile findByUserId(@Param("userId") String userId);
 }

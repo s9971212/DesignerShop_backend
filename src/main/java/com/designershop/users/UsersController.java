@@ -28,8 +28,14 @@ public class UsersController {
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<UpdateUserRequestModel> update(@RequestBody UpdateRequestModel request) {
+	public ResponseEntity<UpdateUserRequestModel> update(@RequestBody UpdateRequestModel request) throws UserException {
 		UpdateUserRequestModel response = usersService.update(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	@PostMapping("/updateUser")
+	public ResponseEntity<String> updateUser(@RequestBody UpdateUserRequestModel request) throws UserException {
+		String account = usersService.updateUser(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 }

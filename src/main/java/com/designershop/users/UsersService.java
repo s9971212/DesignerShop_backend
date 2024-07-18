@@ -74,7 +74,7 @@ public class UsersService {
 
 		UserProfile userProfileCreate = new UserProfile();
 		userProfileCreate.setUserId(userId);
-		userProfileCreate.setUserType("A1");
+		userProfileCreate.setUserType("B1");
 		userProfileCreate.setAccount(account);
 		userProfileCreate.setPassword(encodePwd);
 		userProfileCreate.setEmail(email);
@@ -95,11 +95,15 @@ public class UsersService {
 		return account;
 	}
 
-	public UpdateUserRequestModel update(UpdateRequestModel request) {
+	public UpdateUserRequestModel update(UpdateRequestModel request) throws UserException {
 		String userId = request.getUserId();
 		String account = request.getAccount();
 
+		// TODO 之後改為從session取得修改前的account
 		UserProfile userProfile = userProfileRepository.findByUserIdAndAccount(userId, account);
+		if (Objects.isNull(userProfile)) {
+			throw new UserException("此帳戶不存在，請重新確認");
+		}
 
 		UpdateUserRequestModel response = new UpdateUserRequestModel();
 		response.setUserId(userProfile.getUserId());
@@ -114,5 +118,73 @@ public class UsersService {
 		response.setUserPhoto(userProfile.getUserPhoto());
 
 		return response;
+	}
+
+	public String updateUser(UpdateUserRequestModel request) throws UserException {
+		String userId = request.getUserId();
+		String account = request.getAccount();
+		String email = request.getEmail();
+		String phoneNo = request.getPhoneNo();
+		String userName = request.getUserName();
+		String gender = request.getGender();
+		String birthdayString = request.getBirthday();
+		String idCardNo = request.getIdCardNo();
+		String homeNo = request.getHomeNo();
+		String userPhoto = request.getUserPhoto();
+		String termsCheckBox = request.getTermsCheckBox();
+
+		if (StringUtils.isBlank(userId) || StringUtils.isBlank(account) || StringUtils.isBlank(email)
+				|| StringUtils.isBlank(phoneNo) || StringUtils.isBlank(termsCheckBox)) {
+			throw new EmptyException("帳號、Email、手機與條款確認不得為空");
+		}
+
+		if (!phoneNo.matches("^09\\d{8}$")) {
+			throw new UserException("手機格式錯誤");
+		}
+
+		List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email,
+				phoneNo);
+		for (UserProfile userProfile : userProfileList) {
+			if (StringUtils.equals(account, userProfile.getAccount())) {
+				throw new UserException("此帳號已被註冊，請使用別的帳號");
+			} else if (StringUtils.equals(email, userProfile.getEmail())) {
+				throw new UserException("此Email已被註冊，請使用別的Email");
+			} else if (StringUtils.equals(phoneNo, userProfile.getPhoneNo())) {
+				throw new UserException("此手機已被註冊，請使用別的手機");
+			}
+		}
+
+		// TODO 之後改為從session取得修改前的account(這裡暫時先只用userId查詢)
+		UserProfile userProfile = userProfileRepository.findByUserId(userId);
+		if (Objects.isNull(userProfile)) {
+			throw new UserException("此帳戶不存在，請重新確認");
+		}
+
+		Timestamp birthday = userProfile.getBirthday();
+		if (StringUtils.isNotBlank(birthdayString)) {
+			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
+		}
+
+		UserProfile userProfileUpdate = new UserProfile();
+		userProfileUpdate.setUserId(userProfile.getUserId());
+		userProfileUpdate.setUserType(userProfile.getUserType());
+		userProfileUpdate.setAccount(account);
+		userProfileUpdate.setPassword(userProfile.getPassword());
+		userProfileUpdate.setEmail(email);
+		userProfileUpdate.setPhoneNo(phoneNo);
+		userProfileUpdate.setUserName(userName);
+		userProfileUpdate.setGender(gender);
+		userProfileUpdate.setBirthday(birthday);
+		userProfileUpdate.setIdCardNo(idCardNo);
+		userProfileUpdate.setHomeNo(homeNo);
+		userProfileUpdate.setUserPhoto(userPhoto);
+		userProfileUpdate.setRegisterDate(userProfile.getRegisterDate());
+		userProfileUpdate.setPwdExpireDate(userProfile.getPwdExpireDate());
+		userProfileUpdate.setModifyUser(userProfile.getUserId());
+		userProfileUpdate.setModifyDate(DateTimeFormatUtil.currentDateTimeFormat());
+
+		userProfileRepository.save(userProfileUpdate);
+
+		return account;
 	}
 }
