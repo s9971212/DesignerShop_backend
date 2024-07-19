@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterUserRequestModel {
+public class CreateUserRequestModel {
 
 	private String account;
 

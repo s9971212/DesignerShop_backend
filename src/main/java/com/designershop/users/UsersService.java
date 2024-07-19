@@ -11,8 +11,8 @@ import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserProfileRepository;
-import com.designershop.users.models.RegisterUserRequestModel;
-import com.designershop.users.models.UpdateRequestModel;
+import com.designershop.users.models.CreateUserRequestModel;
+import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
@@ -25,7 +25,7 @@ public class UsersService {
 
 	private final UserProfileRepository userProfileRepository;
 
-	public String registerUser(RegisterUserRequestModel request) throws UserException {
+	public String createUser(CreateUserRequestModel request) throws UserException {
 		String account = request.getAccount();
 		String password = request.getPassword();
 		String passwordCheck = request.getPasswordCheck();
@@ -95,12 +95,10 @@ public class UsersService {
 		return account;
 	}
 
-	public UpdateUserRequestModel update(UpdateRequestModel request) throws UserException {
-		String userId = request.getUserId();
-		String account = request.getAccount();
+	public UpdateUserRequestModel readUser(String userId) throws UserException {
 
-		// TODO 之後改為從session取得修改前的account
-		UserProfile userProfile = userProfileRepository.findByUserIdAndAccount(userId, account);
+		// TODO 之後改為從session取得修改前的account(這裡暫時先只用userId查詢)
+		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
 		}
@@ -120,8 +118,7 @@ public class UsersService {
 		return response;
 	}
 
-	public String updateUser(UpdateUserRequestModel request) throws UserException {
-		String userId = request.getUserId();
+	public String updateUser(String userId, UpdateUserRequestModel request) throws UserException {
 		String account = request.getAccount();
 		String email = request.getEmail();
 		String phoneNo = request.getPhoneNo();
@@ -186,5 +183,74 @@ public class UsersService {
 		userProfileRepository.save(userProfileUpdate);
 
 		return account;
+	}
+
+	public String updatePassword(String userId, UpdatePasswordRequestModel request) throws UserException {
+		String oldPassword = request.getOldPassword();
+		String password = request.getPassword();
+		String passwordCheck = request.getPasswordCheck();
+
+		if (StringUtils.isBlank(userId) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(password)
+				|| StringUtils.isBlank(passwordCheck)) {
+			throw new EmptyException("舊密碼、密碼與密碼確認不得為空");
+		}
+
+		if (!StringUtils.equals(password, passwordCheck)) {
+			throw new UserException("密碼與密碼確認不一致");
+		}
+
+		// TODO 之後改為從session取得account(這裡暫時先只用userId查詢)
+		UserProfile userProfile = userProfileRepository.findByUserId(userId);
+		if (Objects.isNull(userProfile)) {
+			throw new UserException("此帳戶不存在，請重新確認");
+		}
+
+		BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+		if (!bcryptPasswordEncoder.matches(oldPassword, userProfile.getPassword())) {
+			throw new UserException("舊密碼錯誤，請重新確認");
+		}
+		if (bcryptPasswordEncoder.matches(password, userProfile.getPassword())) {
+			throw new UserException("舊密碼與新密碼一樣，請重新確認");
+		}
+
+		String encodePwd = bcryptPasswordEncoder.encode(password);
+
+		UserProfile userProfilePasswordUpdate = new UserProfile();
+		userProfilePasswordUpdate.setUserId(userProfile.getUserId());
+		userProfilePasswordUpdate.setUserType(userProfile.getUserType());
+		userProfilePasswordUpdate.setAccount(userProfile.getAccount());
+		userProfilePasswordUpdate.setPassword(encodePwd);
+		userProfilePasswordUpdate.setEmail(userProfile.getEmail());
+		userProfilePasswordUpdate.setPhoneNo(userProfile.getPhoneNo());
+		userProfilePasswordUpdate.setUserName(userProfile.getUserName());
+		userProfilePasswordUpdate.setGender(userProfile.getGender());
+		userProfilePasswordUpdate.setBirthday(userProfile.getBirthday());
+		userProfilePasswordUpdate.setIdCardNo(userProfile.getIdCardNo());
+		userProfilePasswordUpdate.setHomeNo(userProfile.getHomeNo());
+		userProfilePasswordUpdate.setUserPhoto(userProfile.getUserPhoto());
+		userProfilePasswordUpdate.setRegisterDate(userProfile.getRegisterDate());
+		userProfilePasswordUpdate.setPwdChangedDate(DateTimeFormatUtil.currentDateTimeFormat());
+		userProfilePasswordUpdate.setPwdExpireDate(DateTimeFormatUtil.pwdExpireDateTimeFormat());
+		userProfilePasswordUpdate.setModifyUser(userProfile.getUserId());
+		userProfilePasswordUpdate.setModifyDate(DateTimeFormatUtil.currentDateTimeFormat());
+
+		userProfileRepository.save(userProfilePasswordUpdate);
+
+		// TODO 之後改為從session取得account
+		return userProfile.getAccount();
+	}
+
+	public String deleteUser(String userId) throws UserException {
+
+		// TODO 之後改為從session取得修改前的account(這裡暫時先只用userId查詢)
+		UserProfile userProfile = userProfileRepository.findByUserId(userId);
+		if (Objects.isNull(userProfile)) {
+			throw new UserException("此帳戶不存在，請重新確認");
+		}
+
+		userProfileRepository.delete(userProfile);
+
+		// TODO 之後改為從session取得account
+		return userProfile.getAccount();
 	}
 }
