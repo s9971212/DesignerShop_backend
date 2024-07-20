@@ -23,15 +23,24 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "userprofile")
+@Table(name = "user_profile")
 public class UserProfile {
 
 	@Id
-	@Column(name = "userid", nullable = false, length = 10)
+	@Column(name = "user_id", nullable = false, length = 10)
 	private String userId;
 
-	@Column(name = "usertype", nullable = false, length = 2)
+	@Column(name = "user_type", nullable = false, length = 2)
 	private String userType;
+	
+	@Column(name = "seller_type", length = 2)
+	private String sellerType;
+	
+	@Column(name = "designer_type", length = 2)
+	private String designerType;
+	
+	@Column(name = "admin_type", length = 2)
+	private String adminType;
 
 	@Column(name = "account", nullable = false, length = 30)
 	private String account;
@@ -42,10 +51,10 @@ public class UserProfile {
 	@Column(name = "email", nullable = false, length = 30)
 	private String email;
 
-	@Column(name = "phoneno", nullable = false, length = 20)
+	@Column(name = "phone_no", nullable = false, length = 20)
 	private String phoneNo;
 
-	@Column(name = "username", length = 30)
+	@Column(name = "user_name", length = 30)
 	private String userName;
 
 	@Column(name = "gender", length = 10)
@@ -55,64 +64,64 @@ public class UserProfile {
 	@Column(name = "birthday")
 	private Timestamp birthday;
 
-	@Column(name = "idcardno", length = 10)
+	@Column(name = "id_card_no", length = 10)
 	private String idCardNo;
 
-	@Column(name = "homeno", length = 20)
+	@Column(name = "home_no", length = 20)
 	private String homeNo;
 
-	@Column(name = "userphoto", length = 10000)
+	@Column(name = "user_photo", length = 10000)
 	private String userPhoto;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	@Column(name = "registerdate", nullable = false)
+	@Column(name = "register_date", nullable = false)
 	private Timestamp registerDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	@Column(name = "pwdchangeddate")
+	@Column(name = "pwd_changed_date")
 	private Timestamp pwdChangedDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	@Column(name = "pwdexpiredate", nullable = false)
+	@Column(name = "pwd_expire_date", nullable = false)
 	private Timestamp pwdExpireDate;
 
-	@Column(name = "signonstatus", length = 1)
+	@Column(name = "sign_on_status", length = 1)
 	private String signOnStatus;
 
-	@Column(name = "signoncomputer", length = 32)
+	@Column(name = "sign_on_computer", length = 32)
 	private String signOnComputer;
 
-	@Column(name = "pwderrorcount", nullable = false)
+	@Column(name = "pwd_error_count", nullable = false)
 	private int pwdErrorCount = 0;
 
-	@Column(name = "modifyuser", length = 10)
+	@Column(name = "modify_user", length = 10)
 	private String modifyUser;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	@Column(name = "modifydate")
+	@Column(name = "modify_date")
 	private Timestamp modifyDate;
 
-	@Column(name = "islock", length = 1)
+	@Column(name = "is_lock", length = 1)
 	private String isLock;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	@Column(name = "lockdate")
+	@Column(name = "lock_date")
 	private Timestamp lockDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-	@Column(name = "unlockdate")
+	@Column(name = "unlock_date")
 	private Timestamp unlockDate;
 
 	@Column(name = "hash", length = 1024)
 	private String hash;
 
-	@Column(name = "refreshhash", length = 1024)
+	@Column(name = "refresh_hash", length = 1024)
 	private String refreshHash;
 
-	@Column(name = "googleid", length = 10)
+	@Column(name = "google_id", length = 10)
 	private String googleId;
 
-	@Column(name = "facebookid", length = 10)
+	@Column(name = "facebook_id", length = 10)
 	private String facebookId;
 
 	@Override
