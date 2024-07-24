@@ -3,7 +3,7 @@ USE designershop;
 DROP TABLE IF EXISTS user_profile;
 
 CREATE TABLE user_profile (
-    user_id NVARCHAR(10) NOT NULL,
+    user_id NVARCHAR(10) PRIMARY KEY,
     user_type NVARCHAR(2) NOT NULL,
     seller_type NVARCHAR(2) NULL,
     designer_type NVARCHAR(2) NULL,
@@ -33,7 +33,6 @@ CREATE TABLE user_profile (
     refresh_hash NVARCHAR(1024) NULL,
     google_id NVARCHAR(10) NULL,
     facebook_id NVARCHAR(10) NULL,
-    PRIMARY KEY (user_id),
     UNIQUE (account),
     UNIQUE (email),
     UNIQUE (phone_no)

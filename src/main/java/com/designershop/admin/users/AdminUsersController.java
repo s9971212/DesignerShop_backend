@@ -1,4 +1,6 @@
-package com.designershop.users;
+package com.designershop.admin.users;
+
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,49 +14,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.designershop.admin.users.models.AdminCreateUserRequestModel;
+import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
+import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.exceptions.UserException;
-import com.designershop.users.models.CreateUserRequestModel;
-import com.designershop.users.models.UpdatePasswordRequestModel;
-import com.designershop.users.models.UpdateUserRequestModel;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/admin/users")
 @RequiredArgsConstructor
-public class UsersController {
+public class AdminUsersController {
 
-	private final UsersService usersService;
+	private final AdminUsersService adminUsersService;
 
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody CreateUserRequestModel request) throws UserException {
-		String account = usersService.createUser(request);
+	public ResponseEntity<String> createUser(@RequestBody AdminCreateUserRequestModel request) throws UserException {
+		String account = adminUsersService.createUser(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
+	@GetMapping
+	public ResponseEntity<List<AdminUpdateUserRequestModel>> readAllUser() {
+		List<AdminUpdateUserRequestModel> response = adminUsersService.readAllUser();
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<UpdateUserRequestModel> readUser(@PathVariable String id) throws UserException {
-		UpdateUserRequestModel response = usersService.readUser(id);
+	public ResponseEntity<AdminUpdateUserRequestModel> readUser(@PathVariable String id) throws UserException {
+		AdminUpdateUserRequestModel response = adminUsersService.readUser(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody UpdateUserRequestModel request)
+	public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody AdminUpdateUserRequestModel request)
 			throws UserException {
-		String account = usersService.updateUser(id, request);
+		String account = adminUsersService.updateUser(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody UpdatePasswordRequestModel request) throws UserException {
-		String account = usersService.updatePassword(id, request);
+			@RequestBody AdminUpdatePasswordRequestModel request) throws UserException {
+		String account = adminUsersService.updatePassword(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException {
-		String account = usersService.deleteUser(id);
+		String account = adminUsersService.deleteUser(id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 }
