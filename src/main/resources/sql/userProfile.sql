@@ -8,11 +8,11 @@ CREATE TABLE user_profile (
     seller_type NVARCHAR(2) NULL,
     designer_type NVARCHAR(2) NULL,
     admin_type NVARCHAR(2) NULL,
-	account NVARCHAR(30) NOT NULL,
+    account NVARCHAR(30) NOT NULL,
     password NVARCHAR(100) NOT NULL,
-	email NVARCHAR(30) NOT NULL,
-	phone_no NVARCHAR(20) NOT NULL,
-	user_name NVARCHAR(30) NULL,
+    email NVARCHAR(30) NOT NULL,
+    phone_no NVARCHAR(20) NOT NULL,
+    user_name NVARCHAR(30) NULL,
     gender NVARCHAR(10) NULL,
     birthday DATETIME NULL,
     id_card_no NVARCHAR(10) NULL,
@@ -36,7 +36,7 @@ CREATE TABLE user_profile (
     UNIQUE (account),
     UNIQUE (email),
     UNIQUE (phone_no)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 -- 插入假資料到userProfile表中
 INSERT INTO user_profile (user_id, user_type, seller_type, designer_type, admin_type, account, password, email, phone_no, user_name, gender, birthday, id_card_no, home_no, user_photo, register_date, pwd_changed_date, pwd_expire_date, sign_on_status, sign_on_computer, pwd_error_count, modify_user, modify_date, is_lock, lock_date, unlock_date, hash, refresh_hash, google_id, facebook_id)

@@ -2,10 +2,14 @@ package com.designershop.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -18,26 +22,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final JwtAuthenticationFilter jwtAuthFilter;
+	private final MyUserDetailsService myUserDetailsService;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
-			throws Exception {
-		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector).servletPath("/");
-
-		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/error/**", "/api/users/**", // 用戶註冊
-						"/api/register/check", // 用戶註冊確認
-						"/api/auth", // 用戶登入
-						"/api/password/forgot", // 忘記密碼
-						"/api/verification/send", // 發送驗證碼
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf().disable().authorizeHttpRequests()
+				.requestMatchers("/error/**", "/api/auth", "/api/users", "/api/verification/send", // 發送驗證碼
 						"/api/verification/check" // 檢查驗證碼
-				).permitAll()
-						// 其他路徑需要認證
-						.anyRequest().authenticated())
-				.sessionManagement(sessionManagement -> {
-					sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 無狀態
-				}).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+				).permitAll().requestMatchers("/api/users/**").hasAuthority("ROLE_USER")
+				.requestMatchers("/admin/users/**").hasAuthority("ROLE_ADMIN").anyRequest().authenticated().and()
+				.logout().logoutUrl("/logout").permitAll().and()
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.authenticationManager(authenticationManager());
 		return http.build();
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager() {
+		return new ProviderManager(daoAuthenticationProvider());
+	}
+
+	@Bean
+	public DaoAuthenticationProvider daoAuthenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(myUserDetailsService);
+		authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+		return authenticationProvider;
 	}
 }
