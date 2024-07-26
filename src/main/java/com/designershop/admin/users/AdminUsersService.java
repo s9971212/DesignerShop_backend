@@ -106,7 +106,7 @@ public class AdminUsersService {
 	}
 
 	public List<AdminUpdateUserRequestModel> readAllUser() {
-		List<AdminUpdateUserRequestModel> response = new ArrayList<AdminUpdateUserRequestModel>();
+		List<AdminUpdateUserRequestModel> response = new ArrayList<>();
 
 		List<UserProfile> userProfileList = userProfileRepository.findAll();
 		for (UserProfile userProfile : userProfileList) {
@@ -120,8 +120,6 @@ public class AdminUsersService {
 	}
 
 	public AdminUpdateUserRequestModel readUser(String userId) throws UserException {
-
-		// TODO 之後改為從session取得account(這裡暫時先只用userId查詢)
 		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
@@ -173,7 +171,6 @@ public class AdminUsersService {
 			}
 		}
 
-		// TODO 之後改為從session取得修改前的account(這裡暫時先只用userId查詢)
 		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
@@ -224,7 +221,6 @@ public class AdminUsersService {
 			throw new UserException("密碼與密碼確認不一致");
 		}
 
-		// TODO 之後改為從session取得account(這裡暫時先只用userId查詢)
 		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
@@ -261,13 +257,10 @@ public class AdminUsersService {
 
 		userProfileRepository.save(userProfilePasswordUpdate);
 
-		// TODO 之後改為從session取得account
 		return userProfile.getAccount();
 	}
 
 	public String deleteUser(String userId) throws UserException {
-
-		// TODO 之後改為從session取得刪除前的account(這裡暫時先只用userId查詢)
 		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
@@ -275,7 +268,6 @@ public class AdminUsersService {
 
 		userProfileRepository.delete(userProfile);
 
-		// TODO 之後改為從session取得account
 		return userProfile.getAccount();
 	}
 }

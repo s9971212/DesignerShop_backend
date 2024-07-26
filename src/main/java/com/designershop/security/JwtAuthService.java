@@ -7,15 +7,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.designershop.entities.UserProfile;
+import com.designershop.repositories.UserProfileRepository;
 import com.designershop.utils.JwtUtil;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class JwtAuthService {
 
+	private final HttpSession session;
 	private final AuthenticationManager authenticationManager;
+	private final UserProfileRepository userProfileRepository;
 
 	public String auth(Map<String, Object> request) {
 		String username = (String) request.get("username");
@@ -25,6 +30,9 @@ public class JwtAuthService {
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		String token = JwtUtil.generateToken(authentication);
 
+		UserProfile userProfile = userProfileRepository.findByLogin(username);
+		session.setAttribute("userProfile", userProfile);
+		
 		return token;
 	}
 }

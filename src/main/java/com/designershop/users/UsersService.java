@@ -2,6 +2,7 @@ package com.designershop.users;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,15 @@ import com.designershop.users.models.CreateUserRequestModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
+
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UsersService {
 
+	private final HttpSession session;
 	private final AdminUsersService adminUsersService;
 	private final UserProfileRepository userProfileRepository;
 
@@ -33,14 +37,8 @@ public class UsersService {
 	}
 
 	public UpdateUserRequestModel readUser(String userId) throws UserException {
-
-		// TODO 之後改為從session取得account(這裡暫時先只用userId查詢)
-		UserProfile userProfile = userProfileRepository.findByUserId(userId);
-		if (Objects.isNull(userProfile)) {
-			throw new UserException("此帳戶不存在，請重新確認");
-		}
-
 		UpdateUserRequestModel response = new UpdateUserRequestModel();
+		UserProfile userProfile = validateTokenAndSession(userId);
 		BeanUtils.copyProperties(userProfile, response);
 		response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
 
@@ -51,8 +49,7 @@ public class UsersService {
 		AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
 		BeanUtils.copyProperties(request, adminUpdateUserRequestModel);
 
-		// TODO 之後改為從session取得修改前的account(這裡暫時先只用userId查詢)
-		UserProfile userProfile = userProfileRepository.findByUserId(userId);
+		UserProfile userProfile = validateTokenAndSession(userId);
 		adminUpdateUserRequestModel.setUserType(userProfile.getUserType());
 		adminUpdateUserRequestModel.setSellerType(userProfile.getSellerType());
 		adminUpdateUserRequestModel.setDesignerType(userProfile.getDesignerType());
@@ -64,10 +61,27 @@ public class UsersService {
 	public String updatePassword(String userId, UpdatePasswordRequestModel request) throws UserException {
 		AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
 		BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
+		validateTokenAndSession(userId);
 		return adminUsersService.updatePassword(userId, adminUpdatePasswordRequestModel);
 	}
 
 	public String deleteUser(String userId) throws UserException {
+		validateTokenAndSession(userId);
 		return adminUsersService.deleteUser(userId);
+	}
+
+	private UserProfile validateTokenAndSession(String userId) throws UserException {
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		if (Objects.isNull(sessionUserProfile)) {
+			throw new UserException("此帳戶未登入，請重新確認");
+		}
+
+		UserProfile userProfile = userProfileRepository.findByUserId(userId);
+		if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile)
+				|| !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
+			throw new UserException("此帳戶不存在，請重新確認");
+		}
+
+		return userProfile;
 	}
 }
