@@ -31,8 +31,10 @@ public class JwtAuthService {
 		String token = JwtUtil.generateToken(authentication);
 
 		UserProfile userProfile = userProfileRepository.findByLogin(username);
+		userProfile.setHash(token);
+		userProfileRepository.save(userProfile);
 		session.setAttribute("userProfile", userProfile);
-		
+
 		return token;
 	}
 }

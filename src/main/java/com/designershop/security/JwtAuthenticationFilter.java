@@ -10,11 +10,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.designershop.entities.UserProfile;
 import com.designershop.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+	private final HttpSession session;
 	private final MyUserDetailsService myUserDetailsService;
 
 	@Override
@@ -39,8 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (StringUtils.isNotBlank(username)
 				&& ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
 			MyUser myUser = myUserDetailsService.loadUserByUsername(username);
+			UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
-			if (JwtUtil.validateToken(jwt, myUser)) {
+			if (StringUtils.equals(sessionUserProfile.getHash(), jwt) && JwtUtil.validateToken(jwt, myUser)) {
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 						myUser, null, myUser.getAuthorities());
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

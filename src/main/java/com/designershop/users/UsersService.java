@@ -38,7 +38,7 @@ public class UsersService {
 
 	public UpdateUserRequestModel readUser(String userId) throws UserException {
 		UpdateUserRequestModel response = new UpdateUserRequestModel();
-		UserProfile userProfile = validateTokenAndSession(userId);
+		UserProfile userProfile = validateUserPermission(userId);
 		BeanUtils.copyProperties(userProfile, response);
 		response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
 
@@ -49,7 +49,7 @@ public class UsersService {
 		AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
 		BeanUtils.copyProperties(request, adminUpdateUserRequestModel);
 
-		UserProfile userProfile = validateTokenAndSession(userId);
+		UserProfile userProfile = validateUserPermission(userId);
 		adminUpdateUserRequestModel.setUserType(userProfile.getUserType());
 		adminUpdateUserRequestModel.setSellerType(userProfile.getSellerType());
 		adminUpdateUserRequestModel.setDesignerType(userProfile.getDesignerType());
@@ -61,16 +61,16 @@ public class UsersService {
 	public String updatePassword(String userId, UpdatePasswordRequestModel request) throws UserException {
 		AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
 		BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
-		validateTokenAndSession(userId);
+		validateUserPermission(userId);
 		return adminUsersService.updatePassword(userId, adminUpdatePasswordRequestModel);
 	}
 
 	public String deleteUser(String userId) throws UserException {
-		validateTokenAndSession(userId);
+		validateUserPermission(userId);
 		return adminUsersService.deleteUser(userId);
 	}
 
-	private UserProfile validateTokenAndSession(String userId) throws UserException {
+	public UserProfile validateUserPermission(String userId) throws UserException {
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		if (Objects.isNull(sessionUserProfile)) {
 			throw new UserException("此帳戶未登入，請重新確認");
