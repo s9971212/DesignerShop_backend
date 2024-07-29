@@ -54,18 +54,11 @@ public class MyUser implements UserDetails {
 
 	@Override
 	public boolean isAccountNonExpired() {
-		Timestamp now = new Timestamp(System.currentTimeMillis());
-		if (userProfile.getPwdExpireDate().before(now)) {
-			return false;
-		}
 		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		if (StringUtils.equals("Y", userProfile.getIsLock())) {
-			return false;
-		}
 		return true;
 	}
 

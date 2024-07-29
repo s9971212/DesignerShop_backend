@@ -1,6 +1,7 @@
 package com.designershop.admin.users;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +21,14 @@ import com.designershop.repositories.UserProfileRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AdminUsersService {
 
+	private final HttpSession session;
 	private final UserProfileRepository userProfileRepository;
 
 	public String createUser(AdminCreateUserRequestModel request) throws UserException {
@@ -78,6 +81,7 @@ public class AdminUsersService {
 		if (StringUtils.isNotBlank(birthdayString)) {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
+		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		UserProfile userProfileCreate = new UserProfile();
 		userProfileCreate.setUserId(userId);
@@ -95,10 +99,14 @@ public class AdminUsersService {
 		userProfileCreate.setIdCardNo(idCardNo);
 		userProfileCreate.setHomeNo(homeNo);
 		userProfileCreate.setUserPhoto(userPhoto);
-		userProfileCreate.setRegisterDate(DateTimeFormatUtil.currentDateTimeFormat());
-		userProfileCreate.setPwdExpireDate(DateTimeFormatUtil.pwdExpireDateTimeFormat());
+		userProfileCreate.setRegisterDate(Timestamp.valueOf(currentDateTime));
+		userProfileCreate.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		if (!Objects.isNull(sessionUserProfile)) {
+			userId = sessionUserProfile.getUserId();
+		}
 		userProfileCreate.setModifyUser(userId);
-		userProfileCreate.setModifyDate(DateTimeFormatUtil.currentDateTimeFormat());
+		userProfileCreate.setModifyDate(Timestamp.valueOf(currentDateTime));
 
 		userProfileRepository.save(userProfileCreate);
 
@@ -199,8 +207,9 @@ public class AdminUsersService {
 		userProfileUpdate.setUserPhoto(userPhoto);
 		userProfileUpdate.setRegisterDate(userProfile.getRegisterDate());
 		userProfileUpdate.setPwdExpireDate(userProfile.getPwdExpireDate());
-		userProfileUpdate.setModifyUser(userProfile.getUserId());
-		userProfileUpdate.setModifyDate(DateTimeFormatUtil.currentDateTimeFormat());
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		userProfileUpdate.setModifyUser(sessionUserProfile.getUserId());
+		userProfileUpdate.setModifyDate(Timestamp.valueOf(DateTimeFormatUtil.currentDateTime()));
 
 		userProfileRepository.save(userProfileUpdate);
 
@@ -235,6 +244,7 @@ public class AdminUsersService {
 		}
 
 		String encodePwd = bcryptPasswordEncoder.encode(password);
+		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		UserProfile userProfilePasswordUpdate = new UserProfile();
 		userProfilePasswordUpdate.setUserId(userProfile.getUserId());
@@ -250,10 +260,11 @@ public class AdminUsersService {
 		userProfilePasswordUpdate.setHomeNo(userProfile.getHomeNo());
 		userProfilePasswordUpdate.setUserPhoto(userProfile.getUserPhoto());
 		userProfilePasswordUpdate.setRegisterDate(userProfile.getRegisterDate());
-		userProfilePasswordUpdate.setPwdChangedDate(DateTimeFormatUtil.currentDateTimeFormat());
-		userProfilePasswordUpdate.setPwdExpireDate(DateTimeFormatUtil.pwdExpireDateTimeFormat());
-		userProfilePasswordUpdate.setModifyUser(userProfile.getUserId());
-		userProfilePasswordUpdate.setModifyDate(DateTimeFormatUtil.currentDateTimeFormat());
+		userProfilePasswordUpdate.setPwdChangedDate(Timestamp.valueOf(currentDateTime));
+		userProfilePasswordUpdate.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		userProfilePasswordUpdate.setModifyUser(sessionUserProfile.getUserId());
+		userProfilePasswordUpdate.setModifyDate(Timestamp.valueOf(currentDateTime));
 
 		userProfileRepository.save(userProfilePasswordUpdate);
 

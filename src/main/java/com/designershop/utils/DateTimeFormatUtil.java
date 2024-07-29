@@ -22,14 +22,9 @@ public final class DateTimeFormatUtil {
 		return currentDate.format(SIMPLE_YEAR_MONTH);
 	}
 
-	public static Timestamp currentDateTimeFormat() {
+	public static LocalDateTime currentDateTime() {
 		LocalDateTime currentDateTime = LocalDateTime.now();
-		return Timestamp.valueOf(currentDateTime);
-	}
-
-	public static Timestamp pwdExpireDateTimeFormat() {
-		LocalDateTime threeMonthsLater = LocalDateTime.now().plusMonths(3);
-		return Timestamp.valueOf(threeMonthsLater);
+		return currentDateTime;
 	}
 
 	public static Timestamp localDateTimeFormat(String date) {

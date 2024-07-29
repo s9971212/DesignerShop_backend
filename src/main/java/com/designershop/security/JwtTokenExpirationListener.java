@@ -1,17 +1,25 @@
 package com.designershop.security;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.event.AuthenticationFailureExpiredEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.designershop.entities.UserProfile;
+import com.designershop.repositories.UserProfileRepository;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenExpirationListener {
+
+	private final UserProfileRepository userProfileRepository;
 
 	@EventListener
 	public void handleTokenExpiredEvent(AuthenticationFailureExpiredEvent event) {
@@ -21,6 +29,10 @@ public class JwtTokenExpirationListener {
 
 			HttpSession session = getSessionForUser(myUser.getUsername());
 			if (session != null) {
+				UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+				sessionUserProfile.setSignOnStatus("N");
+				sessionUserProfile.setHash(null);
+				userProfileRepository.save(sessionUserProfile);
 				session.removeAttribute("userProfile");
 				session.invalidate();
 			}
