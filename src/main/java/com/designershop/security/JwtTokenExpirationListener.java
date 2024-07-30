@@ -1,5 +1,7 @@
 package com.designershop.security;
 
+import java.util.Objects;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.event.AuthenticationFailureExpiredEvent;
@@ -30,10 +32,13 @@ public class JwtTokenExpirationListener {
 			HttpSession session = getSessionForUser(myUser.getUsername());
 			if (session != null) {
 				UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-				sessionUserProfile.setSignOnStatus("N");
-				sessionUserProfile.setHash(null);
-				userProfileRepository.save(sessionUserProfile);
-				session.removeAttribute("userProfile");
+				if (!Objects.isNull(sessionUserProfile)) {
+					sessionUserProfile.setSignOnStatus("N");
+					sessionUserProfile.setHash(null);
+					userProfileRepository.save(sessionUserProfile);
+					session.removeAttribute("userProfile");
+				}
+
 				session.invalidate();
 			}
 		}

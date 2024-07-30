@@ -24,6 +24,7 @@ public class SecurityConfig {
 
 	private final MyUserDetailsService myUserDetailsService;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final MyLogoutHandler myLogoutHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +33,8 @@ public class SecurityConfig {
 						"/api/verification/check" // 檢查驗證碼
 				).permitAll().requestMatchers("/api/users/**").hasAuthority("ROLE_USER")
 				.requestMatchers("/admin/users/**").hasAuthority("ROLE_ADMIN").anyRequest().authenticated().and()
-				.logout().logoutUrl("/logout").permitAll().and()
+				.logout().logoutUrl("/logout").logoutSuccessUrl("/api/auth").addLogoutHandler(myLogoutHandler)
+				.invalidateHttpSession(true).and() // 未來有前端可以加上.deleteCookies(Cookie名稱)，把指定的Cookie刪除
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationManager(authenticationManager());
