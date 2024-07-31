@@ -189,29 +189,24 @@ public class AdminUsersService {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
 
-		UserProfile userProfileUpdate = new UserProfile();
-		userProfileUpdate.setUserId(userProfile.getUserId());
-		userProfileUpdate.setUserType(userType);
-		userProfileUpdate.setSellerType(sellerType);
-		userProfileUpdate.setDesignerType(designerType);
-		userProfileUpdate.setAdminType(adminType);
-		userProfileUpdate.setAccount(account);
-		userProfileUpdate.setPassword(userProfile.getPassword());
-		userProfileUpdate.setEmail(email);
-		userProfileUpdate.setPhoneNo(phoneNo);
-		userProfileUpdate.setUserName(userName);
-		userProfileUpdate.setGender(gender);
-		userProfileUpdate.setBirthday(birthday);
-		userProfileUpdate.setIdCardNo(idCardNo);
-		userProfileUpdate.setHomeNo(homeNo);
-		userProfileUpdate.setUserPhoto(userPhoto);
-		userProfileUpdate.setRegisterDate(userProfile.getRegisterDate());
-		userProfileUpdate.setPwdExpireDate(userProfile.getPwdExpireDate());
+		userProfile.setUserType(userType);
+		userProfile.setSellerType(sellerType);
+		userProfile.setDesignerType(designerType);
+		userProfile.setAdminType(adminType);
+		userProfile.setAccount(account);
+		userProfile.setEmail(email);
+		userProfile.setPhoneNo(phoneNo);
+		userProfile.setUserName(userName);
+		userProfile.setGender(gender);
+		userProfile.setBirthday(birthday);
+		userProfile.setIdCardNo(idCardNo);
+		userProfile.setHomeNo(homeNo);
+		userProfile.setUserPhoto(userPhoto);
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-		userProfileUpdate.setModifyUser(sessionUserProfile.getUserId());
-		userProfileUpdate.setModifyDate(Timestamp.valueOf(DateTimeFormatUtil.currentDateTime()));
+		userProfile.setModifyUser(sessionUserProfile.getUserId());
+		userProfile.setModifyDate(Timestamp.valueOf(DateTimeFormatUtil.currentDateTime()));
 
-		userProfileRepository.save(userProfileUpdate);
+		userProfileRepository.save(userProfile);
 
 		return account;
 	}
@@ -246,27 +241,14 @@ public class AdminUsersService {
 		String encodePwd = bcryptPasswordEncoder.encode(password);
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
-		UserProfile userProfilePasswordUpdate = new UserProfile();
-		userProfilePasswordUpdate.setUserId(userProfile.getUserId());
-		userProfilePasswordUpdate.setUserType(userProfile.getUserType());
-		userProfilePasswordUpdate.setAccount(userProfile.getAccount());
-		userProfilePasswordUpdate.setPassword(encodePwd);
-		userProfilePasswordUpdate.setEmail(userProfile.getEmail());
-		userProfilePasswordUpdate.setPhoneNo(userProfile.getPhoneNo());
-		userProfilePasswordUpdate.setUserName(userProfile.getUserName());
-		userProfilePasswordUpdate.setGender(userProfile.getGender());
-		userProfilePasswordUpdate.setBirthday(userProfile.getBirthday());
-		userProfilePasswordUpdate.setIdCardNo(userProfile.getIdCardNo());
-		userProfilePasswordUpdate.setHomeNo(userProfile.getHomeNo());
-		userProfilePasswordUpdate.setUserPhoto(userProfile.getUserPhoto());
-		userProfilePasswordUpdate.setRegisterDate(userProfile.getRegisterDate());
-		userProfilePasswordUpdate.setPwdChangedDate(Timestamp.valueOf(currentDateTime));
-		userProfilePasswordUpdate.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
+		userProfile.setPassword(encodePwd);
+		userProfile.setPwdChangedDate(Timestamp.valueOf(currentDateTime));
+		userProfile.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-		userProfilePasswordUpdate.setModifyUser(sessionUserProfile.getUserId());
-		userProfilePasswordUpdate.setModifyDate(Timestamp.valueOf(currentDateTime));
+		userProfile.setModifyUser(sessionUserProfile.getUserId());
+		userProfile.setModifyDate(Timestamp.valueOf(currentDateTime));
 
-		userProfileRepository.save(userProfilePasswordUpdate);
+		userProfileRepository.save(userProfile);
 
 		return userProfile.getAccount();
 	}

@@ -32,8 +32,6 @@ public class JwtAuthController {
 		}
 	}
 
-	// TODO 忘記密碼API
-
 	@ExceptionHandler(PasswordExpiredException.class)
 	public ResponseEntity<String> handlePasswordExpiredException(PasswordExpiredException e) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());

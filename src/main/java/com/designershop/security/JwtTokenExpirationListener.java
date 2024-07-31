@@ -3,7 +3,6 @@ package com.designershop.security;
 import java.util.Objects;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.event.AuthenticationFailureExpiredEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
