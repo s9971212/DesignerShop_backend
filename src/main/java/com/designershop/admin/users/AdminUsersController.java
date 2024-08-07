@@ -18,6 +18,8 @@ import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.exceptions.UserException;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,7 +30,8 @@ public class AdminUsersController {
 	private final AdminUsersService adminUsersService;
 
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody AdminCreateUserRequestModel request) throws UserException {
+	public ResponseEntity<String> createUser(@RequestBody @Valid AdminCreateUserRequestModel request)
+			throws UserException {
 		String account = adminUsersService.createUser(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
@@ -46,15 +49,15 @@ public class AdminUsersController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody AdminUpdateUserRequestModel request)
-			throws UserException {
+	public ResponseEntity<String> updateUser(@PathVariable String id,
+			@RequestBody @Valid AdminUpdateUserRequestModel request) throws UserException {
 		String account = adminUsersService.updateUser(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody AdminUpdatePasswordRequestModel request) throws UserException {
+			@RequestBody @Valid AdminUpdatePasswordRequestModel request) throws UserException {
 		String account = adminUsersService.updatePassword(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}

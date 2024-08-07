@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.designershop.exceptions.UserException;
 import com.designershop.users.models.PasswordForgotRequestModel;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,7 +25,7 @@ public class PasswordForgotController {
 
 	@PostMapping
 	public ResponseEntity<String> passwordForgot(@RequestParam String token,
-			@RequestBody PasswordForgotRequestModel request) throws UserException {
+			@RequestBody @Valid PasswordForgotRequestModel request) throws UserException {
 		String account = passwordForgotService.passwordForgot(token, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}

@@ -17,6 +17,7 @@ import com.designershop.users.models.CreateUserRequestModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,7 +28,7 @@ public class UsersController {
 	private final UsersService usersService;
 
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody CreateUserRequestModel request) throws UserException {
+	public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request) throws UserException {
 		String account = usersService.createUser(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
@@ -39,15 +40,15 @@ public class UsersController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody UpdateUserRequestModel request)
-			throws UserException {
+	public ResponseEntity<String> updateUser(@PathVariable String id,
+			@RequestBody @Valid UpdateUserRequestModel request) throws UserException {
 		String account = usersService.updateUser(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody UpdatePasswordRequestModel request) throws UserException {
+			@RequestBody @Valid UpdatePasswordRequestModel request) throws UserException {
 		String account = usersService.updatePassword(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
