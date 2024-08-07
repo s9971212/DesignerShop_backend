@@ -1,5 +1,8 @@
 package com.designershop.admin.users.models;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,8 +10,7 @@ import lombok.Setter;
 @Setter
 public class AdminUpdateUserRequestModel {
 
-	private String userId;
-
+	@NotBlank
 	private String userType;
 
 	private String sellerType;
@@ -17,10 +19,15 @@ public class AdminUpdateUserRequestModel {
 
 	private String adminType;
 
+	@NotBlank
 	private String account;
 
+	@NotBlank
+	@Email
 	private String email;
 
+	@NotBlank
+	@Pattern(regexp = "^09\\d{8}$")
 	private String phoneNo;
 
 	private String userName;
@@ -35,5 +42,6 @@ public class AdminUpdateUserRequestModel {
 
 	private String userPhoto;
 
+	@NotBlank
 	private String termsCheckBox;
 }
