@@ -25,6 +25,9 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
 	@Query(value = "SELECT * FROM user_profile WHERE user_id =:userId", nativeQuery = true)
 	UserProfile findByUserId(@Param("userId") String userId);
 	
+	@Query(value = "SELECT * FROM user_profile WHERE email =:email", nativeQuery = true)
+	UserProfile findByEmail(@Param("email") String email);
+	
 	@Query(value = "SELECT * FROM user_profile WHERE refresh_hash =:token", nativeQuery = true)
 	UserProfile findByRefreshHash(@Param("token") String token);
 }
