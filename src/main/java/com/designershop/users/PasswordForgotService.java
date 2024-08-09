@@ -51,14 +51,14 @@ public class PasswordForgotService {
 
 		userProfileRepository.save(userProfile);
 
-		String[] receivers = { email };
+		String[] receivers = { userProfile.getEmail() };
 		String[] cc = {};
 		String[] bcc = {};
 		Map<String, Object> map = new HashMap<>();
 		map.put("email", userProfile.getEmail());
 		map.put("account", userProfile.getAccount());
 		map.put("token", token);
-		mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 重設密碼", "password-forgot", map);
+		mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 重設密碼通知", "password-forgot", map);
 
 		return userProfile.getAccount();
 	}

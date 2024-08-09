@@ -3,7 +3,9 @@ package com.designershop.admin.users;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,10 +19,12 @@ import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
+import com.designershop.mail.MailService;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -29,9 +33,10 @@ import lombok.RequiredArgsConstructor;
 public class AdminUsersService {
 
 	private final HttpSession session;
+	private final MailService mailService;
 	private final UserProfileRepository userProfileRepository;
 
-	public String createUser(AdminCreateUserRequestModel request) throws UserException {
+	public String createUser(AdminCreateUserRequestModel request) throws UserException, MessagingException {
 		String userType = request.getUserType();
 		String sellerType = request.getSellerType();
 		String designerType = request.getDesignerType();
@@ -109,6 +114,15 @@ public class AdminUsersService {
 		userProfileCreate.setModifyDate(Timestamp.valueOf(currentDateTime));
 
 		userProfileRepository.save(userProfileCreate);
+
+		String[] receivers = { userProfileCreate.getEmail() };
+		String[] cc = {};
+		String[] bcc = {};
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", userProfileCreate.getEmail());
+		map.put("account", userProfileCreate.getAccount());
+		map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfileCreate.getPwdExpireDate()));
+		mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 註冊成功通知", "register", map);
 
 		return account;
 	}
@@ -211,7 +225,8 @@ public class AdminUsersService {
 		return account;
 	}
 
-	public String updatePassword(String userId, AdminUpdatePasswordRequestModel request) throws UserException {
+	public String updatePassword(String userId, AdminUpdatePasswordRequestModel request)
+			throws UserException, MessagingException {
 		String oldPassword = request.getOldPassword();
 		String password = request.getPassword();
 		String passwordCheck = request.getPasswordCheck();
@@ -250,16 +265,33 @@ public class AdminUsersService {
 
 		userProfileRepository.save(userProfile);
 
+		String[] receivers = { userProfile.getEmail() };
+		String[] cc = {};
+		String[] bcc = {};
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", userProfile.getEmail());
+		map.put("account", userProfile.getAccount());
+		map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+		mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 密碼變更通知", "password-changed", map);
+
 		return userProfile.getAccount();
 	}
 
-	public String deleteUser(String userId) throws UserException {
+	public String deleteUser(String userId) throws UserException, MessagingException {
 		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
 		}
 
 		userProfileRepository.delete(userProfile);
+
+		String[] receivers = { userProfile.getEmail() };
+		String[] cc = {};
+		String[] bcc = {};
+		Map<String, Object> map = new HashMap<>();
+		map.put("email", userProfile.getEmail());
+		map.put("account", userProfile.getAccount());
+		mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 帳戶刪除通知", "account-deleted", map);
 
 		return userProfile.getAccount();
 	}

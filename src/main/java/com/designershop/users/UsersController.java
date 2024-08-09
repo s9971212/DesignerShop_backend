@@ -17,6 +17,7 @@ import com.designershop.users.models.CreateUserRequestModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +29,8 @@ public class UsersController {
 	private final UsersService usersService;
 
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request) throws UserException {
+	public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request)
+			throws UserException, MessagingException {
 		String account = usersService.createUser(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
@@ -48,13 +50,13 @@ public class UsersController {
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody @Valid UpdatePasswordRequestModel request) throws UserException {
+			@RequestBody @Valid UpdatePasswordRequestModel request) throws UserException, MessagingException {
 		String account = usersService.updatePassword(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException {
+	public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
 		String account = usersService.deleteUser(id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}

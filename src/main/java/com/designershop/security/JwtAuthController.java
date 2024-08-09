@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.designershop.exceptions.PasswordExpiredException;
 import com.designershop.exceptions.UserException;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,7 +24,8 @@ public class JwtAuthController {
 	private final JwtAuthService jwtAuthService;
 
 	@PostMapping
-	public ResponseEntity<String> auth(@RequestBody Map<String, Object> request) throws UserException {
+	public ResponseEntity<String> auth(@RequestBody Map<String, Object> request)
+			throws UserException, MessagingException {
 		try {
 			String token = jwtAuthService.auth(request);
 			return ResponseEntity.status(HttpStatus.CREATED).body(token);

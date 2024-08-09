@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>忘記密碼</title>
+    <title>帳戶刪除</title>
 </head>
 <body>
 	<div style="border-style:solid;border-width:thin;border-color:#dadce0;border-radius:8px;padding:40px 20px;" align="center">
 		<img src="/images/DesignerShop.png" width="150" height="43" style="margin-bottom:16px;" alt="DesignerShop">
 		<div style="border-bottom:thin solid #dadce0;color:rgba(0,0,0,0.87);line-height:32px;padding-bottom:24px;text-align:center;">
-			<div style="font-size:24px;">請透過以下連結重設密碼 </div>
+			<div style="font-size:24px;">您的 DesignerShop 帳戶已被刪除 </div>
 		</div>
 		<div style="font-family:Roboto-Regular, Helvetica, Arial, sans-serif;font-size:14px;color:rgba(0,0,0,0.87);line-height:20px;padding-top:20px;text-align:left;">
-			DesignerShop 收到 <a rel="nofollow noopener noreferrer" style="font-weight:bold;"><span th:text="${email}">Email</span></a> 重設 DesignerShop 帳戶 
-			<a rel="nofollow noopener noreferrer" style="font-weight:bold;"><span th:text="${account}">User</span></a> 密碼的要求。<br><br>
-			請使用這個連結完成重設密碼的設定程序：<br>
+			DesignerShop 收到 <a rel="nofollow noopener noreferrer" style="font-weight:bold;"><span th:text="${email}">Email</span></a> 刪除 DesignerShop 帳戶 
+			<a rel="nofollow noopener noreferrer" style="font-weight:bold;"><span th:text="${account}">User</span></a> 的要求。<br><br>
+			您的帳戶已被刪除，如您希望創建一個新的 DesignerShop 帳戶，可以透過這個連結以進入 DesignerShop 首頁，並重新註冊：<br>
 			<div style="text-align:center;font-size:30px;margin-top:20px;line-height:44px;">
 				<a rel="nofollow noopener noreferrer" style="font-weight:bold;" href="details.html"
-					th:href="@{http://localhost:8080/api/password_forgot(token=${token})}">重設密碼連結</a>
-			</div><br>
-			連結將於 24 小時後失效。<br><br>
-			如果您未曾提出重設密碼的要求，可以放心忽略這封電子郵件。
+					th:href="@{http://designershop.com}">DesignerShop 首頁連結</a>
+            </div><br>
+            感謝您過往對 DesignerShop 的支持，希望未來還能在 DesignerShop 見到您。<br><br>
+			DesignerShop 全體員工敬上。
 		</div>
 	</div>
 </body>

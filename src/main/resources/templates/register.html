@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊成功</title>
+</head>
+<body>
+	<div style="border-style:solid;border-width:thin;border-color:#dadce0;border-radius:8px;padding:40px 20px;" align="center">
+		<img src="/images/DesignerShop.png" width="150" height="43" style="margin-bottom:16px;" alt="DesignerShop">
+		<div style="border-bottom:thin solid #dadce0;color:rgba(0,0,0,0.87);line-height:32px;padding-bottom:24px;text-align:center;">
+			<div style="font-size:24px;">您的 DesignerShop 帳戶已註冊成功 </div>
+		</div>
+		<div style="font-family:Roboto-Regular, Helvetica, Arial, sans-serif;font-size:14px;color:rgba(0,0,0,0.87);line-height:20px;padding-top:20px;text-align:left;">
+			DesignerShop 收到 <a rel="nofollow noopener noreferrer" style="font-weight:bold;"><span th:text="${email}">Email</span></a> 註冊 DesignerShop 帳戶 
+			<a rel="nofollow noopener noreferrer" style="font-weight:bold;"><span th:text="${account}">User</span></a> 的要求。<br><br>
+			可以透過這個連結以進入 DesignerShop 首頁：<br>
+			<div style="text-align:center;font-size:30px;margin-top:20px;line-height:44px;">
+				<a rel="nofollow noopener noreferrer" style="font-weight:bold;" href="details.html"
+					th:href="@{http://designershop.com}">DesignerShop 首頁連結</a>
+			</div><br>
+            進入首頁後請登入即可使用您的 DesignerShop 帳戶，密碼須 <a rel="nofollow noopener noreferrer"
+                style="font-weight:bold;">每三個月</a> 變更一次，請您多加留意，您的密碼將於 <a rel="nofollow noopener noreferrer"
+                style="font-weight:bold;"><span th:text="${pwdExpireDate}">PwdExpireDate</span></a> 到期。<br><br>
+			如果您未曾註冊 DesignerShop 帳戶，可以在DesignerShop 首頁下方取得我們的聯繫方式，協助您做後續處理。
+		</div>
+	</div>
+</body>
+</html>

@@ -2,6 +2,7 @@ package com.designershop.security;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.PasswordExpiredException;
 import com.designershop.exceptions.UserException;
+import com.designershop.mail.MailService;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.JwtUtil;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -27,10 +30,11 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthService {
 
 	private final HttpSession session;
+	private final MailService mailService;
 	private final AuthenticationManager authenticationManager;
 	private final UserProfileRepository userProfileRepository;
 
-	public String auth(Map<String, Object> request) throws UserException, PasswordExpiredException {
+	public String auth(Map<String, Object> request) throws UserException, PasswordExpiredException, MessagingException {
 		String username = (String) request.get("username");
 		String password = (String) request.get("password");
 
@@ -70,6 +74,14 @@ public class JwtAuthService {
 			userProfile.setSignOnToken(token);
 			userProfileRepository.save(userProfile);
 			session.setAttribute("userProfile", userProfile);
+
+			String[] receivers = { userProfile.getEmail() };
+			String[] cc = {};
+			String[] bcc = {};
+			Map<String, Object> map = new HashMap<>();
+			map.put("email", userProfile.getEmail());
+			map.put("account", userProfile.getAccount());
+			mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 帳戶登入通知", "account-sign-on", map);
 
 			return token;
 		} catch (AuthenticationException e) {

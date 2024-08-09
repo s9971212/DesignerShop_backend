@@ -18,6 +18,7 @@ import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +30,7 @@ public class UsersService {
 	private final AdminUsersService adminUsersService;
 	private final UserProfileRepository userProfileRepository;
 
-	public String createUser(CreateUserRequestModel request) throws UserException {
+	public String createUser(CreateUserRequestModel request) throws UserException, MessagingException {
 		AdminCreateUserRequestModel adminCreateUserRequestModel = new AdminCreateUserRequestModel();
 		BeanUtils.copyProperties(request, adminCreateUserRequestModel);
 		adminCreateUserRequestModel.setUserType("B1");
@@ -58,14 +59,15 @@ public class UsersService {
 		return adminUsersService.updateUser(userId, adminUpdateUserRequestModel);
 	}
 
-	public String updatePassword(String userId, UpdatePasswordRequestModel request) throws UserException {
+	public String updatePassword(String userId, UpdatePasswordRequestModel request)
+			throws UserException, MessagingException {
 		AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
 		BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
 		validateUserPermission(userId);
 		return adminUsersService.updatePassword(userId, adminUpdatePasswordRequestModel);
 	}
 
-	public String deleteUser(String userId) throws UserException {
+	public String deleteUser(String userId) throws UserException, MessagingException {
 		validateUserPermission(userId);
 		return adminUsersService.deleteUser(userId);
 	}
