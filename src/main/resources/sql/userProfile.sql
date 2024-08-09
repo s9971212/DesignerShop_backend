@@ -29,8 +29,9 @@ CREATE TABLE user_profile (
     is_lock NVARCHAR(1) NULL,
     lock_date DATETIME NULL,
     unlock_date DATETIME NULL,
-    hash NVARCHAR(1024) NULL,
-    refresh_hash NVARCHAR(1024) NULL,
+    sign_on_token NVARCHAR(1024) NULL,
+    pwd_forgot_token NVARCHAR(1024) NULL,
+    pwd_forgot_token_expire_date DATETIME NULL,
     google_id NVARCHAR(10) NULL,
     facebook_id NVARCHAR(10) NULL,
     UNIQUE (account),
@@ -39,7 +40,7 @@ CREATE TABLE user_profile (
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 -- 插入假資料到userProfile表中
-INSERT INTO user_profile (user_id, user_type, seller_type, designer_type, admin_type, account, password, email, phone_no, user_name, gender, birthday, id_card_no, home_no, user_photo, register_date, pwd_changed_date, pwd_expire_date, sign_on_status, sign_on_computer, pwd_error_count, modify_user, modify_date, is_lock, lock_date, unlock_date, hash, refresh_hash, google_id, facebook_id)
+INSERT INTO user_profile (user_id, user_type, seller_type, designer_type, admin_type, account, password, email, phone_no, user_name, gender, birthday, id_card_no, home_no, user_photo, register_date, pwd_changed_date, pwd_expire_date, sign_on_status, sign_on_computer, pwd_error_count, modify_user, modify_date, is_lock, lock_date, unlock_date, sign_on_token, pwd_forgot_token, google_id, facebook_id)
 SELECT 
     CONCAT('T', LPAD(FLOOR(RAND()*1000), 2, '0')),
     CASE FLOOR(RAND()*3)

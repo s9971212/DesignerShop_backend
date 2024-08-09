@@ -67,7 +67,7 @@ public class JwtAuthService {
 
 			userProfile.setSignOnStatus("Y");
 			userProfile.setPwdErrorCount(0);
-			userProfile.setHash(token);
+			userProfile.setSignOnToken(token);
 			userProfileRepository.save(userProfile);
 			session.setAttribute("userProfile", userProfile);
 

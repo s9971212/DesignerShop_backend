@@ -32,13 +32,13 @@ public class UserProfile {
 
 	@Column(name = "user_type", nullable = false, length = 2)
 	private String userType;
-	
+
 	@Column(name = "seller_type", length = 2)
 	private String sellerType;
-	
+
 	@Column(name = "designer_type", length = 2)
 	private String designerType;
-	
+
 	@Column(name = "admin_type", length = 2)
 	private String adminType;
 
@@ -112,11 +112,15 @@ public class UserProfile {
 	@Column(name = "unlock_date")
 	private Timestamp unlockDate;
 
-	@Column(name = "hash", length = 1024)
-	private String hash;
+	@Column(name = "sign_on_token", length = 1024)
+	private String signOnToken;
 
-	@Column(name = "refresh_hash", length = 1024)
-	private String refreshHash;
+	@Column(name = "pwd_forgot_token", length = 1024)
+	private String pwdForgotToken;
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@Column(name = "pwd_forgot_token_expire_date")
+	private Timestamp pwdForgotTokenExpireDate;
 
 	@Column(name = "google_id", length = 10)
 	private String googleId;

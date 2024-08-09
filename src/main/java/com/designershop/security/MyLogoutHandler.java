@@ -27,7 +27,7 @@ public class MyLogoutHandler implements LogoutHandler {
 		if (!Objects.isNull(sessionUserProfile)) {
 			sessionUserProfile.setSignOnStatus("N");
 			sessionUserProfile.setPwdErrorCount(0);
-			sessionUserProfile.setHash(null);
+			sessionUserProfile.setSignOnToken(null);
 			userProfileRepository.save(sessionUserProfile);
 		}
 	}
