@@ -46,7 +46,7 @@ public class AdminCreateUserRequestModel {
 
 	private String homeNo;
 
-	private String userPhoto;
+	private String userImage;
 
 	@NotBlank
 	private String termsCheckBox;

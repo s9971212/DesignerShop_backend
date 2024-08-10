@@ -51,7 +51,7 @@ public class AdminUsersService {
 		String birthdayString = request.getBirthday();
 		String idCardNo = request.getIdCardNo();
 		String homeNo = request.getHomeNo();
-		String userPhoto = request.getUserPhoto();
+		String userImage = request.getUserImage();
 		String termsCheckBox = request.getTermsCheckBox();
 
 		if (StringUtils.isBlank(account) || StringUtils.isBlank(password) || StringUtils.isBlank(passwordCheck)
@@ -103,7 +103,7 @@ public class AdminUsersService {
 		userProfileCreate.setBirthday(birthday);
 		userProfileCreate.setIdCardNo(idCardNo);
 		userProfileCreate.setHomeNo(homeNo);
-		userProfileCreate.setUserPhoto(userPhoto);
+		userProfileCreate.setUserImage(userImage);
 		userProfileCreate.setRegisterDate(Timestamp.valueOf(currentDateTime));
 		userProfileCreate.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
@@ -167,7 +167,7 @@ public class AdminUsersService {
 		String birthdayString = request.getBirthday();
 		String idCardNo = request.getIdCardNo();
 		String homeNo = request.getHomeNo();
-		String userPhoto = request.getUserPhoto();
+		String userImage = request.getUserImage();
 		String termsCheckBox = request.getTermsCheckBox();
 
 		if (StringUtils.isBlank(userId) || StringUtils.isBlank(account) || StringUtils.isBlank(email)
@@ -215,7 +215,7 @@ public class AdminUsersService {
 		userProfile.setBirthday(birthday);
 		userProfile.setIdCardNo(idCardNo);
 		userProfile.setHomeNo(homeNo);
-		userProfile.setUserPhoto(userPhoto);
+		userProfile.setUserImage(userImage);
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		userProfile.setModifyUser(sessionUserProfile.getUserId());
 		userProfile.setModifyDate(Timestamp.valueOf(DateTimeFormatUtil.currentDateTime()));

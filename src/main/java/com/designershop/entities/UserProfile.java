@@ -70,8 +70,8 @@ public class UserProfile {
 	@Column(name = "home_no", length = 20)
 	private String homeNo;
 
-	@Column(name = "user_photo", length = 10000)
-	private String userPhoto;
+	@Column(name = "user_image", length = 10000)
+	private String userImage;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "register_date", nullable = false)
@@ -164,8 +164,8 @@ public class UserProfile {
 		if (StringUtils.isBlank(this.homeNo)) {
 			this.homeNo = null;
 		}
-		if (StringUtils.isBlank(this.userPhoto)) {
-			this.userPhoto = null;
+		if (StringUtils.isBlank(this.userImage)) {
+			this.userImage = null;
 		}
 	}
 }

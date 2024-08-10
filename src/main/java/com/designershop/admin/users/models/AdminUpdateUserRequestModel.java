@@ -40,7 +40,7 @@ public class AdminUpdateUserRequestModel {
 
 	private String homeNo;
 
-	private String userPhoto;
+	private String userImage;
 
 	@NotBlank
 	private String termsCheckBox;
