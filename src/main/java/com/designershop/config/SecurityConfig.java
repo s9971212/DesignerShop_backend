@@ -1,4 +1,4 @@
-package com.designershop.security;
+package com.designershop.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.designershop.security.JwtAuthenticationFilter;
+import com.designershop.security.MyLogoutHandler;
+import com.designershop.security.MyUserDetailsService;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
