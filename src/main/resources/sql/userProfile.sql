@@ -17,7 +17,7 @@ CREATE TABLE user_profile (
     birthday DATETIME NULL,
     id_card_no NVARCHAR(10) NULL,
     home_no NVARCHAR(20) NULL,
-    user_image NVARCHAR(10000) NULL,
+    user_image TEXT NULL,
     register_date DATETIME NOT NULL,
     pwd_changed_date DATETIME NULL,
     pwd_expire_date DATETIME NOT NULL,

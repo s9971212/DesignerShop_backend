@@ -70,7 +70,7 @@ public class UserProfile {
 	@Column(name = "home_no", length = 20)
 	private String homeNo;
 
-	@Column(name = "user_image", length = 10000)
+	@Column(name = "user_image", columnDefinition = "TEXT")
 	private String userImage;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
