@@ -11,6 +11,7 @@ import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.UserProfile;
+import com.designershop.entities.UserRole;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.users.models.CreateUserRequestModel;
@@ -51,10 +52,24 @@ public class UsersService {
 		BeanUtils.copyProperties(request, adminUpdateUserRequestModel);
 
 		UserProfile userProfile = validateUserPermission(userId);
-		adminUpdateUserRequestModel.setUserType(userProfile.getUserType());
-		adminUpdateUserRequestModel.setSellerType(userProfile.getSellerType());
-		adminUpdateUserRequestModel.setDesignerType(userProfile.getDesignerType());
-		adminUpdateUserRequestModel.setAdminType(userProfile.getAdminType());
+		for (UserRole userRole : userProfile.getUserRoles()) {
+			switch (userRole.getRoleCategory()) {
+			case "buyer":
+				adminUpdateUserRequestModel.setUserType(userRole.getRoleId());
+				break;
+			case "seller":
+				adminUpdateUserRequestModel.setSellerType(userRole.getRoleId());
+				break;
+			case "designer":
+				adminUpdateUserRequestModel.setDesignerType(userRole.getRoleId());
+				break;
+			case "admin":
+				adminUpdateUserRequestModel.setAdminType(userRole.getRoleId());
+				break;
+			default:
+				break;
+			}
+		}
 
 		return adminUsersService.updateUser(userId, adminUpdateUserRequestModel);
 	}

@@ -2,6 +2,7 @@ package com.designershop.entities;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,7 +10,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -29,18 +34,6 @@ public class UserProfile {
 	@Id
 	@Column(name = "user_id", nullable = false, length = 10)
 	private String userId;
-
-	@Column(name = "user_type", nullable = false, length = 2)
-	private String userType;
-
-	@Column(name = "seller_type", length = 2)
-	private String sellerType;
-
-	@Column(name = "designer_type", length = 2)
-	private String designerType;
-
-	@Column(name = "admin_type", length = 2)
-	private String adminType;
 
 	@Column(name = "account", nullable = false, length = 30)
 	private String account;
@@ -127,6 +120,10 @@ public class UserProfile {
 
 	@Column(name = "facebook_id", length = 10)
 	private String facebookId;
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_profile_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<UserRole> userRoles;
 
 	@Override
 	public int hashCode() {

@@ -4,9 +4,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -17,10 +19,12 @@ import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.UserProfile;
+import com.designershop.entities.UserRole;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.mail.MailService;
 import com.designershop.repositories.UserProfileRepository;
+import com.designershop.repositories.UserRoleRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
 
@@ -35,6 +39,7 @@ public class AdminUsersService {
 	private final HttpSession session;
 	private final MailService mailService;
 	private final UserProfileRepository userProfileRepository;
+	private final UserRoleRepository userRoleRepository;
 
 	public String createUser(AdminCreateUserRequestModel request) throws UserException, MessagingException {
 		String userType = request.getUserType();
@@ -87,13 +92,14 @@ public class AdminUsersService {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
+		Set<String> roleIds = new HashSet<>();
+		roleIds.add(userType);
+		roleIds.add(sellerType);
+		roleIds.add(designerType);
+		roleIds.add(adminType);
 
 		UserProfile userProfileCreate = new UserProfile();
 		userProfileCreate.setUserId(userId);
-		userProfileCreate.setUserType(userType);
-		userProfileCreate.setSellerType(sellerType);
-		userProfileCreate.setDesignerType(designerType);
-		userProfileCreate.setAdminType(adminType);
 		userProfileCreate.setAccount(account);
 		userProfileCreate.setPassword(encodePwd);
 		userProfileCreate.setEmail(email);
@@ -112,6 +118,14 @@ public class AdminUsersService {
 		}
 		userProfileCreate.setModifyUser(userId);
 		userProfileCreate.setModifyDate(Timestamp.valueOf(currentDateTime));
+		Set<UserRole> userRoles = new HashSet<>();
+		for (String roleId : roleIds) {
+			UserRole userRole = userRoleRepository.findByRoleId(roleId);
+			if (!Objects.isNull(userRole)) {
+				userRoles.add(userRole);
+			}
+		}
+		userProfileCreate.setUserRoles(userRoles);
 
 		userProfileRepository.save(userProfileCreate);
 
@@ -202,11 +216,12 @@ public class AdminUsersService {
 		if (StringUtils.isNotBlank(birthdayString)) {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
+		Set<String> roleIds = new HashSet<>();
+		roleIds.add(userType);
+		roleIds.add(sellerType);
+		roleIds.add(designerType);
+		roleIds.add(adminType);
 
-		userProfile.setUserType(userType);
-		userProfile.setSellerType(sellerType);
-		userProfile.setDesignerType(designerType);
-		userProfile.setAdminType(adminType);
 		userProfile.setAccount(account);
 		userProfile.setEmail(email);
 		userProfile.setPhoneNo(phoneNo);
@@ -219,6 +234,14 @@ public class AdminUsersService {
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		userProfile.setModifyUser(sessionUserProfile.getUserId());
 		userProfile.setModifyDate(Timestamp.valueOf(DateTimeFormatUtil.currentDateTime()));
+		Set<UserRole> userRoles = new HashSet<>();
+		for (String roleId : roleIds) {
+			UserRole userRole = userRoleRepository.findByRoleId(roleId);
+			if (!Objects.isNull(userRole)) {
+				userRoles.add(userRole);
+			}
+		}
+		userProfile.setUserRoles(userRoles);
 
 		userProfileRepository.save(userProfile);
 

@@ -2,11 +2,12 @@ package com.designershop.security;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.designershop.entities.UserProfile;
+import com.designershop.entities.UserRole;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -17,17 +18,25 @@ public class MyUser implements UserDetails {
 	@Override
 	public List<SimpleGrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		if (StringUtils.isNotBlank(userProfile.getUserType())) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-		}
-		if (StringUtils.isNotBlank(userProfile.getSellerType())) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_SELLER"));
-		}
-		if (StringUtils.isNotBlank(userProfile.getDesignerType())) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_DESIGNER"));
-		}
-		if (StringUtils.isNotBlank(userProfile.getAdminType())) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		if (!userProfile.getUserRoles().isEmpty()) {
+			for (UserRole userRole : userProfile.getUserRoles()) {
+				switch (userRole.getRoleCategory()) {
+				case "buyer":
+					authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+					break;
+				case "seller":
+					authorities.add(new SimpleGrantedAuthority("ROLE_SELLER"));
+					break;
+				case "designer":
+					authorities.add(new SimpleGrantedAuthority("ROLE_DESIGNER"));
+					break;
+				case "admin":
+					authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+					break;
+				default:
+					break;
+				}
+			}
 		}
 
 		return authorities;
