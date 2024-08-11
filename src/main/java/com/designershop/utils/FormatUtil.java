@@ -1,13 +1,21 @@
 package com.designershop.utils;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 
+import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.UserException;
 
 public final class FormatUtil {
 
-	public static String userIdGenerate(String userId) throws UserException {
+	public static String userIdGenerate(UserProfile userProfile) throws UserException {
 		String currentDate = DateTimeFormatUtil.currentLocalDateFormat().substring(1);
+
+		String userId = "0240700000";
+		if (!Objects.isNull(userProfile)) {
+			userId = userProfile.getUserId();
+		}
 
 		String maxUserId = "00000";
 		if (StringUtils.equals(currentDate, userId.substring(0, 5))) {

@@ -85,7 +85,7 @@ public class AdminUsersService {
 		}
 
 		UserProfile userProfile = userProfileRepository.findMaxUserId();
-		String userId = FormatUtil.userIdGenerate(userProfile.getUserId());
+		String userId = FormatUtil.userIdGenerate(userProfile);
 		String encodePwd = new BCryptPasswordEncoder().encode(password);
 		Timestamp birthday = null;
 		if (StringUtils.isNotBlank(birthdayString)) {
