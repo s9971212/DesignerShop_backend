@@ -1,6 +1,5 @@
 package com.designershop.security;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,22 +43,22 @@ public class JwtAuthService {
 		}
 
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
-		if (LocalDateTime.now().isAfter(userProfile.getPwdExpireDate().toLocalDateTime())) {
+		if (LocalDateTime.now().isAfter(userProfile.getPwdExpireDate())) {
 			userProfile.setIsLock("Y");
-			userProfile.setLockDate(Timestamp.valueOf(currentDateTime));
+			userProfile.setLockDate(currentDateTime);
 			userProfileRepository.save(userProfile);
 			throw new PasswordExpiredException("密碼已過期，請修改密碼");
 		}
 
 		if (!Objects.isNull(userProfile.getUnlockDate())) {
-			if (LocalDateTime.now().isAfter(userProfile.getUnlockDate().toLocalDateTime())) {
+			if (LocalDateTime.now().isAfter(userProfile.getUnlockDate())) {
 				userProfile.setIsLock("N");
 				userProfile.setLockDate(null);
 				userProfile.setUnlockDate(null);
 				userProfileRepository.save(userProfile);
 			} else {
-				throw new UserException("帳號已被鎖定，直到"
-						+ userProfile.getUnlockDate().toLocalDateTime().format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+				throw new UserException(
+						"帳號已被鎖定，直到" + userProfile.getUnlockDate().format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
 			}
 		}
 
@@ -94,8 +93,8 @@ public class JwtAuthService {
 
 				userProfile.setPwdErrorCount(0);
 				userProfile.setIsLock("Y");
-				userProfile.setLockDate(Timestamp.valueOf(currentDateTime));
-				userProfile.setUnlockDate(Timestamp.valueOf(currentDateTime.plusMinutes(5)));
+				userProfile.setLockDate(currentDateTime);
+				userProfile.setUnlockDate(currentDateTime.plusMinutes(5));
 				userProfileRepository.save(userProfile);
 				throw new UserException("密碼輸入錯誤次數過多，帳號已被鎖定，直到"
 						+ currentDateTime.plusMinutes(5).format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));

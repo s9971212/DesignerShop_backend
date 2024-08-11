@@ -1,6 +1,5 @@
 package com.designershop.users;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class PasswordForgotService {
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		userProfile.setPwdForgotToken(token);
-		userProfile.setPwdForgotTokenExpireDate(Timestamp.valueOf(currentDateTime.plusHours(24)));
+		userProfile.setPwdForgotTokenExpireDate(currentDateTime.plusHours(24));
 
 		userProfileRepository.save(userProfile);
 
@@ -80,7 +79,7 @@ public class PasswordForgotService {
 			throw new UserException("token錯誤，請重新確認");
 		}
 
-		if (LocalDateTime.now().isAfter(userProfile.getPwdForgotTokenExpireDate().toLocalDateTime())) {
+		if (LocalDateTime.now().isAfter(userProfile.getPwdForgotTokenExpireDate())) {
 			throw new UserException("token已過期，請重新申請");
 		}
 
@@ -89,10 +88,10 @@ public class PasswordForgotService {
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		userProfile.setPassword(encodePwd);
-		userProfile.setPwdChangedDate(Timestamp.valueOf(currentDateTime));
-		userProfile.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
+		userProfile.setPwdChangedDate(currentDateTime);
+		userProfile.setPwdExpireDate(currentDateTime.plusMonths(3));
 		userProfile.setModifyUser(userProfile.getUserId());
-		userProfile.setModifyDate(Timestamp.valueOf(currentDateTime));
+		userProfile.setModifyDate(currentDateTime);
 		userProfile.setPwdForgotToken(null);
 		userProfile.setPwdForgotTokenExpireDate(null);
 

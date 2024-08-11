@@ -1,6 +1,5 @@
 package com.designershop.admin.users;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,7 +86,7 @@ public class AdminUsersService {
 		UserProfile userProfile = userProfileRepository.findMaxUserId();
 		String userId = FormatUtil.userIdGenerate(userProfile);
 		String encodePwd = new BCryptPasswordEncoder().encode(password);
-		Timestamp birthday = null;
+		LocalDateTime birthday = null;
 		if (StringUtils.isNotBlank(birthdayString)) {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
@@ -110,14 +109,14 @@ public class AdminUsersService {
 		userProfileCreate.setIdCardNo(idCardNo);
 		userProfileCreate.setHomeNo(homeNo);
 		userProfileCreate.setUserImage(userImage);
-		userProfileCreate.setRegisterDate(Timestamp.valueOf(currentDateTime));
-		userProfileCreate.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
+		userProfileCreate.setRegisterDate(currentDateTime);
+		userProfileCreate.setPwdExpireDate(currentDateTime.plusMonths(3));
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		if (!Objects.isNull(sessionUserProfile)) {
 			userId = sessionUserProfile.getUserId();
 		}
 		userProfileCreate.setModifyUser(userId);
-		userProfileCreate.setModifyDate(Timestamp.valueOf(currentDateTime));
+		userProfileCreate.setModifyDate(currentDateTime);
 		Set<UserRole> userRoles = new HashSet<>();
 		for (String roleId : roleIds) {
 			UserRole userRole = userRoleRepository.findByRoleId(roleId);
@@ -212,7 +211,7 @@ public class AdminUsersService {
 			throw new UserException("此帳戶不存在，請重新確認");
 		}
 
-		Timestamp birthday = userProfile.getBirthday();
+		LocalDateTime birthday = userProfile.getBirthday();
 		if (StringUtils.isNotBlank(birthdayString)) {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
@@ -233,7 +232,7 @@ public class AdminUsersService {
 		userProfile.setUserImage(userImage);
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		userProfile.setModifyUser(sessionUserProfile.getUserId());
-		userProfile.setModifyDate(Timestamp.valueOf(DateTimeFormatUtil.currentDateTime()));
+		userProfile.setModifyDate(DateTimeFormatUtil.currentDateTime());
 		Set<UserRole> userRoles = new HashSet<>();
 		for (String roleId : roleIds) {
 			UserRole userRole = userRoleRepository.findByRoleId(roleId);
@@ -280,11 +279,11 @@ public class AdminUsersService {
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		userProfile.setPassword(encodePwd);
-		userProfile.setPwdChangedDate(Timestamp.valueOf(currentDateTime));
-		userProfile.setPwdExpireDate(Timestamp.valueOf(currentDateTime.plusMonths(3)));
+		userProfile.setPwdChangedDate(currentDateTime);
+		userProfile.setPwdExpireDate(currentDateTime.plusMonths(3));
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		userProfile.setModifyUser(sessionUserProfile.getUserId());
-		userProfile.setModifyDate(Timestamp.valueOf(currentDateTime));
+		userProfile.setModifyDate(currentDateTime);
 
 		userProfileRepository.save(userProfile);
 

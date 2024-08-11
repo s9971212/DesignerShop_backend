@@ -1,6 +1,6 @@
 package com.designershop.entities;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class UserProfile {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "birthday")
-	private Timestamp birthday;
+	private LocalDateTime birthday;
 
 	@Column(name = "id_card_no", length = 10)
 	private String idCardNo;
@@ -68,15 +68,15 @@ public class UserProfile {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "register_date", nullable = false)
-	private Timestamp registerDate;
+	private LocalDateTime registerDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "pwd_changed_date")
-	private Timestamp pwdChangedDate;
+	private LocalDateTime pwdChangedDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "pwd_expire_date", nullable = false)
-	private Timestamp pwdExpireDate;
+	private LocalDateTime pwdExpireDate;
 
 	@Column(name = "sign_on_status", length = 1)
 	private String signOnStatus;
@@ -92,18 +92,18 @@ public class UserProfile {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "modify_date")
-	private Timestamp modifyDate;
+	private LocalDateTime modifyDate;
 
 	@Column(name = "is_lock", length = 1)
 	private String isLock;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "lock_date")
-	private Timestamp lockDate;
+	private LocalDateTime lockDate;
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "unlock_date")
-	private Timestamp unlockDate;
+	private LocalDateTime unlockDate;
 
 	@Column(name = "sign_on_token", length = 1024)
 	private String signOnToken;
@@ -113,7 +113,7 @@ public class UserProfile {
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "pwd_forgot_token_expire_date")
-	private Timestamp pwdForgotTokenExpireDate;
+	private LocalDateTime pwdForgotTokenExpireDate;
 
 	@Column(name = "google_id", length = 10)
 	private String googleId;

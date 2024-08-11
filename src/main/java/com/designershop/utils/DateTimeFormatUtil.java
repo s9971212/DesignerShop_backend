@@ -1,6 +1,5 @@
 package com.designershop.utils;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,23 +16,21 @@ public final class DateTimeFormatUtil {
 	public static final DateTimeFormatter FULL_DATE_DASH_TIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final DateTimeFormatter FULL_DATE_SLASH_TIME = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
-	public static String currentLocalDateFormat() {
-		LocalDate currentDate = LocalDate.now();
-		return currentDate.format(SIMPLE_YEAR_MONTH);
-	}
-
 	public static LocalDateTime currentDateTime() {
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		return currentDateTime;
 	}
 
-	public static Timestamp localDateTimeFormat(String date) {
-		LocalDateTime localDateTime = LocalDateTime.from(FULL_DATE_DASH_TIME.parse(date));
-		return Timestamp.valueOf(localDateTime);
+	public static String currentLocalDateFormat() {
+		LocalDate currentDate = LocalDate.now();
+		return currentDate.format(SIMPLE_YEAR_MONTH);
 	}
 
-	public static String localDateTimeFormat(Timestamp timestamp) {
-		LocalDateTime localDateTime = timestamp.toLocalDateTime();
+	public static LocalDateTime localDateTimeFormat(String date) {
+		return LocalDateTime.from(FULL_DATE_DASH_TIME.parse(date));
+	}
+
+	public static String localDateTimeFormat(LocalDateTime localDateTime) {
 		return localDateTime.format(FULL_DATE_DASH_TIME);
 	}
 }
