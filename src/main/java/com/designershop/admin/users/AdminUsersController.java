@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
+import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 
 import jakarta.mail.MessagingException;
@@ -32,7 +33,7 @@ public class AdminUsersController {
 
 	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody @Valid AdminCreateUserRequestModel request)
-			throws UserException, MessagingException {
+			throws EmptyException, UserException, MessagingException {
 		String account = adminUsersService.createUser(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
@@ -51,14 +52,15 @@ public class AdminUsersController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updateUser(@PathVariable String id,
-			@RequestBody @Valid AdminUpdateUserRequestModel request) throws UserException {
+			@RequestBody @Valid AdminUpdateUserRequestModel request) throws EmptyException, UserException {
 		String account = adminUsersService.updateUser(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody @Valid AdminUpdatePasswordRequestModel request) throws UserException, MessagingException {
+			@RequestBody @Valid AdminUpdatePasswordRequestModel request)
+			throws EmptyException, UserException, MessagingException {
 		String account = adminUsersService.updatePassword(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}

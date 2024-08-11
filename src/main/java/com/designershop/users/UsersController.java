@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.users.models.CreateUserRequestModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
@@ -30,7 +31,7 @@ public class UsersController {
 
 	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request)
-			throws UserException, MessagingException {
+			throws EmptyException, UserException, MessagingException {
 		String account = usersService.createUser(request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
@@ -43,14 +44,15 @@ public class UsersController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updateUser(@PathVariable String id,
-			@RequestBody @Valid UpdateUserRequestModel request) throws UserException {
+			@RequestBody @Valid UpdateUserRequestModel request) throws EmptyException, UserException {
 		String account = usersService.updateUser(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody @Valid UpdatePasswordRequestModel request) throws UserException, MessagingException {
+			@RequestBody @Valid UpdatePasswordRequestModel request)
+			throws EmptyException, UserException, MessagingException {
 		String account = usersService.updatePassword(id, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(account);
 	}

@@ -30,7 +30,7 @@ public class PasswordForgotService {
 	private final UserProfileRepository userProfileRepository;
 
 	public String passwordForgotSendEmail(PasswordForgotSendEmailRequestModel request)
-			throws UserException, MessagingException {
+			throws EmptyException, UserException, MessagingException {
 		String email = request.getEmail();
 
 		if (StringUtils.isBlank(email)) {
@@ -62,7 +62,8 @@ public class PasswordForgotService {
 		return userProfile.getAccount();
 	}
 
-	public String passwordForgot(String token, PasswordForgotRequestModel request) throws UserException {
+	public String passwordForgot(String token, PasswordForgotRequestModel request)
+			throws EmptyException, UserException {
 		String password = request.getPassword();
 		String passwordCheck = request.getPasswordCheck();
 

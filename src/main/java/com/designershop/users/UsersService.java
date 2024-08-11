@@ -12,6 +12,7 @@ import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.UserProfile;
 import com.designershop.entities.UserRole;
+import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.users.models.CreateUserRequestModel;
@@ -31,7 +32,7 @@ public class UsersService {
 	private final AdminUsersService adminUsersService;
 	private final UserProfileRepository userProfileRepository;
 
-	public String createUser(CreateUserRequestModel request) throws UserException, MessagingException {
+	public String createUser(CreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
 		AdminCreateUserRequestModel adminCreateUserRequestModel = new AdminCreateUserRequestModel();
 		BeanUtils.copyProperties(request, adminCreateUserRequestModel);
 		adminCreateUserRequestModel.setUserType("B1");
@@ -47,7 +48,7 @@ public class UsersService {
 		return response;
 	}
 
-	public String updateUser(String userId, UpdateUserRequestModel request) throws UserException {
+	public String updateUser(String userId, UpdateUserRequestModel request) throws EmptyException, UserException {
 		AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
 		BeanUtils.copyProperties(request, adminUpdateUserRequestModel);
 
@@ -75,7 +76,7 @@ public class UsersService {
 	}
 
 	public String updatePassword(String userId, UpdatePasswordRequestModel request)
-			throws UserException, MessagingException {
+			throws EmptyException, UserException, MessagingException {
 		AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
 		BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
 		validateUserPermission(userId);

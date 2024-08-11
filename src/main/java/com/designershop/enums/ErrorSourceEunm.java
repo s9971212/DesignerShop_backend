@@ -7,25 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorSourceEunm {
 
+	// Empty
+	E,
 	// User
 	U,
-	// eSmart
-	E,
-	// OBS
-	O,
-	// CDR
-	C,
-	// eReport
-	ER,
-	// 存託
-	CDS,
-	// 台網
-	CA,
-	// 區塊練
-	B,
-	// OTP
-	P,
-	// RenderTp
-	R
-
+	// Product
+	P
 }

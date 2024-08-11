@@ -2,27 +2,35 @@ package com.designershop.exceptions;
 
 import org.apache.logging.log4j.Level;
 
-/**
- * request或以此當key查出來資料為空
- */
-public class EmptyException extends UserException {
+import com.designershop.enums.ErrorSourceEunm;
+
+import lombok.Getter;
+
+@Getter
+public class EmptyException extends Exception implements IBaseException {
+
+	protected String[] customMessages;
 
 	public EmptyException(String message) {
 		super(message);
 	}
 
-	public EmptyException(String message, String... customMessages) {
-		super(message);
-		this.customMessages = customMessages;
+	public EmptyException(Throwable cause, String message) {
+		super(message, cause);
 	}
 
 	public EmptyException(Throwable cause, String message, String... customMessages) {
-		super(cause, message);
+		super(message, cause);
 		this.customMessages = customMessages;
 	}
 
 	@Override
+	public String getSystemName() {
+		return ErrorSourceEunm.E.name();
+	}
+
+	@Override
 	public Level getLogLevel() {
-		return Level.WARN;
+		return Level.INFO;
 	}
 }

@@ -40,7 +40,8 @@ public class AdminUsersService {
 	private final UserProfileRepository userProfileRepository;
 	private final UserRoleRepository userRoleRepository;
 
-	public String createUser(AdminCreateUserRequestModel request) throws UserException, MessagingException {
+	public String createUser(AdminCreateUserRequestModel request)
+			throws EmptyException, UserException, MessagingException {
 		String userType = request.getUserType();
 		String sellerType = request.getSellerType();
 		String designerType = request.getDesignerType();
@@ -167,7 +168,7 @@ public class AdminUsersService {
 		return response;
 	}
 
-	public String updateUser(String userId, AdminUpdateUserRequestModel request) throws UserException {
+	public String updateUser(String userId, AdminUpdateUserRequestModel request) throws EmptyException, UserException {
 		String userType = request.getUserType();
 		String sellerType = request.getSellerType();
 		String designerType = request.getDesignerType();
@@ -248,7 +249,7 @@ public class AdminUsersService {
 	}
 
 	public String updatePassword(String userId, AdminUpdatePasswordRequestModel request)
-			throws UserException, MessagingException {
+			throws EmptyException, UserException, MessagingException {
 		String oldPassword = request.getOldPassword();
 		String password = request.getPassword();
 		String passwordCheck = request.getPasswordCheck();
