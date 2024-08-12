@@ -1,5 +1,6 @@
 package com.designershop.entities;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -21,24 +22,31 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_image")
-public class ProductImage {
+@Table(name = "product_evaluate")
+public class ProductEvaluate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "image_id", nullable = false)
-	private int imageId;
+	@Column(name = "evaluate_id", nullable = false)
+	private int evaluateId;
 
-	@Column(name = "image", nullable = false, columnDefinition = "TEXT")
-	private String image;
+	@Column(name = "stars", nullable = false, precision = 3, scale = 2)
+	private BigDecimal stars;
+
+	@Column(name = "evaluate", nullable = false, columnDefinition = "TEXT")
+	private String evaluate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_id")
 	private Product product;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id")
+	private UserProfile userProfile;
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(imageId);
+		return Objects.hash(evaluateId);
 	}
 
 	@Override
@@ -49,7 +57,7 @@ public class ProductImage {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProductImage other = (ProductImage) obj;
-		return Objects.equals(imageId, other.imageId);
+		ProductEvaluate other = (ProductEvaluate) obj;
+		return Objects.equals(evaluateId, other.evaluateId);
 	}
 }

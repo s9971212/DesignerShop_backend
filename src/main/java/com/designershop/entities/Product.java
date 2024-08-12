@@ -66,11 +66,22 @@ public class Product {
 	private LocalDateTime updatedDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "category_id")
+	private ProductCategory productCategory;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "brand_id")
+	private ProductBrand productBrand;
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	private UserProfile userProfile;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductImage> productImages;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+	private List<ProductEvaluate> ProductEvaluates;
 
 	@Override
 	public int hashCode() {

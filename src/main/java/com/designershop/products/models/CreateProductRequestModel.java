@@ -12,6 +12,12 @@ import lombok.Setter;
 public class CreateProductRequestModel {
 
 	@NotBlank
+	private String category;
+
+	@NotBlank
+	private String brand;
+
+	@NotBlank
 	private String productName;
 
 	private String productDescription;

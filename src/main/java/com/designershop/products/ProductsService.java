@@ -3,15 +3,20 @@ package com.designershop.products;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.designershop.entities.Product;
+import com.designershop.entities.ProductBrand;
+import com.designershop.entities.ProductCategory;
 import com.designershop.entities.ProductImage;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
 import com.designershop.products.models.CreateProductRequestModel;
+import com.designershop.repositories.ProductBrandRepository;
+import com.designershop.repositories.ProductCategoryRepository;
 import com.designershop.repositories.ProductImageRepository;
 import com.designershop.repositories.ProductRepository;
 import com.designershop.utils.DateTimeFormatUtil;
@@ -25,9 +30,13 @@ public class ProductsService {
 
 	private final HttpSession session;
 	private final ProductRepository productRepository;
+	private final ProductCategoryRepository productCategoryRepository;
+	private final ProductBrandRepository productBrandRepository;
 	private final ProductImageRepository productImageRepository;
 
 	public String createProduct(CreateProductRequestModel request) throws EmptyException, ProductException {
+		String category = request.getCategory();
+		String brand = request.getBrand();
 		String productName = request.getProductName();
 		String productDescription = request.getProductDescription();
 		String priceString = request.getPrice();
@@ -35,9 +44,10 @@ public class ProductsService {
 		List<String> images = request.getImages();
 		String termsCheckBox = request.getTermsCheckBox();
 
-		if (StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
-				|| StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
-			throw new EmptyException("商品名稱、價格、庫存數量與條款確認不得為空");
+		if (StringUtils.isBlank(category) || StringUtils.isBlank(brand) || StringUtils.isBlank(productName)
+				|| StringUtils.isBlank(priceString) || StringUtils.isBlank(stockQuantityString)
+				|| StringUtils.isBlank(termsCheckBox)) {
+			throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
 		}
 
 		if (images.isEmpty()) {
@@ -56,6 +66,17 @@ public class ProductsService {
 		int stockQuantity = Integer.parseInt(stockQuantityString);
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
+		ProductCategory productCategory = productCategoryRepository.findByCategoryName(category);
+
+		ProductBrand productBrand = productBrandRepository.findByBrand(brand);
+		if (Objects.isNull(productBrand)) {
+			productBrand = new ProductBrand();
+			productBrand.setBrand(brand);
+			productBrandRepository.save(productBrand);
+		}
+
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+
 		Product productCreate = new Product();
 		productCreate.setProductName(productName);
 		productCreate.setProductDescription(productDescription);
@@ -63,7 +84,8 @@ public class ProductsService {
 		productCreate.setStockQuantity(stockQuantity);
 		productCreate.setCreatedDate(currentDateTime);
 		productCreate.setUpdatedDate(currentDateTime);
-		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		productCreate.setProductCategory(productCategory);
+		productCreate.setProductBrand(productBrand);
 		productCreate.setUserProfile(sessionUserProfile);
 
 		productRepository.save(productCreate);

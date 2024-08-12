@@ -12,7 +12,13 @@ CREATE TABLE product (
     likes INT DEFAULT 0 NOT NULL,
     created_date DATETIME NOT NULL,
     updated_date DATETIME NOT NULL,
+    category_id INT NOT NULL,
+    brand_id INT NOT NULL,
     user_id NVARCHAR(10) NOT NULL,
+    FOREIGN KEY (category_id)
+        REFERENCES product_category (category_id),
+    FOREIGN KEY (brand_id)
+        REFERENCES product_brand (brand_id),
     FOREIGN KEY (user_id)
         REFERENCES user_profile (user_id)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;

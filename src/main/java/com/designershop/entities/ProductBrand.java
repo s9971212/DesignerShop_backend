@@ -1,5 +1,6 @@
 package com.designershop.entities;
 
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -8,8 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,24 +21,23 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_image")
-public class ProductImage {
+@Table(name = "product_brand")
+public class ProductBrand {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "image_id", nullable = false)
-	private int imageId;
+	@Column(name = "brand_id", nullable = false)
+	private int brandId;
 
-	@Column(name = "image", nullable = false, columnDefinition = "TEXT")
-	private String image;
+	@Column(name = "brand", nullable = false, length = 50)
+	private String brand;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "product_id")
-	private Product product;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "productBrand")
+	private List<Product> products;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(imageId);
+		return Objects.hash(brandId, brand);
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class ProductImage {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProductImage other = (ProductImage) obj;
-		return Objects.equals(imageId, other.imageId);
+		ProductBrand other = (ProductBrand) obj;
+		return Objects.equals(brandId, other.brandId) && Objects.equals(brand, other.brand);
 	}
 }

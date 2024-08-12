@@ -1,6 +1,7 @@
 package com.designershop.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -128,7 +129,10 @@ public class UserProfile {
 	private Set<UserRole> userRoles;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Product> products;
+	private List<Product> products;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProductEvaluate> ProductEvaluates;
 
 	@Override
 	public int hashCode() {
