@@ -68,4 +68,3 @@ FROM
     information_schema.tables AS t1,
     information_schema.tables AS t2
 LIMIT 3;
-

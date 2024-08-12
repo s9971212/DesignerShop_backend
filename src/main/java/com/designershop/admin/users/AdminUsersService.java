@@ -92,11 +92,24 @@ public class AdminUsersService {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
+
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		if (!Objects.isNull(sessionUserProfile)) {
+			userId = sessionUserProfile.getUserId();
+		}
+
 		Set<String> roleIds = new HashSet<>();
 		roleIds.add(userType);
 		roleIds.add(sellerType);
 		roleIds.add(designerType);
 		roleIds.add(adminType);
+		Set<UserRole> userRoles = new HashSet<>();
+		for (String roleId : roleIds) {
+			UserRole userRole = userRoleRepository.findByRoleId(roleId);
+			if (!Objects.isNull(userRole)) {
+				userRoles.add(userRole);
+			}
+		}
 
 		UserProfile userProfileCreate = new UserProfile();
 		userProfileCreate.setUserId(userId);
@@ -112,19 +125,8 @@ public class AdminUsersService {
 		userProfileCreate.setUserImage(userImage);
 		userProfileCreate.setRegisterDate(currentDateTime);
 		userProfileCreate.setPwdExpireDate(currentDateTime.plusMonths(3));
-		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-		if (!Objects.isNull(sessionUserProfile)) {
-			userId = sessionUserProfile.getUserId();
-		}
 		userProfileCreate.setModifyUser(userId);
 		userProfileCreate.setModifyDate(currentDateTime);
-		Set<UserRole> userRoles = new HashSet<>();
-		for (String roleId : roleIds) {
-			UserRole userRole = userRoleRepository.findByRoleId(roleId);
-			if (!Objects.isNull(userRole)) {
-				userRoles.add(userRole);
-			}
-		}
 		userProfileCreate.setUserRoles(userRoles);
 
 		userProfileRepository.save(userProfileCreate);
@@ -216,11 +218,21 @@ public class AdminUsersService {
 		if (StringUtils.isNotBlank(birthdayString)) {
 			birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
 		}
+
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+
 		Set<String> roleIds = new HashSet<>();
 		roleIds.add(userType);
 		roleIds.add(sellerType);
 		roleIds.add(designerType);
 		roleIds.add(adminType);
+		Set<UserRole> userRoles = new HashSet<>();
+		for (String roleId : roleIds) {
+			UserRole userRole = userRoleRepository.findByRoleId(roleId);
+			if (!Objects.isNull(userRole)) {
+				userRoles.add(userRole);
+			}
+		}
 
 		userProfile.setAccount(account);
 		userProfile.setEmail(email);
@@ -231,16 +243,8 @@ public class AdminUsersService {
 		userProfile.setIdCardNo(idCardNo);
 		userProfile.setHomeNo(homeNo);
 		userProfile.setUserImage(userImage);
-		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		userProfile.setModifyUser(sessionUserProfile.getUserId());
 		userProfile.setModifyDate(DateTimeFormatUtil.currentDateTime());
-		Set<UserRole> userRoles = new HashSet<>();
-		for (String roleId : roleIds) {
-			UserRole userRole = userRoleRepository.findByRoleId(roleId);
-			if (!Objects.isNull(userRole)) {
-				userRoles.add(userRole);
-			}
-		}
 		userProfile.setUserRoles(userRoles);
 
 		userProfileRepository.save(userProfile);
@@ -278,11 +282,11 @@ public class AdminUsersService {
 
 		String encodePwd = bcryptPasswordEncoder.encode(password);
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
+		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
 		userProfile.setPassword(encodePwd);
 		userProfile.setPwdChangedDate(currentDateTime);
 		userProfile.setPwdExpireDate(currentDateTime.plusMonths(3));
-		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 		userProfile.setModifyUser(sessionUserProfile.getUserId());
 		userProfile.setModifyDate(currentDateTime);
 
