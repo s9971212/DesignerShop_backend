@@ -150,6 +150,26 @@ public class AdminUsersService {
 		for (UserProfile userProfile : userProfileList) {
 			AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
 			BeanUtils.copyProperties(userProfile, adminUpdateUserRequestModel);
+
+			for (UserRole userRole : userProfile.getUserRoles()) {
+				switch (userRole.getRoleCategory()) {
+				case "buyer":
+					adminUpdateUserRequestModel.setUserType(userRole.getRoleId());
+					break;
+				case "seller":
+					adminUpdateUserRequestModel.setSellerType(userRole.getRoleId());
+					break;
+				case "designer":
+					adminUpdateUserRequestModel.setDesignerType(userRole.getRoleId());
+					break;
+				case "admin":
+					adminUpdateUserRequestModel.setAdminType(userRole.getRoleId());
+					break;
+				default:
+					break;
+				}
+			}
+
 			adminUpdateUserRequestModel.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
 			response.add(adminUpdateUserRequestModel);
 		}
