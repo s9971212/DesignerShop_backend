@@ -10,6 +10,6 @@ import com.designershop.entities.ProductBrand;
 @Repository
 public interface ProductBrandRepository extends JpaRepository<ProductBrand, Long> {
 
-	@Query(value = "SELECT * FROM product_brand WHERE brand =:brand", nativeQuery = true)
-	ProductBrand findByBrand(@Param("brand") String brand);
+	@Query(value = "SELECT * FROM product_brand WHERE LOWER(brand) LIKE LOWER(CONCAT('%', :brand, '%'))", nativeQuery = true)
+	ProductBrand findByBrandIgnoreCase(@Param("brand") String brand);
 }
