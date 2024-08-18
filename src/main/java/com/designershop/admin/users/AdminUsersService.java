@@ -95,8 +95,9 @@ public class AdminUsersService {
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+		String modifyUser = userId;
 		if (Objects.nonNull(sessionUserProfile)) {
-			userId = sessionUserProfile.getUserId();
+			modifyUser = sessionUserProfile.getUserId();
 		}
 
 		Set<String> roleIds = new HashSet<>();
@@ -126,7 +127,7 @@ public class AdminUsersService {
 		userProfileCreate.setUserImage(userImage);
 		userProfileCreate.setRegisterDate(currentDateTime);
 		userProfileCreate.setPwdExpireDate(currentDateTime.plusMonths(3));
-		userProfileCreate.setModifyUser(userId);
+		userProfileCreate.setModifyUser(modifyUser);
 		userProfileCreate.setModifyDate(currentDateTime);
 		userProfileCreate.setUserRoles(userRoles);
 
