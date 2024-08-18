@@ -42,25 +42,14 @@ public class UserProductsController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
 	}
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<List<UpdateProductRequestModel>> readAllProductByUser(@PathVariable String userId) {
-		List<UpdateProductRequestModel> response = userProductsService.readAllProductByUser(userId);
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+	@PutMapping("/{id}")
+	public ResponseEntity<String> updateProduct(@PathVariable String id,
+			@RequestBody @Valid UpdateProductRequestModel request)
+			throws EmptyException, UserException, ProductException {
+		String productName = userProductsService.updateProduct(id, request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
 	}
-//
-//	@GetMapping("/{id}")
-//	public ResponseEntity<UpdateProductRequestModel> readProduct(@PathVariable String id) {
-//		UpdateProductRequestModel response = productsService.readProduct(id);
-//		return ResponseEntity.status(HttpStatus.OK).body(response);
-//	}
-//
-//	@PutMapping("/{id}")
-//	public ResponseEntity<String> updateProduct(@PathVariable String id,
-//			@RequestBody @Valid UpdateProductRequestModel request) {
-//		String productName = productsService.updateProduct(id, request);
-//		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
-//	}
-//
+
 //	@DeleteMapping("/{id}")
 //	public ResponseEntity<String> deleteProduct(@PathVariable String id) {
 //		String productName = productsService.deleteProduct(id);

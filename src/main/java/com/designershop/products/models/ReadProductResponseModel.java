@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateProductRequestModel {
+public class ReadProductResponseModel {
 
 	@NotBlank
 	private String category;
@@ -28,9 +28,15 @@ public class UpdateProductRequestModel {
 	@NotBlank
 	private String stockQuantity;
 
+	@NotBlank
+	private String soldQuantity;
+
+	@NotBlank
+	private String likes;
+
 	@NotEmpty
 	private List<String> images;
 
 	@NotBlank
-	private String termsCheckBox;
+	private String createdDate;
 }

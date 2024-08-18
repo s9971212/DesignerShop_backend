@@ -30,7 +30,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products",
+				.requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
 						"/api/verification/send", // 發送驗證碼
 						"/api/verification/check" // 檢查驗證碼
 				).permitAll().requestMatchers("/api/users/**").hasAuthority("ROLE_USER")
