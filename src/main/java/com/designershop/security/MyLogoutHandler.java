@@ -24,7 +24,7 @@ public class MyLogoutHandler implements LogoutHandler {
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-		if (!Objects.isNull(sessionUserProfile)) {
+		if (Objects.nonNull(sessionUserProfile)) {
 			sessionUserProfile.setSignOnStatus("N");
 			sessionUserProfile.setPwdErrorCount(0);
 			sessionUserProfile.setSignOnToken(null);

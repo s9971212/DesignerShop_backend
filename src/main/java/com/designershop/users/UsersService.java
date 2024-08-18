@@ -16,6 +16,7 @@ import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.users.models.CreateUserRequestModel;
+import com.designershop.users.models.ReadUserResponseModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
@@ -39,11 +40,19 @@ public class UsersService {
 		return adminUsersService.createUser(adminCreateUserRequestModel);
 	}
 
-	public UpdateUserRequestModel readUser(String userId) throws UserException {
-		UpdateUserRequestModel response = new UpdateUserRequestModel();
+	public ReadUserResponseModel readUser(String userId) throws UserException {
 		UserProfile userProfile = validateUserPermission(userId);
+		ReadUserResponseModel response = new ReadUserResponseModel();
 		BeanUtils.copyProperties(userProfile, response);
-		response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+
+		if (Objects.nonNull(userProfile.getBirthday())) {
+			response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+		}
+		response.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate()));
+		if (Objects.nonNull(userProfile.getPwdChangedDate())) {
+			response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate()));
+		}
+		response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
 
 		return response;
 	}

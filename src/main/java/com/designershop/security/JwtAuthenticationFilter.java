@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
 			if (JwtUtil.validateToken(jwt, myUser)) {
-				if (!Objects.isNull(sessionUserProfile) && StringUtils.equals(sessionUserProfile.getSignOnToken(), jwt)
+				if (Objects.nonNull(sessionUserProfile) && StringUtils.equals(sessionUserProfile.getSignOnToken(), jwt)
 						&& !StringUtils.equals("Y", sessionUserProfile.getIsLock())) {
 					UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 							myUser, null, myUser.getAuthorities());

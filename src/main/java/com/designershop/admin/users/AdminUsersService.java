@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
+import com.designershop.admin.users.models.AdminReadUserResponseModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.UserProfile;
@@ -94,7 +95,7 @@ public class AdminUsersService {
 		LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
 		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-		if (!Objects.isNull(sessionUserProfile)) {
+		if (Objects.nonNull(sessionUserProfile)) {
 			userId = sessionUserProfile.getUserId();
 		}
 
@@ -106,7 +107,7 @@ public class AdminUsersService {
 		Set<UserRole> userRoles = new HashSet<>();
 		for (String roleId : roleIds) {
 			UserRole userRole = userRoleRepository.findByRoleId(roleId);
-			if (!Objects.isNull(userRole)) {
+			if (Objects.nonNull(userRole)) {
 				userRoles.add(userRole);
 			}
 		}
@@ -143,49 +144,87 @@ public class AdminUsersService {
 		return account;
 	}
 
-	public List<AdminUpdateUserRequestModel> readAllUser() {
-		List<AdminUpdateUserRequestModel> response = new ArrayList<>();
+	public List<AdminReadUserResponseModel> readAllUser() {
+		List<AdminReadUserResponseModel> response = new ArrayList<>();
 
 		List<UserProfile> userProfileList = userProfileRepository.findAll();
 		for (UserProfile userProfile : userProfileList) {
-			AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
-			BeanUtils.copyProperties(userProfile, adminUpdateUserRequestModel);
+			AdminReadUserResponseModel adminReadUserResponseModel = new AdminReadUserResponseModel();
+			BeanUtils.copyProperties(userProfile, adminReadUserResponseModel);
 
 			for (UserRole userRole : userProfile.getUserRoles()) {
 				switch (userRole.getRoleCategory()) {
 				case "buyer":
-					adminUpdateUserRequestModel.setUserType(userRole.getRoleId());
+					adminReadUserResponseModel.setUserType(userRole.getRoleId());
 					break;
 				case "seller":
-					adminUpdateUserRequestModel.setSellerType(userRole.getRoleId());
+					adminReadUserResponseModel.setSellerType(userRole.getRoleId());
 					break;
 				case "designer":
-					adminUpdateUserRequestModel.setDesignerType(userRole.getRoleId());
+					adminReadUserResponseModel.setDesignerType(userRole.getRoleId());
 					break;
 				case "admin":
-					adminUpdateUserRequestModel.setAdminType(userRole.getRoleId());
+					adminReadUserResponseModel.setAdminType(userRole.getRoleId());
 					break;
 				default:
 					break;
 				}
 			}
 
-			adminUpdateUserRequestModel.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
-			response.add(adminUpdateUserRequestModel);
+			if (Objects.nonNull(userProfile.getBirthday())) {
+				adminReadUserResponseModel
+						.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+			}
+			adminReadUserResponseModel
+					.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate()));
+			if (Objects.nonNull(userProfile.getPwdChangedDate())) {
+				adminReadUserResponseModel
+						.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate()));
+			}
+			adminReadUserResponseModel
+					.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+			response.add(adminReadUserResponseModel);
 		}
 
 		return response;
 	}
 
-	public AdminUpdateUserRequestModel readUser(String userId) throws UserException {
+	public AdminReadUserResponseModel readUser(String userId) throws UserException {
 		UserProfile userProfile = userProfileRepository.findByUserId(userId);
 		if (Objects.isNull(userProfile)) {
 			throw new UserException("此帳戶不存在，請重新確認");
 		}
 
-		AdminUpdateUserRequestModel response = new AdminUpdateUserRequestModel();
+		AdminReadUserResponseModel response = new AdminReadUserResponseModel();
 		BeanUtils.copyProperties(userProfile, response);
-		response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+
+		for (UserRole userRole : userProfile.getUserRoles()) {
+			switch (userRole.getRoleCategory()) {
+			case "buyer":
+				response.setUserType(userRole.getRoleId());
+				break;
+			case "seller":
+				response.setSellerType(userRole.getRoleId());
+				break;
+			case "designer":
+				response.setDesignerType(userRole.getRoleId());
+				break;
+			case "admin":
+				response.setAdminType(userRole.getRoleId());
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (Objects.nonNull(userProfile.getBirthday())) {
+			response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+		}
+		response.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate()));
+		if (Objects.nonNull(userProfile.getPwdChangedDate())) {
+			response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate()));
+		}
+		response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
 
 		return response;
 	}
@@ -249,7 +288,7 @@ public class AdminUsersService {
 		Set<UserRole> userRoles = new HashSet<>();
 		for (String roleId : roleIds) {
 			UserRole userRole = userRoleRepository.findByRoleId(roleId);
-			if (!Objects.isNull(userRole)) {
+			if (Objects.nonNull(userRole)) {
 				userRoles.add(userRole);
 			}
 		}

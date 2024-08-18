@@ -13,7 +13,7 @@ public final class FormatUtil {
 		String currentDate = DateTimeFormatUtil.currentLocalDateFormat().substring(1);
 
 		String userId = "0240700000";
-		if (!Objects.isNull(userProfile)) {
+		if (Objects.nonNull(userProfile)) {
 			userId = userProfile.getUserId();
 		}
 

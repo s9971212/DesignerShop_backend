@@ -50,7 +50,7 @@ public class JwtAuthService {
 			throw new PasswordExpiredException("密碼已過期，請修改密碼");
 		}
 
-		if (!Objects.isNull(userProfile.getUnlockDate())) {
+		if (Objects.nonNull(userProfile.getUnlockDate())) {
 			if (LocalDateTime.now().isAfter(userProfile.getUnlockDate())) {
 				userProfile.setIsLock("N");
 				userProfile.setLockDate(null);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.users.models.CreateUserRequestModel;
+import com.designershop.users.models.ReadUserResponseModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 
@@ -37,8 +38,8 @@ public class UsersController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<UpdateUserRequestModel> readUser(@PathVariable String id) throws UserException {
-		UpdateUserRequestModel response = usersService.readUser(id);
+	public ResponseEntity<ReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
+		ReadUserResponseModel response = usersService.readUser(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 

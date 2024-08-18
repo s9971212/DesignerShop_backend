@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
+import com.designershop.admin.users.models.AdminReadUserResponseModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.exceptions.EmptyException;
@@ -39,14 +40,14 @@ public class AdminUsersController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<AdminUpdateUserRequestModel>> readAllUser() {
-		List<AdminUpdateUserRequestModel> response = adminUsersService.readAllUser();
+	public ResponseEntity<List<AdminReadUserResponseModel>> readAllUser() {
+		List<AdminReadUserResponseModel> response = adminUsersService.readAllUser();
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<AdminUpdateUserRequestModel> readUser(@PathVariable String id) throws UserException {
-		AdminUpdateUserRequestModel response = adminUsersService.readUser(id);
+	public ResponseEntity<AdminReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
+		AdminReadUserResponseModel response = adminUsersService.readUser(id);
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
