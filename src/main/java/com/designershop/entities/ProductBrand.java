@@ -32,7 +32,7 @@ public class ProductBrand {
 	@Column(name = "brand", nullable = false, length = 50)
 	private String brand;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "productBrand")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productBrand")
 	private List<Product> products;
 
 	@Override

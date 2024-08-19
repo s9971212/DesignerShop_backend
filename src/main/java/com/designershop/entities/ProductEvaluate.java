@@ -36,13 +36,12 @@ public class ProductEvaluate {
 	@Column(name = "evaluate", nullable = false, columnDefinition = "TEXT")
 	private String evaluate;
 
+	@Column(name = "user_id", nullable = false, length = 10)
+	private String userId;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_id")
 	private Product product;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id")
-	private UserProfile userProfile;
 
 	@Override
 	public int hashCode() {

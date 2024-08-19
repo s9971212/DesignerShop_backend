@@ -2,24 +2,19 @@ package com.designershop.products;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.Product;
 import com.designershop.entities.ProductBrand;
 import com.designershop.entities.ProductCategory;
 import com.designershop.entities.ProductImage;
 import com.designershop.entities.UserProfile;
-import com.designershop.entities.UserRole;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
@@ -187,6 +182,19 @@ public class UserProductsService {
 		}
 
 		return productName;
+	}
+
+	public String deleteProduct(String productId) throws UserException, ProductException {
+		validateUserPermission(productId);
+
+		Product product = productRepository.findByProductId(productId);
+		if (Objects.isNull(product)) {
+			throw new ProductException("此商品不存在，請重新確認");
+		}
+
+		productRepository.delete(product);
+
+		return product.getProductName();
 	}
 
 	public UserProfile validateUserPermission(String productId) throws UserException {

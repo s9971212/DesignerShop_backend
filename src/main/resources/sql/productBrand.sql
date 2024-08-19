@@ -7,3 +7,7 @@ CREATE TABLE product_brand (
     brand NVARCHAR(50) NOT NULL,
     UNIQUE (brand)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
+
+INSERT INTO product_brand (brand) VALUES
+('SAMSUNG 三星'),
+('ASUS 華碩');

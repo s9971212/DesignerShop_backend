@@ -32,7 +32,7 @@ public class UserRole {
 	@Column(name = "role_category", nullable = false, length = 10)
 	private String roleCategory;
 
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "userRoles")
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
 	private Set<UserProfile> userProfiles;
 
 	@Override

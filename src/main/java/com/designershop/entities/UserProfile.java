@@ -128,11 +128,8 @@ public class UserProfile {
 	@JoinTable(name = "user_profile_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<UserRole> userRoles;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Product> products;
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductEvaluate> ProductEvaluates;
 
 	@Override
 	public int hashCode() {
