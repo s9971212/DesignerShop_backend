@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -83,8 +85,11 @@ public class Product {
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductImage> productImages;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
-	private List<ProductEvaluate> ProductEvaluates;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<ProductLikes> ProductLikes;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProductEvaluation> ProductEvaluation;
 
 	@Override
 	public int hashCode() {

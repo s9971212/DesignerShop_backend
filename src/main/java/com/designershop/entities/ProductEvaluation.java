@@ -22,19 +22,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_evaluate")
-public class ProductEvaluate {
+@Table(name = "product_evaluation")
+public class ProductEvaluation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "evaluate_id", nullable = false)
-	private int evaluateId;
+	@Column(name = "evaluation_id", nullable = false)
+	private int evaluationId;
 
 	@Column(name = "stars", nullable = false, precision = 3, scale = 2)
 	private BigDecimal stars;
 
-	@Column(name = "evaluate", nullable = false, columnDefinition = "TEXT")
-	private String evaluate;
+	@Column(name = "evaluation", nullable = false, columnDefinition = "TEXT")
+	private String evaluation;
 
 	@Column(name = "user_id", nullable = false, length = 10)
 	private String userId;
@@ -45,7 +45,7 @@ public class ProductEvaluate {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(evaluateId);
+		return Objects.hash(evaluationId);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class ProductEvaluate {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProductEvaluate other = (ProductEvaluate) obj;
-		return Objects.equals(evaluateId, other.evaluateId);
+		ProductEvaluation other = (ProductEvaluation) obj;
+		return Objects.equals(evaluationId, other.evaluationId);
 	}
 }
