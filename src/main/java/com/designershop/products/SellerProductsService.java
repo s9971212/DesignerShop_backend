@@ -4,7 +4,6 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-
 import com.designershop.admin.products.AdminProductsService;
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
@@ -20,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserProductsService {
+public class SellerProductsService {
 
 	private final HttpSession session;
 	private final AdminProductsService adminProductsService;

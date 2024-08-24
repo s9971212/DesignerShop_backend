@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
@@ -40,6 +41,7 @@ public class AdminProductsService {
 	private final ProductBrandRepository productBrandRepository;
 	private final ProductImageRepository productImageRepository;
 
+	@Transactional
 	public String createProduct(String userId, AdminCreateProductRequestModel request)
 			throws EmptyException, ProductException {
 		String category = request.getCategory();
@@ -51,9 +53,9 @@ public class AdminProductsService {
 		List<String> images = request.getImages();
 		String termsCheckBox = request.getTermsCheckBox();
 
-		if (StringUtils.isBlank(category) || StringUtils.isBlank(brand) || StringUtils.isBlank(productName)
-				|| StringUtils.isBlank(priceString) || StringUtils.isBlank(stockQuantityString)
-				|| StringUtils.isBlank(termsCheckBox)) {
+		if (StringUtils.isBlank(userId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
+				|| StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
+				|| StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
 			throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
 		}
 
@@ -115,6 +117,7 @@ public class AdminProductsService {
 		return productName;
 	}
 
+	@Transactional
 	public String updateProduct(String productId, AdminUpdateProductRequestModel request)
 			throws EmptyException, ProductException {
 		String category = request.getCategory();
@@ -126,9 +129,9 @@ public class AdminProductsService {
 		List<String> images = request.getImages();
 		String termsCheckBox = request.getTermsCheckBox();
 
-		if (StringUtils.isBlank(category) || StringUtils.isBlank(brand) || StringUtils.isBlank(productName)
-				|| StringUtils.isBlank(priceString) || StringUtils.isBlank(stockQuantityString)
-				|| StringUtils.isBlank(termsCheckBox)) {
+		if (StringUtils.isBlank(productId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
+				|| StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
+				|| StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
 			throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
 		}
 
@@ -191,6 +194,7 @@ public class AdminProductsService {
 		return productName;
 	}
 
+	@Transactional
 	public String deleteProduct(String productId) throws ProductException {
 		Product product = productRepository.findByProductId(productId);
 		if (Objects.isNull(product)) {
