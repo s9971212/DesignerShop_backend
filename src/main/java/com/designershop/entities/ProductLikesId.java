@@ -17,26 +17,26 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProductLikesId implements Serializable {
 
-	@Column(name = "user_id", nullable = false, length = 10)
-	private String userId;
+    @Column(name = "user_id", nullable = false, length = 10)
+    private String userId;
 
-	@Column(name = "product_id", nullable = false)
-	private int productId;
+    @Column(name = "product_id", nullable = false)
+    private int productId;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(userId, productId);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, productId);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductLikesId other = (ProductLikesId) obj;
-		return Objects.equals(userId, other.userId) && Objects.equals(productId, other.productId);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductLikesId other = (ProductLikesId) obj;
+        return Objects.equals(userId, other.userId) && Objects.equals(productId, other.productId);
+    }
 }

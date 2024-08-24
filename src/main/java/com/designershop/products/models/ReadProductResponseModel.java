@@ -11,32 +11,32 @@ import lombok.Setter;
 @Setter
 public class ReadProductResponseModel {
 
-	@NotBlank
-	private String category;
+    @NotBlank
+    private String category;
 
-	@NotBlank
-	private String brand;
+    @NotBlank
+    private String brand;
 
-	@NotBlank
-	private String productName;
+    @NotBlank
+    private String productName;
 
-	private String productDescription;
+    private String productDescription;
 
-	@NotBlank
-	private String price;
+    @NotBlank
+    private String price;
 
-	@NotBlank
-	private String stockQuantity;
+    @NotBlank
+    private String stockQuantity;
 
-	@NotBlank
-	private String soldQuantity;
+    @NotBlank
+    private String soldQuantity;
 
-	@NotBlank
-	private String likes;
+    @NotBlank
+    private String likes;
 
-	@NotEmpty
-	private List<String> images;
+    @NotEmpty
+    private List<String> images;
 
-	@NotBlank
-	private String createdDate;
+    @NotBlank
+    private String createdDate;
 }

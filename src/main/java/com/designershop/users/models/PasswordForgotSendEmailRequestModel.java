@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class PasswordForgotSendEmailRequestModel {
 
-	@NotBlank
-	private String email;
+    @NotBlank
+    private String email;
 }

@@ -30,45 +30,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminUsersController {
 
-	private final AdminUsersService adminUsersService;
+    private final AdminUsersService adminUsersService;
 
-	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody @Valid AdminCreateUserRequestModel request)
-			throws EmptyException, UserException, MessagingException {
-		String account = adminUsersService.createUser(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @PostMapping
+    public ResponseEntity<String> createUser(@RequestBody @Valid AdminCreateUserRequestModel request)
+            throws EmptyException, UserException, MessagingException {
+        String account = adminUsersService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 
-	@GetMapping
-	public ResponseEntity<List<AdminReadUserResponseModel>> readAllUser() {
-		List<AdminReadUserResponseModel> response = adminUsersService.readAllUser();
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+    @GetMapping
+    public ResponseEntity<List<AdminReadUserResponseModel>> readAllUser() {
+        List<AdminReadUserResponseModel> response = adminUsersService.readAllUser();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<AdminReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
-		AdminReadUserResponseModel response = adminUsersService.readUser(id);
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<AdminReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
+        AdminReadUserResponseModel response = adminUsersService.readUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable String id,
-			@RequestBody @Valid AdminUpdateUserRequestModel request) throws EmptyException, UserException {
-		String account = adminUsersService.updateUser(id, request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable String id,
+                                             @RequestBody @Valid AdminUpdateUserRequestModel request) throws EmptyException, UserException {
+        String account = adminUsersService.updateUser(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody @Valid AdminUpdatePasswordRequestModel request)
-			throws EmptyException, UserException, MessagingException {
-		String account = adminUsersService.updatePassword(id, request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updatePassword(@PathVariable String id,
+                                                 @RequestBody @Valid AdminUpdatePasswordRequestModel request)
+            throws EmptyException, UserException, MessagingException {
+        String account = adminUsersService.updatePassword(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
-		String account = adminUsersService.deleteUser(id);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
+        String account = adminUsersService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 }

@@ -11,9 +11,9 @@ import com.designershop.entities.ProductLikesId;
 @Repository
 public interface ProductLikesRepository extends JpaRepository<ProductLikes, ProductLikesId> {
 
-	@Query(value = "SELECT * FROM product_likes WHERE user_id =:userId AND product_id =:productId", nativeQuery = true)
-	ProductLikes findByUserIdAndProductId(@Param("userId") String userId, @Param("productId") String productId);
+    @Query(value = "SELECT * FROM product_likes WHERE user_id =:userId AND product_id =:productId", nativeQuery = true)
+    ProductLikes findByUserIdAndProductId(@Param("userId") String userId, @Param("productId") String productId);
 
-	@Query(value = "SELECT COUNT(*) FROM product_likes WHERE product_id =:productId", nativeQuery = true)
-	Long findCountByProductId(@Param("productId") String productId);
+    @Query(value = "SELECT COUNT(*) FROM product_likes WHERE product_id =:productId", nativeQuery = true)
+    Long findCountByProductId(@Param("productId") String productId);
 }

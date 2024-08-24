@@ -28,39 +28,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UsersController {
 
-	private final UsersService usersService;
+    private final UsersService usersService;
 
-	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request)
-			throws EmptyException, UserException, MessagingException {
-		String account = usersService.createUser(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @PostMapping
+    public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request)
+            throws EmptyException, UserException, MessagingException {
+        String account = usersService.createUser(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<ReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
-		ReadUserResponseModel response = usersService.readUser(id);
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
+        ReadUserResponseModel response = usersService.readUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<String> updateUser(@PathVariable String id,
-			@RequestBody @Valid UpdateUserRequestModel request) throws EmptyException, UserException {
-		String account = usersService.updateUser(id, request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable String id,
+                                             @RequestBody @Valid UpdateUserRequestModel request) throws EmptyException, UserException {
+        String account = usersService.updateUser(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<String> updatePassword(@PathVariable String id,
-			@RequestBody @Valid UpdatePasswordRequestModel request)
-			throws EmptyException, UserException, MessagingException {
-		String account = usersService.updatePassword(id, request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updatePassword(@PathVariable String id,
+                                                 @RequestBody @Valid UpdatePasswordRequestModel request)
+            throws EmptyException, UserException, MessagingException {
+        String account = usersService.updatePassword(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
-		String account = usersService.deleteUser(id);
-		return ResponseEntity.status(HttpStatus.CREATED).body(account);
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
+        String account = usersService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+    }
 }

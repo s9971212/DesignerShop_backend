@@ -13,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
 
-	private final UserProfileRepository userProfileRepository;
+    private final UserProfileRepository userProfileRepository;
 
-	@Override
-	public MyUser loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserProfile userProfile = userProfileRepository.findByLogin(username);
-		return new MyUser(userProfile);
-	}
+    @Override
+    public MyUser loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserProfile userProfile = userProfileRepository.findByLogin(username);
+        return new MyUser(userProfile);
+    }
 }

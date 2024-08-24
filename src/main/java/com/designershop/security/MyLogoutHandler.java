@@ -18,17 +18,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MyLogoutHandler implements LogoutHandler {
 
-	private final HttpSession session;
-	private final UserProfileRepository userProfileRepository;
+    private final HttpSession session;
+    private final UserProfileRepository userProfileRepository;
 
-	@Override
-	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-		UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-		if (Objects.nonNull(sessionUserProfile)) {
-			sessionUserProfile.setSignOnStatus("N");
-			sessionUserProfile.setPwdErrorCount(0);
-			sessionUserProfile.setSignOnToken(null);
-			userProfileRepository.save(sessionUserProfile);
-		}
-	}
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.nonNull(sessionUserProfile)) {
+            sessionUserProfile.setSignOnStatus("N");
+            sessionUserProfile.setPwdErrorCount(0);
+            sessionUserProfile.setSignOnToken(null);
+            userProfileRepository.save(sessionUserProfile);
+        }
+    }
 }

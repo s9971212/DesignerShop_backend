@@ -10,6 +10,6 @@ import com.designershop.entities.UserRole;
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, String> {
 
-	@Query(value = "SELECT * FROM user_role WHERE role_id =:roleId", nativeQuery = true)
-	UserRole findByRoleId(@Param("roleId") String roleId);
+    @Query(value = "SELECT * FROM user_role WHERE role_id =:roleId", nativeQuery = true)
+    UserRole findByRoleId(@Param("roleId") String roleId);
 }

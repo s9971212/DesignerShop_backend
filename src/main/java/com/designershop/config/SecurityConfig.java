@@ -23,36 +23,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final MyUserDetailsService myUserDetailsService;
-	private final JwtAuthenticationFilter jwtAuthenticationFilter;
-	private final MyLogoutHandler myLogoutHandler;
+    private final MyUserDetailsService myUserDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final MyLogoutHandler myLogoutHandler;
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeHttpRequests()
-				.requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
-						"/api/verification/send", // 發送驗證碼
-						"/api/verification/check" // 檢查驗證碼
-				).permitAll().requestMatchers("/api/users/**", "/api/user/products/**").hasAuthority("ROLE_USER")
-				.requestMatchers("/api/seller/products/**").hasAuthority("ROLE_SELLER").requestMatchers("/admin/**")
-				.hasAuthority("ROLE_ADMIN").anyRequest().authenticated().and().logout().logoutUrl("/logout")
-				.logoutSuccessUrl("/api/auth").addLogoutHandler(myLogoutHandler).invalidateHttpSession(true).and() // 未來有前端可以加上.deleteCookies(Cookie名稱)，把指定的Cookie刪除
-				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authenticationManager(authenticationManager());
-		return http.build();
-	}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeHttpRequests()
+                .requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
+                        "/api/verification/send", // 發送驗證碼
+                        "/api/verification/check" // 檢查驗證碼
+                ).permitAll().requestMatchers("/api/users/**", "/api/user/products/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/api/seller/products/**").hasAuthority("ROLE_SELLER").requestMatchers("/admin/**")
+                .hasAuthority("ROLE_ADMIN").anyRequest().authenticated().and().logout().logoutUrl("/logout")
+                .logoutSuccessUrl("/api/auth").addLogoutHandler(myLogoutHandler).invalidateHttpSession(true).and() // 未來有前端可以加上.deleteCookies(Cookie名稱)，把指定的Cookie刪除
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authenticationManager(authenticationManager());
+        return http.build();
+    }
 
-	@Bean
-	public AuthenticationManager authenticationManager() {
-		return new ProviderManager(daoAuthenticationProvider());
-	}
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(daoAuthenticationProvider());
+    }
 
-	@Bean
-	public DaoAuthenticationProvider daoAuthenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(myUserDetailsService);
-		authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-		return authenticationProvider;
-	}
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(myUserDetailsService);
+        authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        return authenticationProvider;
+    }
 }

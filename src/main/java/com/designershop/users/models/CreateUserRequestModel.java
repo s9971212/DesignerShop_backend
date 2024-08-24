@@ -10,35 +10,35 @@ import lombok.Setter;
 @Setter
 public class CreateUserRequestModel {
 
-	@NotBlank
-	private String account;
+    @NotBlank
+    private String account;
 
-	@NotBlank
-	private String password;
+    @NotBlank
+    private String password;
 
-	@NotBlank
-	private String passwordCheck;
+    @NotBlank
+    private String passwordCheck;
 
-	@NotBlank
-	@Email
-	private String email;
+    @NotBlank
+    @Email
+    private String email;
 
-	@NotBlank
-	@Pattern(regexp = "^09\\d{8}$")
-	private String phoneNo;
+    @NotBlank
+    @Pattern(regexp = "^09\\d{8}$")
+    private String phoneNo;
 
-	private String userName;
+    private String userName;
 
-	private String gender;
+    private String gender;
 
-	private String birthday;
+    private String birthday;
 
-	private String idCardNo;
+    private String idCardNo;
 
-	private String homeNo;
+    private String homeNo;
 
-	private String userImage;
+    private String userImage;
 
-	@NotBlank
-	private String termsCheckBox;
+    @NotBlank
+    private String termsCheckBox;
 }

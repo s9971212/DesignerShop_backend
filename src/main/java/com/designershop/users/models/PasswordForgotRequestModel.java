@@ -8,9 +8,9 @@ import lombok.Setter;
 @Setter
 public class PasswordForgotRequestModel {
 
-	@NotBlank
-	private String password;
+    @NotBlank
+    private String password;
 
-	@NotBlank
-	private String passwordCheck;
+    @NotBlank
+    private String passwordCheck;
 }

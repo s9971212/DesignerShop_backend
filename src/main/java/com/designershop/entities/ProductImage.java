@@ -24,32 +24,32 @@ import lombok.Setter;
 @Table(name = "product_image")
 public class ProductImage {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "image_id", nullable = false)
-	private int imageId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "image_id", nullable = false)
+    private int imageId;
 
-	@Column(name = "image", nullable = false, columnDefinition = "TEXT")
-	private String image;
+    @Column(name = "image", nullable = false, columnDefinition = "TEXT")
+    private String image;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "product_id")
-	private Product product;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(imageId);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(imageId);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductImage other = (ProductImage) obj;
-		return Objects.equals(imageId, other.imageId);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductImage other = (ProductImage) obj;
+        return Objects.equals(imageId, other.imageId);
+    }
 }

@@ -11,26 +11,26 @@ import lombok.Setter;
 @Setter
 public class AdminUpdateProductRequestModel {
 
-	@NotBlank
-	private String category;
+    @NotBlank
+    private String category;
 
-	@NotBlank
-	private String brand;
+    @NotBlank
+    private String brand;
 
-	@NotBlank
-	private String productName;
+    @NotBlank
+    private String productName;
 
-	private String productDescription;
+    private String productDescription;
 
-	@NotBlank
-	private String price;
+    @NotBlank
+    private String price;
 
-	@NotBlank
-	private String stockQuantity;
+    @NotBlank
+    private String stockQuantity;
 
-	@NotEmpty
-	private List<String> images;
+    @NotEmpty
+    private List<String> images;
 
-	@NotBlank
-	private String termsCheckBox;
+    @NotBlank
+    private String termsCheckBox;
 }

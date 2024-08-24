@@ -22,25 +22,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminProductsController {
 
-	private final AdminProductsService adminProductsService;
+    private final AdminProductsService adminProductsService;
 
-	@PostMapping("/{userId}")
-	public ResponseEntity<String> createProduct(@PathVariable String userId,
-			@RequestBody @Valid AdminCreateProductRequestModel request) throws EmptyException, ProductException {
-		String productName = adminProductsService.createProduct(userId, request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
-	}
+    @PostMapping("/{userId}")
+    public ResponseEntity<String> createProduct(@PathVariable String userId,
+                                                @RequestBody @Valid AdminCreateProductRequestModel request) throws EmptyException, ProductException {
+        String productName = adminProductsService.createProduct(userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productName);
+    }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<String> updateProduct(@PathVariable String id,
-			@RequestBody @Valid AdminUpdateProductRequestModel request) throws EmptyException, ProductException {
-		String productName = adminProductsService.updateProduct(id, request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
-	}
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable String id,
+                                                @RequestBody @Valid AdminUpdateProductRequestModel request) throws EmptyException, ProductException {
+        String productName = adminProductsService.updateProduct(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productName);
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteProduct(@PathVariable String id) throws ProductException {
-		String productName = adminProductsService.deleteProduct(id);
-		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable String id) throws ProductException {
+        String productName = adminProductsService.deleteProduct(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productName);
+    }
 }

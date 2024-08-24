@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserProductsController {
 
-	private final UserProductsService userProductsService;
+    private final UserProductsService userProductsService;
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<String> updateProductLikes(@PathVariable String id) throws ProductException {
-		String productName = userProductsService.updateProductLikes(id);
-		return ResponseEntity.status(HttpStatus.CREATED).body(productName);
-	}
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateProductLikes(@PathVariable String id) throws ProductException {
+        String productName = userProductsService.updateProductLikes(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productName);
+    }
 }

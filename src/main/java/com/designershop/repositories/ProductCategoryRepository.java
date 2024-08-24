@@ -10,6 +10,6 @@ import com.designershop.entities.ProductCategory;
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
 
-	@Query(value = "SELECT * FROM product_category WHERE category_name =:categoryName", nativeQuery = true)
-	ProductCategory findByCategoryName(@Param("categoryName") String categoryName);
+    @Query(value = "SELECT * FROM product_category WHERE category_name =:categoryName", nativeQuery = true)
+    ProductCategory findByCategoryName(@Param("categoryName") String categoryName);
 }

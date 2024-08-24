@@ -22,28 +22,28 @@ import lombok.Setter;
 @Table(name = "product_likes")
 public class ProductLikes {
 
-	@EmbeddedId
-	private ProductLikesId id;
+    @EmbeddedId
+    private ProductLikesId id;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@MapsId("productId")
-	@JoinColumn(name = "product_id")
-	private Product product;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("productId")
+    @JoinColumn(name = "product_id")
+    private Product product;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProductLikes other = (ProductLikes) obj;
-		return Objects.equals(id, other.id);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ProductLikes other = (ProductLikes) obj;
+        return Objects.equals(id, other.id);
+    }
 }

@@ -4,11 +4,11 @@ import org.apache.logging.log4j.Level;
 
 public interface IBaseException {
 
-	String getMessage();
+    String getMessage();
 
-	String[] getCustomMessages();
+    String[] getCustomMessages();
 
-	String getSystemName();
+    String getSystemName();
 
-	Level getLogLevel();
+    Level getLogLevel();
 }

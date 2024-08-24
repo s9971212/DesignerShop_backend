@@ -21,21 +21,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthController {
 
-	private final JwtAuthService jwtAuthService;
+    private final JwtAuthService jwtAuthService;
 
-	@PostMapping
-	public ResponseEntity<String> auth(@RequestBody Map<String, Object> request)
-			throws UserException, MessagingException {
-		try {
-			String token = jwtAuthService.auth(request);
-			return ResponseEntity.status(HttpStatus.CREATED).body(token);
-		} catch (PasswordExpiredException e) {
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("PasswordExpired");
-		}
-	}
+    @PostMapping
+    public ResponseEntity<String> auth(@RequestBody Map<String, Object> request)
+            throws UserException, MessagingException {
+        try {
+            String token = jwtAuthService.auth(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(token);
+        } catch (PasswordExpiredException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("PasswordExpired");
+        }
+    }
 
-	@ExceptionHandler(PasswordExpiredException.class)
-	public ResponseEntity<String> handlePasswordExpiredException(PasswordExpiredException e) {
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-	}
+    @ExceptionHandler(PasswordExpiredException.class)
+    public ResponseEntity<String> handlePasswordExpiredException(PasswordExpiredException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    }
 }

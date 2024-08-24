@@ -20,32 +20,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtTokenExpirationListener {
 
-	private final UserProfileRepository userProfileRepository;
+    private final UserProfileRepository userProfileRepository;
 
-	@EventListener
-	public void handleTokenExpiredEvent(AuthenticationFailureExpiredEvent event) {
-		Authentication authentication = event.getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof MyUser) {
-			MyUser myUser = (MyUser) authentication.getPrincipal();
+    @EventListener
+    public void handleTokenExpiredEvent(AuthenticationFailureExpiredEvent event) {
+        Authentication authentication = event.getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof MyUser) {
+            MyUser myUser = (MyUser) authentication.getPrincipal();
 
-			HttpSession session = getSessionForUser(myUser.getUsername());
-			if (session != null) {
-				UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-				if (Objects.nonNull(sessionUserProfile)) {
-					sessionUserProfile.setSignOnStatus("N");
-					sessionUserProfile.setSignOnToken(null);
-					userProfileRepository.save(sessionUserProfile);
-					session.removeAttribute("userProfile");
-				}
+            HttpSession session = getSessionForUser(myUser.getUsername());
+            if (session != null) {
+                UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+                if (Objects.nonNull(sessionUserProfile)) {
+                    sessionUserProfile.setSignOnStatus("N");
+                    sessionUserProfile.setSignOnToken(null);
+                    userProfileRepository.save(sessionUserProfile);
+                    session.removeAttribute("userProfile");
+                }
 
-				session.invalidate();
-			}
-		}
-	}
+                session.invalidate();
+            }
+        }
+    }
 
-	private HttpSession getSessionForUser(String username) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-				.getRequest();
-		return request.getSession(false);
-	}
+    private HttpSession getSessionForUser(String username) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                .getRequest();
+        return request.getSession(false);
+    }
 }

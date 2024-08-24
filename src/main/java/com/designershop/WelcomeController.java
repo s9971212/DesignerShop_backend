@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WelcomeController {
 
-	@GetMapping("/welcome")
-	public String welcome() {
-		return "welcome to designershop";
-	}
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome to designershop";
+    }
 }

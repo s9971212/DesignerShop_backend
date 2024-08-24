@@ -20,25 +20,25 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductsController {
 
-	private final ProductsService productsService;
+    private final ProductsService productsService;
 
-	// TODO 未來改成首頁顯示的商品
-//	@GetMapping
-//	public ResponseEntity<List<ReadProductRequestModel>> readAllProduct() {
-//		List<ReadProductRequestModel> response = productsService.readAllProduct();
-//		return ResponseEntity.status(HttpStatus.OK).body(response);
-//	}
+    // TODO 未來改成首頁顯示的商品
+    //	@GetMapping
+    //	public ResponseEntity<List<ReadProductRequestModel>> readAllProduct() {
+    //		List<ReadProductRequestModel> response = productsService.readAllProduct();
+    //		return ResponseEntity.status(HttpStatus.OK).body(response);
+    //	}
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) {
-		List<ReadProductResponseModel> response = productsService.readAllProductByUser(userId);
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) {
+        List<ReadProductResponseModel> response = productsService.readAllProductByUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-	@GetMapping
-	public ResponseEntity<ReadProductResponseModel> readProduct(@RequestParam String productId)
-			throws ProductException {
-		ReadProductResponseModel response = productsService.readProduct(productId);
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+    @GetMapping
+    public ResponseEntity<ReadProductResponseModel> readProduct(@RequestParam String productId)
+            throws ProductException {
+        ReadProductResponseModel response = productsService.readProduct(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
