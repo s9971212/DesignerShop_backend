@@ -61,6 +61,6 @@ public class UsersController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
         String account = usersService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+        return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 }

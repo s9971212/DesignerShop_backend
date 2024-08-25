@@ -43,6 +43,6 @@ public class SellerProductsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable String id) throws UserException, ProductException {
         String productName = sellerProductsService.deleteProduct(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productName);
+        return ResponseEntity.status(HttpStatus.OK).body(productName);
     }
 }
