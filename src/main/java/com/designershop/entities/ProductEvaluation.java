@@ -33,7 +33,7 @@ public class ProductEvaluation {
     @Column(name = "stars", nullable = false, precision = 3, scale = 2)
     private BigDecimal stars;
 
-    @Column(name = "evaluation", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "evaluation", columnDefinition = "TEXT")
     private String evaluation;
 
     @Column(name = "user_id", nullable = false, length = 10)

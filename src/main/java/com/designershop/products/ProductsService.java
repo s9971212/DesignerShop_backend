@@ -52,6 +52,7 @@ public class ProductsService {
             readProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
             readProductResponseModel.setBrand(product.getProductBrand().getBrand());
             readProductResponseModel.setPrice(product.getPrice().toString());
+            readProductResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
             readProductResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
             readProductResponseModel.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
             readProductResponseModel.setLikes(Integer.toString(product.getLikes()));
@@ -79,6 +80,7 @@ public class ProductsService {
         response.setCategory(product.getProductCategory().getCategoryName());
         response.setBrand(product.getProductBrand().getBrand());
         response.setPrice(product.getPrice().toString());
+        response.setOriginalPrice(product.getOriginalPrice().toString());
         response.setStockQuantity(Integer.toString(product.getStockQuantity()));
         response.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
         response.setLikes(Integer.toString(product.getLikes()));

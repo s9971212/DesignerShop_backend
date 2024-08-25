@@ -97,6 +97,7 @@ public class AdminProductsService {
         productCreate.setProductName(productName);
         productCreate.setProductDescription(productDescription);
         productCreate.setPrice(price);
+        productCreate.setOriginalPrice(price);
         productCreate.setStockQuantity(stockQuantity);
         productCreate.setCreatedDate(currentDateTime);
         productCreate.setModifyUser(modifyUser);
@@ -165,6 +166,7 @@ public class AdminProductsService {
         }
 
         BigDecimal price = new BigDecimal(priceString);
+        int priceCompare = product.getOriginalPrice().compareTo(price);
         int stockQuantity = Integer.parseInt(stockQuantityString);
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
@@ -172,6 +174,9 @@ public class AdminProductsService {
         product.setProductName(productName);
         product.setProductDescription(productDescription);
         product.setPrice(price);
+        if (priceCompare < 0) {
+            product.setOriginalPrice(price);
+        }
         product.setStockQuantity(stockQuantity);
         product.setModifyUser(sessionUserProfile.getUserId());
         product.setModifyDate(DateTimeFormatUtil.currentDateTime());

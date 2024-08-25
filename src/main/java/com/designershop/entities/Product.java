@@ -50,6 +50,9 @@ public class Product {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "original_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal originalPrice;
+
     @Column(name = "stock_quantity", nullable = false)
     private int stockQuantity = 0;
 

@@ -7,6 +7,7 @@ CREATE TABLE product (
     product_name NVARCHAR(100) NOT NULL,
     product_description TEXT NULL,
     price DECIMAL(10 , 2 ) NOT NULL,
+    original_price DECIMAL(10 , 2 ) NOT NULL,
     stock_quantity INT DEFAULT 0 NOT NULL,
     sold_quantity INT DEFAULT 0 NOT NULL,
     likes INT DEFAULT 0 NOT NULL,

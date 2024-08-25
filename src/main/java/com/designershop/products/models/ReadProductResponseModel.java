@@ -26,6 +26,9 @@ public class ReadProductResponseModel {
     private String price;
 
     @NotBlank
+    private String originalPrice;
+
+    @NotBlank
     private String stockQuantity;
 
     @NotBlank
