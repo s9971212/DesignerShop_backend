@@ -25,11 +25,6 @@ public class ProductLikes {
     @EmbeddedId
     private ProductLikesId id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @MapsId("productId")
-    @JoinColumn(name = "product_id")
-    private Product product;
-
     @Override
     public int hashCode() {
         return Objects.hash(id);

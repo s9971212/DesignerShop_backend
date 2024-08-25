@@ -6,8 +6,10 @@ CREATE TABLE product_evaluation (
     evaluation_id INT AUTO_INCREMENT PRIMARY KEY,
     stars DECIMAL(3 , 2 ) NOT NULL,
     evaluation TEXT NULL,
+    created_date DATETIME NOT NULL,
+    updated_user NVARCHAR(10) NULL,
+    updated_date DATETIME NULL,
     user_id NVARCHAR(10) NOT NULL,
     product_id INT NOT NULL,
-    FOREIGN KEY (product_id)
-        REFERENCES product (product_id)
+    UNIQUE (user_id , product_id)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
