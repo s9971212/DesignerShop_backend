@@ -90,12 +90,12 @@ public class UserProfile {
     @Column(name = "pwd_error_count", nullable = false)
     private int pwdErrorCount = 0;
 
-    @Column(name = "modify_user", length = 10)
-    private String modifyUser;
+    @Column(name = "updated_user", length = 10)
+    private String updatedUser;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "modify_date")
-    private LocalDateTime modifyDate;
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 
     @Column(name = "is_lock", length = 1)
     private String isLock;

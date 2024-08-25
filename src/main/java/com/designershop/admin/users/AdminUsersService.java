@@ -95,9 +95,9 @@ public class AdminUsersService {
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-        String modifyUser = userId;
+        String updatedUser = userId;
         if (Objects.nonNull(sessionUserProfile)) {
-            modifyUser = sessionUserProfile.getUserId();
+            updatedUser = sessionUserProfile.getUserId();
         }
 
         Set<String> roleIds = new HashSet<>();
@@ -127,8 +127,8 @@ public class AdminUsersService {
         userProfileCreate.setUserImage(userImage);
         userProfileCreate.setRegisterDate(currentDateTime);
         userProfileCreate.setPwdExpireDate(currentDateTime.plusMonths(3));
-        userProfileCreate.setModifyUser(modifyUser);
-        userProfileCreate.setModifyDate(currentDateTime);
+        userProfileCreate.setUpdatedUser(updatedUser);
+        userProfileCreate.setUpdatedDate(currentDateTime);
         userProfileCreate.setUserRoles(userRoles);
 
         userProfileRepository.save(userProfileCreate);
@@ -303,8 +303,8 @@ public class AdminUsersService {
         userProfile.setIdCardNo(idCardNo);
         userProfile.setHomeNo(homeNo);
         userProfile.setUserImage(userImage);
-        userProfile.setModifyUser(sessionUserProfile.getUserId());
-        userProfile.setModifyDate(DateTimeFormatUtil.currentDateTime());
+        userProfile.setUpdatedUser(sessionUserProfile.getUserId());
+        userProfile.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         userProfile.setUserRoles(userRoles);
 
         userProfileRepository.save(userProfile);
@@ -347,8 +347,8 @@ public class AdminUsersService {
         userProfile.setPassword(encodePwd);
         userProfile.setPwdChangedDate(currentDateTime);
         userProfile.setPwdExpireDate(currentDateTime.plusMonths(3));
-        userProfile.setModifyUser(sessionUserProfile.getUserId());
-        userProfile.setModifyDate(currentDateTime);
+        userProfile.setUpdatedUser(sessionUserProfile.getUserId());
+        userProfile.setUpdatedDate(currentDateTime);
 
         userProfileRepository.save(userProfile);
 

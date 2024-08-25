@@ -66,12 +66,12 @@ public class Product {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "modify_user", length = 10)
-    private String modifyUser;
+    @Column(name = "updated_user", length = 10)
+    private String updatedUser;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "modify_date")
-    private LocalDateTime modifyDate;
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")

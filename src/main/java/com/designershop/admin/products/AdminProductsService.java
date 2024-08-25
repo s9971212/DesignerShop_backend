@@ -88,8 +88,8 @@ public class AdminProductsService {
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        String modifyUser = userProfile.getUserId();
-        if (!StringUtils.equals(modifyUser, userId)) {
+        String updatedUser = userProfile.getUserId();
+        if (!StringUtils.equals(updatedUser, userId)) {
             userProfile = userProfileRepository.findByUserId(userId);
         }
 
@@ -100,8 +100,8 @@ public class AdminProductsService {
         productCreate.setOriginalPrice(price);
         productCreate.setStockQuantity(stockQuantity);
         productCreate.setCreatedDate(currentDateTime);
-        productCreate.setModifyUser(modifyUser);
-        productCreate.setModifyDate(currentDateTime);
+        productCreate.setUpdatedUser(updatedUser);
+        productCreate.setUpdatedDate(currentDateTime);
         productCreate.setProductCategory(productCategory);
         productCreate.setProductBrand(productBrand);
         productCreate.setUserProfile(userProfile);
@@ -178,8 +178,8 @@ public class AdminProductsService {
             product.setOriginalPrice(price);
         }
         product.setStockQuantity(stockQuantity);
-        product.setModifyUser(sessionUserProfile.getUserId());
-        product.setModifyDate(DateTimeFormatUtil.currentDateTime());
+        product.setUpdatedUser(sessionUserProfile.getUserId());
+        product.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         product.setProductCategory(productCategory);
         product.setProductBrand(productBrand);
 
