@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
                         "/api/verification/send", // 發送驗證碼
                         "/api/verification/check" // 檢查驗證碼
-                ).permitAll().requestMatchers("/api/users/**", "/api/user/products/**").hasAuthority("ROLE_USER")
+                ).permitAll().requestMatchers("/api/users/**", "/api/user/products/**", "/api/carts/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/api/seller/products/**").hasAuthority("ROLE_SELLER").requestMatchers("/admin/**")
                 .hasAuthority("ROLE_ADMIN").anyRequest().authenticated().and().logout().logoutUrl("/logout")
                 .logoutSuccessUrl("/api/auth").addLogoutHandler(myLogoutHandler).invalidateHttpSession(true).and() // 未來有前端可以加上.deleteCookies(Cookie名稱)，把指定的Cookie刪除
