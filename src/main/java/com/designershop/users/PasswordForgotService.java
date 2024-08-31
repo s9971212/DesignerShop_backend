@@ -42,6 +42,10 @@ public class PasswordForgotService {
             throw new UserException("email錯誤，請重新確認");
         }
 
+        if (userProfile.isDeleted()) {
+            throw new UserException("此帳戶已被刪除，請重新確認");
+        }
+
         String token = RandomTokenUtil.randomTokenGenerate(100);
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 

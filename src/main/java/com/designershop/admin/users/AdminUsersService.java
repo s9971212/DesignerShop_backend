@@ -370,7 +370,8 @@ public class AdminUsersService {
             throw new UserException("此帳戶不存在，請重新確認");
         }
 
-        userProfileRepository.delete(userProfile);
+        userProfile.setDeleted(true);
+        userProfileRepository.save(userProfile);
 
         String[] receivers = {userProfile.getEmail()};
         String[] cc = {};

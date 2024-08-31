@@ -118,6 +118,9 @@ public class UserProfile {
     @Column(name = "pwd_forgot_token_expire_date")
     private LocalDateTime pwdForgotTokenExpireDate;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     @Column(name = "google_id", length = 10)
     private String googleId;
 

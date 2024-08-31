@@ -28,6 +28,7 @@ CREATE TABLE user_profile (
     sign_on_token NVARCHAR(1024) NULL,
     pwd_forgot_token NVARCHAR(1024) NULL,
     pwd_forgot_token_expire_date DATETIME NULL,
+    is_deleted TINYINT(1) DEFAULT 0 NOT NULL,
     google_id NVARCHAR(10) NULL,
     facebook_id NVARCHAR(10) NULL,
     UNIQUE (account),
