@@ -33,17 +33,16 @@ public class CartItem {
     @Column(name = "added_date", nullable = false)
     private LocalDateTime addedDate;
 
+    @Column(name = "product_id", nullable = false)
+    private int productId;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
-    private Product product;
-
     @Override
     public int hashCode() {
-        return Objects.hash(itemsId, cart != null ? cart.getCartId() : 0, product != null ? product.getProductId() : 0);
+        return Objects.hash(itemsId, productId, cart != null ? cart.getCartId() : 0);
     }
 
     @Override
@@ -55,8 +54,7 @@ public class CartItem {
         if (getClass() != obj.getClass())
             return false;
         CartItem other = (CartItem) obj;
-        return Objects.equals(itemsId, other.itemsId) &&
-                Objects.equals(cart != null ? cart.getCartId() : null, other.cart != null ? other.cart.getCartId() : null) &&
-                Objects.equals(product != null ? product.getProductId() : null, other.product != null ? other.product.getProductId() : null);
+        return Objects.equals(itemsId, other.itemsId) && Objects.equals(productId, other.productId) &&
+                Objects.equals(cart != null ? cart.getCartId() : null, other.cart != null ? other.cart.getCartId() : null);
     }
 }

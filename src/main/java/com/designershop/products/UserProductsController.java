@@ -23,15 +23,15 @@ public class UserProductsController {
 
     private final UserProductsService userProductsService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> readProductLikes(@PathVariable String id) throws ProductException {
-        String response = userProductsService.readProductLikes(id);
+    @GetMapping("/{productId}")
+    public ResponseEntity<String> readProductLikes(@PathVariable String productId) throws ProductException {
+        String response = userProductsService.readProductLikes(productId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> updateProductLikes(@PathVariable String id) throws ProductException {
-        String productName = userProductsService.updateProductLikes(id);
+    @PatchMapping("/{productId}")
+    public ResponseEntity<String> updateProductLikes(@PathVariable String productId) throws ProductException {
+        String productName = userProductsService.updateProductLikes(productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(productName);
     }
 }
