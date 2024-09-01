@@ -81,6 +81,8 @@ public class UsersService {
             }
         }
 
+        adminUpdateUserRequestModel.setIsDeleted("N");
+
         return adminUsersService.updateUser(userId, adminUpdateUserRequestModel);
     }
 

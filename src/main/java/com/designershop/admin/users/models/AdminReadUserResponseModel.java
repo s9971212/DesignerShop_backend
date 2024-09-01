@@ -49,4 +49,7 @@ public class AdminReadUserResponseModel {
 
     @NotBlank
     private String pwdExpireDate;
+
+    @NotBlank
+    private String isDeleted;
 }

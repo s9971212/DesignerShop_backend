@@ -43,5 +43,8 @@ public class AdminUpdateUserRequestModel {
     private String userImage;
 
     @NotBlank
+    private String isDeleted;
+
+    @NotBlank
     private String termsCheckBox;
 }

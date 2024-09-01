@@ -184,6 +184,13 @@ public class AdminUsersService {
             }
             adminReadUserResponseModel
                     .setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+
+            String isDeleted = "N";
+            if (userProfile.isDeleted()) {
+                isDeleted = "Y";
+            }
+            adminReadUserResponseModel.setIsDeleted(isDeleted);
+
             response.add(adminReadUserResponseModel);
         }
 
@@ -227,6 +234,12 @@ public class AdminUsersService {
         }
         response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
 
+        String isDeleted = "N";
+        if (userProfile.isDeleted()) {
+            isDeleted = "Y";
+        }
+        response.setIsDeleted(isDeleted);
+
         return response;
     }
 
@@ -244,10 +257,11 @@ public class AdminUsersService {
         String idCardNo = request.getIdCardNo();
         String homeNo = request.getHomeNo();
         String userImage = request.getUserImage();
+        String isDeletedString = request.getIsDeleted();
         String termsCheckBox = request.getTermsCheckBox();
 
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(account) || StringUtils.isBlank(email)
-                || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(termsCheckBox)) {
+                || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(isDeletedString) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("帳號、Email、手機與條款確認不得為空");
         }
 
@@ -281,6 +295,11 @@ public class AdminUsersService {
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
+        boolean isDeleted = false;
+        if (StringUtils.equals("Y", isDeletedString)) {
+            isDeleted = true;
+        }
+
         Set<String> roleIds = new HashSet<>();
         roleIds.add(userType);
         roleIds.add(sellerType);
@@ -305,6 +324,7 @@ public class AdminUsersService {
         userProfile.setUserImage(userImage);
         userProfile.setUpdatedUser(sessionUserProfile.getUserId());
         userProfile.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
+        userProfile.setDeleted(isDeleted);
         userProfile.setUserRoles(userRoles);
 
         userProfileRepository.save(userProfile);
