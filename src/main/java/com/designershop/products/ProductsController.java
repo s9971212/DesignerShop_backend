@@ -2,6 +2,7 @@ package com.designershop.products;
 
 import java.util.List;
 
+import com.designershop.exceptions.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class ProductsController {
     //	}
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) {
+    public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws UserException {
         List<ReadProductResponseModel> response = productsService.readAllProductByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

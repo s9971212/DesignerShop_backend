@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.designershop.entities.UserProfile;
+import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.UserException;
+import com.designershop.repositories.UserProfileRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductsService {
 
+    private final UserProfileRepository userProfileRepository;
     private final ProductRepository productRepository;
 
     // TODO 未來改成首頁顯示的商品
@@ -42,28 +47,39 @@ public class ProductsService {
     //		return response;
     //	}
 
-    public List<ReadProductResponseModel> readAllProductByUser(String userId) {
+    public List<ReadProductResponseModel> readAllProductByUser(String userId) throws UserException {
         List<ReadProductResponseModel> response = new ArrayList<>();
+
+        UserProfile userProfile = userProfileRepository.findByUserId(userId);
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶不存在，請重新確認");
+        }
+
+        if (userProfile.isDeleted()) {
+            throw new UserException("此帳戶已被刪除，請重新確認");
+        }
 
         List<Product> productList = productRepository.findAllByUserId(userId);
         for (Product product : productList) {
-            ReadProductResponseModel readProductResponseModel = new ReadProductResponseModel();
-            BeanUtils.copyProperties(product, readProductResponseModel);
-            readProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
-            readProductResponseModel.setBrand(product.getProductBrand().getBrand());
-            readProductResponseModel.setPrice(product.getPrice().toString());
-            readProductResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
-            readProductResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
-            readProductResponseModel.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
-            readProductResponseModel.setLikes(Integer.toString(product.getLikes()));
+            if (!product.isDeleted()) {
+                ReadProductResponseModel readProductResponseModel = new ReadProductResponseModel();
+                BeanUtils.copyProperties(product, readProductResponseModel);
+                readProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
+                readProductResponseModel.setBrand(product.getProductBrand().getBrand());
+                readProductResponseModel.setPrice(product.getPrice().toString());
+                readProductResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
+                readProductResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
+                readProductResponseModel.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
+                readProductResponseModel.setLikes(Integer.toString(product.getLikes()));
 
-            List<String> images = new ArrayList<>();
-            for (ProductImage productImage : product.getProductImages()) {
-                images.add(productImage.getImage());
+                List<String> images = new ArrayList<>();
+                for (ProductImage productImage : product.getProductImages()) {
+                    images.add(productImage.getImage());
+                }
+                readProductResponseModel.setImages(images);
+                readProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+                response.add(readProductResponseModel);
             }
-            readProductResponseModel.setImages(images);
-            readProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
-            response.add(readProductResponseModel);
         }
 
         return response;
@@ -73,6 +89,10 @@ public class ProductsService {
         Product product = productRepository.findByProductId(productId);
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
+        }
+
+        if (product.isDeleted()) {
+            throw new ProductException("此商品已被刪除，請重新確認");
         }
 
         ReadProductResponseModel response = new ReadProductResponseModel();

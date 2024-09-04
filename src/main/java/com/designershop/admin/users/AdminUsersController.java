@@ -2,6 +2,7 @@ package com.designershop.admin.users;
 
 import java.util.List;
 
+import com.designershop.exceptions.ProductException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,7 +68,7 @@ public class AdminUsersController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
+    public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, ProductException, MessagingException {
         String account = adminUsersService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }

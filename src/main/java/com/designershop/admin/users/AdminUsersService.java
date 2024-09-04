@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import com.designershop.admin.products.AdminProductsService;
+import com.designershop.entities.Product;
+import com.designershop.exceptions.ProductException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +34,7 @@ import com.designershop.utils.FormatUtil;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +42,7 @@ public class AdminUsersService {
 
     private final HttpSession session;
     private final MailService mailService;
+    private final AdminProductsService adminProductsService;
     private final UserProfileRepository userProfileRepository;
     private final UserRoleRepository userRoleRepository;
 
@@ -384,7 +389,8 @@ public class AdminUsersService {
         return userProfile.getAccount();
     }
 
-    public String deleteUser(String userId) throws UserException, MessagingException {
+    @Transactional
+    public String deleteUser(String userId) throws UserException, ProductException, MessagingException {
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶不存在，請重新確認");
@@ -392,6 +398,10 @@ public class AdminUsersService {
 
         userProfile.setDeleted(true);
         userProfileRepository.save(userProfile);
+
+        for (Product product : userProfile.getProducts()) {
+            adminProductsService.deleteProduct(Integer.toString(product.getProductId()));
+        }
 
         String[] receivers = {userProfile.getEmail()};
         String[] cc = {};

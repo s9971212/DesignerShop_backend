@@ -73,6 +73,9 @@ public class Product {
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private ProductCategory productCategory;

@@ -2,12 +2,17 @@ package com.designershop.admin.products;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.designershop.admin.products.models.AdminReadProductResponseModel;
+import com.designershop.exceptions.UserException;
+import com.designershop.products.models.ReadProductResponseModel;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,6 +123,77 @@ public class AdminProductsService {
         return productName;
     }
 
+    public List<AdminReadProductResponseModel> readAllProductByUser(String userId) throws UserException {
+        List<AdminReadProductResponseModel> response = new ArrayList<>();
+
+        UserProfile userProfile = userProfileRepository.findByUserId(userId);
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶不存在，請重新確認");
+        }
+
+        List<Product> productList = productRepository.findAllByUserId(userId);
+        for (Product product : productList) {
+            AdminReadProductResponseModel adminReadProductResponseModel = new AdminReadProductResponseModel();
+            BeanUtils.copyProperties(product, adminReadProductResponseModel);
+            adminReadProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
+            adminReadProductResponseModel.setBrand(product.getProductBrand().getBrand());
+            adminReadProductResponseModel.setPrice(product.getPrice().toString());
+            adminReadProductResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
+            adminReadProductResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
+            adminReadProductResponseModel.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
+            adminReadProductResponseModel.setLikes(Integer.toString(product.getLikes()));
+
+            List<String> images = new ArrayList<>();
+            for (ProductImage productImage : product.getProductImages()) {
+                images.add(productImage.getImage());
+            }
+            adminReadProductResponseModel.setImages(images);
+            adminReadProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+
+            String isDeleted = "N";
+            if (product.isDeleted()) {
+                isDeleted = "Y";
+            }
+            adminReadProductResponseModel.setIsDeleted(isDeleted);
+
+            response.add(adminReadProductResponseModel);
+        }
+
+        return response;
+    }
+
+    public AdminReadProductResponseModel readProduct(String productId) throws ProductException {
+        Product product = productRepository.findByProductId(productId);
+        if (Objects.isNull(product)) {
+            throw new ProductException("此商品不存在，請重新確認");
+        }
+
+        AdminReadProductResponseModel response = new AdminReadProductResponseModel();
+        BeanUtils.copyProperties(product, response);
+        response.setCategory(product.getProductCategory().getCategoryName());
+        response.setBrand(product.getProductBrand().getBrand());
+        response.setPrice(product.getPrice().toString());
+        response.setOriginalPrice(product.getOriginalPrice().toString());
+        response.setStockQuantity(Integer.toString(product.getStockQuantity()));
+        response.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
+        response.setLikes(Integer.toString(product.getLikes()));
+
+        List<String> images = new ArrayList<>();
+        for (ProductImage productImage : product.getProductImages()) {
+            images.add(productImage.getImage());
+        }
+        response.setImages(images);
+        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+
+        String isDeleted = "N";
+        if (product.isDeleted()) {
+            isDeleted = "Y";
+        }
+        response.setIsDeleted(isDeleted);
+
+        return response;
+    }
+
     @Transactional
     public String updateProduct(String productId, AdminUpdateProductRequestModel request)
             throws EmptyException, ProductException {
@@ -127,12 +203,13 @@ public class AdminProductsService {
         String productDescription = request.getProductDescription();
         String priceString = request.getPrice();
         String stockQuantityString = request.getStockQuantity();
+        String isDeletedString = request.getIsDeleted();
         List<String> images = request.getImages();
         String termsCheckBox = request.getTermsCheckBox();
 
         if (StringUtils.isBlank(productId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
                 || StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
-                || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
+                || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
         }
 
@@ -171,6 +248,11 @@ public class AdminProductsService {
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
+        boolean isDeleted = false;
+        if (StringUtils.equals("Y", isDeletedString)) {
+            isDeleted = true;
+        }
+
         product.setProductName(productName);
         product.setProductDescription(productDescription);
         product.setPrice(price);
@@ -180,6 +262,7 @@ public class AdminProductsService {
         product.setStockQuantity(stockQuantity);
         product.setUpdatedUser(sessionUserProfile.getUserId());
         product.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
+        product.setDeleted(isDeleted);
         product.setProductCategory(productCategory);
         product.setProductBrand(productBrand);
 
@@ -199,14 +282,14 @@ public class AdminProductsService {
         return productName;
     }
 
-    @Transactional
     public String deleteProduct(String productId) throws ProductException {
         Product product = productRepository.findByProductId(productId);
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
-        productRepository.delete(product);
+        product.setDeleted(true);
+        productRepository.save(product);
 
         return product.getProductName();
     }

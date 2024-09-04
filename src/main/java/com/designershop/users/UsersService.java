@@ -2,6 +2,7 @@ package com.designershop.users;
 
 import java.util.Objects;
 
+import com.designershop.exceptions.ProductException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -94,7 +95,7 @@ public class UsersService {
         return adminUsersService.updatePassword(userId, adminUpdatePasswordRequestModel);
     }
 
-    public String deleteUser(String userId) throws UserException, MessagingException {
+    public String deleteUser(String userId) throws UserException, ProductException, MessagingException {
         validateUserPermission(userId);
         return adminUsersService.deleteUser(userId);
     }
@@ -109,6 +110,10 @@ public class UsersService {
         if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile)
                 || !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
             throw new UserException("此帳戶不存在，請重新確認");
+        }
+
+        if (userProfile.isDeleted()) {
+            throw new UserException("此帳戶已被刪除，請重新確認");
         }
 
         return userProfile;

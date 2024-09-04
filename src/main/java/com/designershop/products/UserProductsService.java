@@ -8,6 +8,7 @@ import java.util.Objects;
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.UserException;
 import com.designershop.products.models.CreateProductEvaluationRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -32,30 +33,25 @@ public class UserProductsService {
     private final BigDecimal upperStars = new BigDecimal("5.0");
 
     public String readProductLikes(String productId) throws ProductException {
-        Product product = productRepository.findByProductId(productId);
-        if (Objects.isNull(product)) {
-            throw new ProductException("此商品不存在，請重新確認");
-        }
+        validateProductPermission(productId);
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-
-        ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), productId);
-        String response = "N";
-        if (Objects.nonNull(productLikes)) {
-            response = "Y";
+        if (Objects.isNull(userProfile)) {
+            return "N";
         }
 
-        return response;
+        ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), productId);
+        return Objects.nonNull(productLikes) ? "Y" : "N";
     }
 
     @Transactional
-    public String updateProductLikes(String productId) throws ProductException {
-        Product product = productRepository.findByProductId(productId);
-        if (Objects.isNull(product)) {
-            throw new ProductException("此商品不存在，請重新確認");
+    public String updateProductLikes(String productId) throws UserException, ProductException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        Product product = validateProductPermission(productId);
 
         ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), productId);
         if (Objects.isNull(productLikes)) {
@@ -75,5 +71,18 @@ public class UserProductsService {
         productRepository.save(product);
 
         return product.getProductName();
+    }
+
+    public Product validateProductPermission(String productId) throws ProductException {
+        Product product = productRepository.findByProductId(productId);
+        if (Objects.isNull(product)) {
+            throw new ProductException("此商品不存在，請重新確認");
+        }
+
+        if (product.isDeleted()) {
+            throw new ProductException("此商品已被刪除，請重新確認");
+        }
+
+        return product;
     }
 }

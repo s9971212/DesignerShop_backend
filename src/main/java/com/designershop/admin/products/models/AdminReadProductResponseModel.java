@@ -1,15 +1,15 @@
 package com.designershop.admin.products.models;
 
-import java.util.List;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-public class AdminUpdateProductRequestModel {
+public class AdminReadProductResponseModel {
 
     @NotBlank
     private String category;
@@ -26,14 +26,23 @@ public class AdminUpdateProductRequestModel {
     private String price;
 
     @NotBlank
+    private String originalPrice;
+
+    @NotBlank
     private String stockQuantity;
 
     @NotBlank
-    private String isDeleted;
+    private String soldQuantity;
+
+    @NotBlank
+    private String likes;
 
     @NotEmpty
     private List<String> images;
 
     @NotBlank
-    private String termsCheckBox;
+    private String createdDate;
+
+    @NotBlank
+    private String isDeleted;
 }

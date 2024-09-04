@@ -14,6 +14,7 @@ CREATE TABLE product (
     created_date DATETIME NOT NULL,
     updated_user NVARCHAR(10) NULL,
     updated_date DATETIME NULL,
+    is_deleted TINYINT(1) DEFAULT 0 NOT NULL,
     category_id INT NOT NULL,
     brand_id INT NOT NULL,
     user_id NVARCHAR(10) NOT NULL,

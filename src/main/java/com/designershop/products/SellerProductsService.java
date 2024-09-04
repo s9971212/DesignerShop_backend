@@ -2,6 +2,7 @@ package com.designershop.products;
 
 import java.util.Objects;
 
+import com.designershop.entities.Product;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class SellerProductsService {
         AdminUpdateProductRequestModel adminUpdateProductRequestModel = new AdminUpdateProductRequestModel();
         BeanUtils.copyProperties(request, adminUpdateProductRequestModel);
         validateUserPermission(productId);
+        adminUpdateProductRequestModel.setIsDeleted("N");
         return adminProductsService.updateProduct(productId, adminUpdateProductRequestModel);
     }
 
@@ -52,16 +54,21 @@ public class SellerProductsService {
         return adminProductsService.deleteProduct(productId);
     }
 
-    public void validateUserPermission(String productId) throws UserException {
+    public void validateUserPermission(String productId) throws UserException, ProductException {
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(sessionUserProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        UserProfile userProfile = productRepository.findByProductId(productId).getUserProfile();
+        Product product = productRepository.findByProductId(productId);
+        UserProfile userProfile = product.getUserProfile();
         if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile)
                 || !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
             throw new UserException("此帳戶不存在，請重新確認");
+        }
+
+        if (product.isDeleted()) {
+            throw new ProductException("此商品已被刪除，請重新確認");
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.designershop.users;
 
+import com.designershop.exceptions.ProductException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,8 @@ import com.designershop.users.models.UpdateUserRequestModel;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/users")
@@ -59,8 +62,8 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, MessagingException {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) throws UserException, ProductException, MessagingException {
         String account = usersService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).body(account);
+        return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/logout")).build();
     }
 }

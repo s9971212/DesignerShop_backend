@@ -23,14 +23,14 @@ public class UserProductsController {
 
     private final UserProductsService userProductsService;
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<String> readProductLikes(@PathVariable String productId) throws ProductException {
+    @GetMapping
+    public ResponseEntity<String> readProductLikes(@RequestParam String productId) throws ProductException {
         String response = userProductsService.readProductLikes(productId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<String> updateProductLikes(@PathVariable String productId) throws ProductException {
+    public ResponseEntity<String> updateProductLikes(@PathVariable String productId) throws UserException, ProductException {
         String productName = userProductsService.updateProductLikes(productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(productName);
     }
