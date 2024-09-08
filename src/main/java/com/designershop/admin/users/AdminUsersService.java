@@ -383,6 +383,10 @@ public class AdminUsersService {
             throw new UserException("此帳戶不存在，請重新確認");
         }
 
+        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+
+        userProfile.setUpdatedUser(sessionUserProfile.getUserId());
+        userProfile.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         userProfile.setDeleted(true);
         userProfileRepository.save(userProfile);
 

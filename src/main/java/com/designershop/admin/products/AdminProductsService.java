@@ -274,6 +274,10 @@ public class AdminProductsService {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
+        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+
+        product.setUpdatedUser(sessionUserProfile.getUserId());
+        product.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         product.setDeleted(true);
         productRepository.save(product);
 
