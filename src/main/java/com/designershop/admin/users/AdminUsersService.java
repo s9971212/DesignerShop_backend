@@ -181,11 +181,7 @@ public class AdminUsersService {
             adminReadUserResponseModel
                     .setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
 
-            String isDeleted = "N";
-            if (userProfile.isDeleted()) {
-                isDeleted = "Y";
-            }
-            adminReadUserResponseModel.setIsDeleted(isDeleted);
+            adminReadUserResponseModel.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
 
             response.add(adminReadUserResponseModel);
         }
@@ -230,11 +226,7 @@ public class AdminUsersService {
         }
         response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
 
-        String isDeleted = "N";
-        if (userProfile.isDeleted()) {
-            isDeleted = "Y";
-        }
-        response.setIsDeleted(isDeleted);
+        response.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
 
         return response;
     }

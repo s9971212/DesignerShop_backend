@@ -24,7 +24,7 @@ public class CartsController {
     private final CartsService cartsService;
 
     @PostMapping
-    public ResponseEntity<String> createCart() throws EmptyException, UserException, ProductException, CartException {
+    public ResponseEntity<String> createCart() throws UserException, CartException {
         Cart cart = cartsService.createCart();
         return ResponseEntity.status(HttpStatus.CREATED).body(cart.getUserId());
     }

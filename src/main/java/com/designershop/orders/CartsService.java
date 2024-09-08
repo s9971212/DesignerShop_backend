@@ -32,7 +32,7 @@ public class CartsService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
-    public Cart createCart() throws EmptyException, UserException, ProductException, CartException {
+    public Cart createCart() throws UserException, CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
@@ -117,7 +117,7 @@ public class CartsService {
 
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());
         if (Objects.isNull(cart)) {
-            throw new CartException("此購物車不存在，請重新確認");
+            cart = createCart();
         }
 
         List<ReadCartItemResponseModel> response = new ArrayList<>();
@@ -127,6 +127,7 @@ public class CartsService {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
 
             Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
+            readCartItemResponseModel.setUserName(product.getUserProfile().getUserName());
             readCartItemResponseModel.setProductName(product.getProductName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
@@ -137,7 +138,16 @@ public class CartsService {
             }
             readCartItemResponseModel.setImages(images);
 
-            readCartItemResponseModel.setQuantity(Integer.toString(cartItem.getQuantity()));
+            readCartItemResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
+
+            int quantity = cartItem.getQuantity();
+            if (product.getStockQuantity() < quantity) {
+                quantity = product.getStockQuantity();
+                cartItem.setQuantity(quantity);
+                cartItemRepository.save(cartItem);
+            }
+            readCartItemResponseModel.setQuantity(Integer.toString(quantity));
+
             response.add(readCartItemResponseModel);
         }
 

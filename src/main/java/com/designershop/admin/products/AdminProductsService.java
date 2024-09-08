@@ -136,13 +136,9 @@ public class AdminProductsService {
                 images.add(productImage.getImage());
             }
             adminReadProductResponseModel.setImages(images);
-            adminReadProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
 
-            String isDeleted = "N";
-            if (product.isDeleted()) {
-                isDeleted = "Y";
-            }
-            adminReadProductResponseModel.setIsDeleted(isDeleted);
+            adminReadProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+            adminReadProductResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
 
             response.add(adminReadProductResponseModel);
         }
@@ -171,13 +167,9 @@ public class AdminProductsService {
             images.add(productImage.getImage());
         }
         response.setImages(images);
-        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
 
-        String isDeleted = "N";
-        if (product.isDeleted()) {
-            isDeleted = "Y";
-        }
-        response.setIsDeleted(isDeleted);
+        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+        response.setIsDeleted(product.isDeleted() ? "Y" : "N");
 
         return response;
     }

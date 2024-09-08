@@ -11,6 +11,8 @@ import java.util.List;
 @Setter
 public class ReadCartItemResponseModel {
 
+    private String userName;
+
     @NotBlank
     private String productName;
 
@@ -22,6 +24,9 @@ public class ReadCartItemResponseModel {
 
     @NotEmpty
     private List<String> images;
+
+    @NotBlank
+    private String isDeleted;
 
     @NotBlank
     private String quantity;

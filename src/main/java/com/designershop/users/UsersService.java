@@ -109,10 +109,6 @@ public class UsersService {
             throw new UserException("此帳戶不存在，請重新確認");
         }
 
-        if (userProfile.isDeleted()) {
-            throw new UserException("此帳戶已被刪除，請重新確認");
-        }
-
         return userProfile;
     }
 }
