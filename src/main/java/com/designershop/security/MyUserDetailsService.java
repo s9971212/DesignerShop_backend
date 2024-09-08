@@ -1,13 +1,11 @@
 package com.designershop.security;
 
+import com.designershop.entities.UserProfile;
+import com.designershop.repositories.UserProfileRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import com.designershop.entities.UserProfile;
-import com.designershop.repositories.UserProfileRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

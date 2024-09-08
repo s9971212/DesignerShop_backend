@@ -1,17 +1,5 @@
 package com.designershop.security;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.stereotype.Service;
-
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.PasswordExpiredException;
 import com.designershop.exceptions.UserException;
@@ -19,10 +7,20 @@ import com.designershop.mail.MailService;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.JwtUtil;
-
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

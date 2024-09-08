@@ -17,8 +17,7 @@ public final class DateTimeFormatUtil {
     public static final DateTimeFormatter FULL_DATE_SLASH_TIME = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     public static LocalDateTime currentDateTime() {
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        return currentDateTime;
+        return LocalDateTime.now();
     }
 
     public static String currentLocalDateFormat() {

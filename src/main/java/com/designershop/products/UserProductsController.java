@@ -1,20 +1,11 @@
 package com.designershop.products;
 
-import com.designershop.entities.ProductLikes;
-import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
-import com.designershop.products.models.CreateProductEvaluationRequestModel;
-import com.designershop.products.models.CreateProductRequestModel;
-import com.designershop.products.models.ReadProductResponseModel;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.designershop.exceptions.ProductException;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/user/products")

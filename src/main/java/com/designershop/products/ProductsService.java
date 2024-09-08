@@ -1,24 +1,21 @@
 package com.designershop.products;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import com.designershop.entities.Product;
+import com.designershop.entities.ProductImage;
 import com.designershop.entities.UserProfile;
-import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
+import com.designershop.products.models.ReadProductResponseModel;
+import com.designershop.repositories.ProductRepository;
 import com.designershop.repositories.UserProfileRepository;
+import com.designershop.utils.DateTimeFormatUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import com.designershop.entities.Product;
-import com.designershop.entities.ProductImage;
-import com.designershop.exceptions.ProductException;
-import com.designershop.products.models.ReadProductResponseModel;
-import com.designershop.repositories.ProductRepository;
-import com.designershop.utils.DateTimeFormatUtil;
-
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

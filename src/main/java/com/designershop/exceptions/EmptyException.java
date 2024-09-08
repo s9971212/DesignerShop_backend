@@ -1,10 +1,8 @@
 package com.designershop.exceptions;
 
-import org.apache.logging.log4j.Level;
-
 import com.designershop.enums.ErrorSourceEunm;
-
 import lombok.Getter;
+import org.apache.logging.log4j.Level;
 
 @Getter
 public class EmptyException extends Exception implements IBaseException {

@@ -1,5 +1,21 @@
 package com.designershop.admin.products;
 
+import com.designershop.admin.products.models.AdminCreateProductRequestModel;
+import com.designershop.admin.products.models.AdminReadProductResponseModel;
+import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
+import com.designershop.entities.*;
+import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.ProductException;
+import com.designershop.exceptions.UserException;
+import com.designershop.repositories.*;
+import com.designershop.utils.DateTimeFormatUtil;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,33 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.designershop.admin.products.models.AdminReadProductResponseModel;
-import com.designershop.exceptions.UserException;
-import com.designershop.products.models.ReadProductResponseModel;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.designershop.admin.products.models.AdminCreateProductRequestModel;
-import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
-import com.designershop.entities.Product;
-import com.designershop.entities.ProductBrand;
-import com.designershop.entities.ProductCategory;
-import com.designershop.entities.ProductImage;
-import com.designershop.entities.UserProfile;
-import com.designershop.exceptions.EmptyException;
-import com.designershop.exceptions.ProductException;
-import com.designershop.repositories.ProductBrandRepository;
-import com.designershop.repositories.ProductCategoryRepository;
-import com.designershop.repositories.ProductImageRepository;
-import com.designershop.repositories.ProductRepository;
-import com.designershop.repositories.UserProfileRepository;
-import com.designershop.utils.DateTimeFormatUtil;
-
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +36,7 @@ public class AdminProductsService {
     private final ProductImageRepository productImageRepository;
 
     @Transactional
-    public String createProduct(String userId, AdminCreateProductRequestModel request)
-            throws EmptyException, ProductException {
+    public String createProduct(String userId, AdminCreateProductRequestModel request) throws EmptyException, ProductException {
         String category = request.getCategory();
         String brand = request.getBrand();
         String productName = request.getProductName();
@@ -209,7 +197,8 @@ public class AdminProductsService {
 
         if (StringUtils.isBlank(productId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
                 || StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
-                || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString) || StringUtils.isBlank(termsCheckBox)) {
+                || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString)
+                || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
         }
 
@@ -248,10 +237,7 @@ public class AdminProductsService {
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
-        boolean isDeleted = false;
-        if (StringUtils.equals("Y", isDeletedString)) {
-            isDeleted = true;
-        }
+        boolean isDeleted = StringUtils.equals("Y", isDeletedString);
 
         product.setProductName(productName);
         product.setProductDescription(productDescription);

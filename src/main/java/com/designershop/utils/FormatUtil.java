@@ -1,11 +1,10 @@
 package com.designershop.utils;
 
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.UserException;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
 
 public final class FormatUtil {
 

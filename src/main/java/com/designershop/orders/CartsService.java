@@ -145,8 +145,7 @@ public class CartsService {
     }
 
     @Transactional
-    public String updateCartItem(String productId, UpdateCartItemRequestModel request)
-            throws EmptyException, UserException, ProductException, CartException {
+    public String updateCartItem(String productId, UpdateCartItemRequestModel request) throws EmptyException, UserException, ProductException, CartException {
         String quantityString = request.getQuantity();
 
         if (StringUtils.isBlank(quantityString)) {

@@ -1,14 +1,9 @@
 package com.designershop.products;
 
-import java.util.Objects;
-
-import com.designershop.entities.Product;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
 import com.designershop.admin.products.AdminProductsService;
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
+import com.designershop.entities.Product;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
@@ -18,6 +13,11 @@ import com.designershop.products.models.UpdateProductRequestModel;
 import com.designershop.repositories.ProductRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +27,7 @@ public class SellerProductsService {
     private final AdminProductsService adminProductsService;
     private final ProductRepository productRepository;
 
-    public String createProduct(CreateProductRequestModel request)
-            throws EmptyException, UserException, ProductException {
+    public String createProduct(CreateProductRequestModel request) throws EmptyException, UserException, ProductException {
         AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
         BeanUtils.copyProperties(request, adminCreateProductRequestModel);
 
@@ -40,8 +39,7 @@ public class SellerProductsService {
         return adminProductsService.createProduct(sessionUserProfile.getUserId(), adminCreateProductRequestModel);
     }
 
-    public String updateProduct(String productId, UpdateProductRequestModel request)
-            throws EmptyException, UserException, ProductException {
+    public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, UserException, ProductException {
         AdminUpdateProductRequestModel adminUpdateProductRequestModel = new AdminUpdateProductRequestModel();
         BeanUtils.copyProperties(request, adminUpdateProductRequestModel);
         validateUserPermission(productId);

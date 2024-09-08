@@ -1,15 +1,13 @@
 package com.designershop.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.designershop.entities.UserProfile;
+import com.designershop.entities.UserRole;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.designershop.entities.UserProfile;
-import com.designershop.entities.UserRole;
-
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class MyUser implements UserDetails {

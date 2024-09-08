@@ -1,12 +1,5 @@
 package com.designershop.users;
 
-import java.util.Objects;
-
-import com.designershop.exceptions.ProductException;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-
 import com.designershop.admin.users.AdminUsersService;
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
@@ -14,6 +7,7 @@ import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
 import com.designershop.entities.UserProfile;
 import com.designershop.entities.UserRole;
 import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.users.models.CreateUserRequestModel;
@@ -21,10 +15,14 @@ import com.designershop.users.models.ReadUserResponseModel;
 import com.designershop.users.models.UpdatePasswordRequestModel;
 import com.designershop.users.models.UpdateUserRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
-
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -87,8 +85,7 @@ public class UsersService {
         return adminUsersService.updateUser(userId, adminUpdateUserRequestModel);
     }
 
-    public String updatePassword(String userId, UpdatePasswordRequestModel request)
-            throws EmptyException, UserException, MessagingException {
+    public String updatePassword(String userId, UpdatePasswordRequestModel request) throws EmptyException, UserException, MessagingException {
         AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
         BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
         validateUserPermission(userId);

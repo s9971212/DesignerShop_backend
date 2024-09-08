@@ -1,40 +1,32 @@
 package com.designershop.admin.users;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-
 import com.designershop.admin.products.AdminProductsService;
-import com.designershop.entities.Product;
-import com.designershop.exceptions.ProductException;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminReadUserResponseModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
+import com.designershop.entities.Product;
 import com.designershop.entities.UserProfile;
 import com.designershop.entities.UserRole;
 import com.designershop.exceptions.EmptyException;
+import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
 import com.designershop.mail.MailService;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.repositories.UserRoleRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
-
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,8 +38,7 @@ public class AdminUsersService {
     private final UserProfileRepository userProfileRepository;
     private final UserRoleRepository userRoleRepository;
 
-    public String createUser(AdminCreateUserRequestModel request)
-            throws EmptyException, UserException, MessagingException {
+    public String createUser(AdminCreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
         String userType = request.getUserType();
         String sellerType = request.getSellerType();
         String designerType = request.getDesignerType();
@@ -266,7 +257,8 @@ public class AdminUsersService {
         String termsCheckBox = request.getTermsCheckBox();
 
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(account) || StringUtils.isBlank(email)
-                || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(isDeletedString) || StringUtils.isBlank(termsCheckBox)) {
+                || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(isDeletedString)
+                || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("帳號、Email、手機與條款確認不得為空");
         }
 
@@ -274,8 +266,7 @@ public class AdminUsersService {
             throw new UserException("手機格式錯誤");
         }
 
-        List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email,
-                phoneNo);
+        List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
         for (UserProfile userProfile : userProfileList) {
             if (!StringUtils.equals(userId, userProfile.getUserId())) {
                 if (StringUtils.equals(account, userProfile.getAccount())) {
@@ -300,10 +291,7 @@ public class AdminUsersService {
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
 
-        boolean isDeleted = false;
-        if (StringUtils.equals("Y", isDeletedString)) {
-            isDeleted = true;
-        }
+        boolean isDeleted = StringUtils.equals("Y", isDeletedString);
 
         Set<String> roleIds = new HashSet<>();
         roleIds.add(userType);
@@ -337,8 +325,7 @@ public class AdminUsersService {
         return account;
     }
 
-    public String updatePassword(String userId, AdminUpdatePasswordRequestModel request)
-            throws EmptyException, UserException, MessagingException {
+    public String updatePassword(String userId, AdminUpdatePasswordRequestModel request) throws EmptyException, UserException, MessagingException {
         String oldPassword = request.getOldPassword();
         String password = request.getPassword();
         String passwordCheck = request.getPasswordCheck();

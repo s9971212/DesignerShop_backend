@@ -9,5 +9,4 @@ public class DesignershopBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(DesignershopBackendApplication.class, args);
     }
-
 }

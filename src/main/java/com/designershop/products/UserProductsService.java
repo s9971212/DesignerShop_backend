@@ -1,25 +1,20 @@
 package com.designershop.products;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-
-import com.designershop.admin.products.models.AdminCreateProductRequestModel;
-import com.designershop.entities.*;
-import com.designershop.exceptions.EmptyException;
-import com.designershop.exceptions.UserException;
-import com.designershop.products.models.CreateProductEvaluationRequestModel;
-import com.designershop.utils.DateTimeFormatUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.designershop.entities.Product;
+import com.designershop.entities.ProductLikes;
+import com.designershop.entities.ProductLikesId;
+import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.ProductException;
+import com.designershop.exceptions.UserException;
 import com.designershop.repositories.ProductLikesRepository;
 import com.designershop.repositories.ProductRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor

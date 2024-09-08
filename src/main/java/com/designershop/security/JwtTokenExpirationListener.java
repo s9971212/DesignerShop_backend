@@ -1,7 +1,10 @@
 package com.designershop.security;
 
-import java.util.Objects;
-
+import com.designershop.entities.UserProfile;
+import com.designershop.repositories.UserProfileRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.event.AuthenticationFailureExpiredEvent;
 import org.springframework.security.core.Authentication;
@@ -9,12 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.designershop.entities.UserProfile;
-import com.designershop.repositories.UserProfileRepository;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -25,9 +23,7 @@ public class JwtTokenExpirationListener {
     @EventListener
     public void handleTokenExpiredEvent(AuthenticationFailureExpiredEvent event) {
         Authentication authentication = event.getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof MyUser) {
-            MyUser myUser = (MyUser) authentication.getPrincipal();
-
+        if (authentication != null && authentication.getPrincipal() instanceof MyUser myUser) {
             HttpSession session = getSessionForUser(myUser.getUsername());
             if (session != null) {
                 UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");

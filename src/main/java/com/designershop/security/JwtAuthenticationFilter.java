@@ -1,16 +1,5 @@
 package com.designershop.security;
 
-import java.io.IOException;
-import java.util.Objects;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.designershop.entities.UserProfile;
 import com.designershop.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -20,6 +9,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (JwtUtil.validateToken(jwt, myUser)) {
                 if (Objects.nonNull(sessionUserProfile) && StringUtils.equals(sessionUserProfile.getSignOnToken(), jwt)
-                        && !StringUtils.equals("Y", sessionUserProfile.getIsLock()) && !sessionUserProfile.isDeleted()) {
+                        && !StringUtils.equals("Y", sessionUserProfile.getIsLock())
+                        && !sessionUserProfile.isDeleted()) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             myUser, null, myUser.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

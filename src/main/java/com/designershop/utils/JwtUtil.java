@@ -1,25 +1,24 @@
 package com.designershop.utils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-
 import com.designershop.security.MyUser;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
 
     private static final String ISSUER = "DesignerShop";
-    private static final String SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256).toString();
+    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private static final long EXPIRATION_TIME = 864_000_000; // 10 days
 
     // 生成 JWT
@@ -29,14 +28,12 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder().setClaims(claims).setSubject(myUser.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).setIssuer(ISSUER)
-                .setIssuedAt(new Date()).signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
-                .compact();
+                .setIssuedAt(new Date()).signWith(SECRET_KEY, SignatureAlgorithm.HS512).compact();
     }
 
     // 解析 JWT
     public static Claims parseToken(String token) {
-        return Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(SECRET_KEY.getBytes())).build().parseSignedClaims(token)
-                .getPayload();
+        return Jwts.parser().setSigningKey(SECRET_KEY).build().parseSignedClaims(token).getPayload();
     }
 
     // 驗證 JWT 是否有效

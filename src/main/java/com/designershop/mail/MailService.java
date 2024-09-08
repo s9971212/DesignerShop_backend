@@ -1,16 +1,15 @@
 package com.designershop.mail;
 
-import java.util.Map;
-
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +20,7 @@ public class MailService {
 
     private final String FROM = "DesignerShop<designershop0715@gmail.com>";
 
-    public void sendEmail(String[] receivers, String[] cc, String[] bcc, String subject, String content)
-            throws MessagingException {
+    public void sendEmail(String[] receivers, String[] cc, String[] bcc, String subject, String content) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
@@ -36,8 +34,8 @@ public class MailService {
         javaMailSender.send(message);
     }
 
-    public void sendEmailWithTemplate(String[] receivers, String[] cc, String[] bcc, String subject, String template,
-                                      Map<String, Object> variables) throws MessagingException {
+    public void sendEmailWithTemplate(String[] receivers, String[] cc, String[] bcc, String subject, String template, Map<String, Object> variables)
+            throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 

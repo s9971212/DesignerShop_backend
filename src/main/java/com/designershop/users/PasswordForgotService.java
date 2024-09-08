@@ -1,14 +1,5 @@
 package com.designershop.users;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
@@ -18,9 +9,16 @@ import com.designershop.users.models.PasswordForgotRequestModel;
 import com.designershop.users.models.PasswordForgotSendEmailRequestModel;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.RandomTokenUtil;
-
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +27,7 @@ public class PasswordForgotService {
     private final MailService mailService;
     private final UserProfileRepository userProfileRepository;
 
-    public String passwordForgotSendEmail(PasswordForgotSendEmailRequestModel request)
-            throws EmptyException, UserException, MessagingException {
+    public String passwordForgotSendEmail(PasswordForgotSendEmailRequestModel request) throws EmptyException, UserException, MessagingException {
         String email = request.getEmail();
 
         if (StringUtils.isBlank(email)) {
@@ -66,8 +63,7 @@ public class PasswordForgotService {
         return userProfile.getAccount();
     }
 
-    public String passwordForgot(String token, PasswordForgotRequestModel request)
-            throws EmptyException, UserException {
+    public String passwordForgot(String token, PasswordForgotRequestModel request) throws EmptyException, UserException {
         String password = request.getPassword();
         String passwordCheck = request.getPasswordCheck();
 
