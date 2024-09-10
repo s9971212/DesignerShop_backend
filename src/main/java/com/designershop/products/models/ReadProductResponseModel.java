@@ -12,6 +12,9 @@ import java.util.List;
 public class ReadProductResponseModel {
 
     @NotBlank
+    private String productId;
+
+    @NotBlank
     private String category;
 
     @NotBlank

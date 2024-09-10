@@ -11,6 +11,9 @@ import lombok.Setter;
 public class AdminReadUserResponseModel {
 
     @NotBlank
+    private String userId;
+
+    @NotBlank
     private String userType;
 
     private String sellerType;

@@ -61,6 +61,7 @@ public class ProductsService {
             if (!product.isDeleted()) {
                 ReadProductResponseModel readProductResponseModel = new ReadProductResponseModel();
                 BeanUtils.copyProperties(product, readProductResponseModel);
+                readProductResponseModel.setProductId(Integer.toString(product.getProductId()));
                 readProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
                 readProductResponseModel.setBrand(product.getProductBrand().getBrand());
                 readProductResponseModel.setPrice(product.getPrice().toString());
@@ -94,6 +95,7 @@ public class ProductsService {
 
         ReadProductResponseModel response = new ReadProductResponseModel();
         BeanUtils.copyProperties(product, response);
+        response.setProductId(Integer.toString(product.getProductId()));
         response.setCategory(product.getProductCategory().getCategoryName());
         response.setBrand(product.getProductBrand().getBrand());
         response.setPrice(product.getPrice().toString());

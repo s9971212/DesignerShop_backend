@@ -123,6 +123,7 @@ public class AdminProductsService {
         for (Product product : productList) {
             AdminReadProductResponseModel adminReadProductResponseModel = new AdminReadProductResponseModel();
             BeanUtils.copyProperties(product, adminReadProductResponseModel);
+            adminReadProductResponseModel.setProductId(Integer.toString(product.getProductId()));
             adminReadProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
             adminReadProductResponseModel.setBrand(product.getProductBrand().getBrand());
             adminReadProductResponseModel.setPrice(product.getPrice().toString());
@@ -154,6 +155,7 @@ public class AdminProductsService {
 
         AdminReadProductResponseModel response = new AdminReadProductResponseModel();
         BeanUtils.copyProperties(product, response);
+        response.setProductId(Integer.toString(product.getProductId()));
         response.setCategory(product.getProductCategory().getCategoryName());
         response.setBrand(product.getProductBrand().getBrand());
         response.setPrice(product.getPrice().toString());
