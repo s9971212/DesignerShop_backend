@@ -12,7 +12,7 @@ import java.util.List;
 public class ReadCartItemResponseModel {
 
     @NotBlank
-    private String itemsId;
+    private String itemId;
 
     private String userName;
 

@@ -127,7 +127,7 @@ public class CartsService {
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
 
-            readCartItemResponseModel.setItemsId(Integer.toString(cartItem.getItemsId()));
+            readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
 
             Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
             readCartItemResponseModel.setUserName(product.getUserProfile().getUserName());
@@ -202,7 +202,7 @@ public class CartsService {
     }
 
     @Transactional
-    public String deleteCartItem(String itemsId) throws UserException, CartException {
+    public String deleteCartItem(String itemId) throws UserException, CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
@@ -214,7 +214,7 @@ public class CartsService {
             cartRepository.save(cart);
         }
 
-        CartItem cartItem = cartItemRepository.findByCartIdAndItemsId(cart.getCartId(), itemsId);
+        CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getCartId(), itemId);
         if (Objects.isNull(cartItem)) {
             throw new CartException("此商品不存在購物車內，請重新確認");
         }

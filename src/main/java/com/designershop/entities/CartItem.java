@@ -20,8 +20,8 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "items_id", nullable = false)
-    private int itemsId;
+    @Column(name = "item_id", nullable = false)
+    private int itemId;
 
     @Column(name = "quantity", nullable = false)
     private int quantity = 1;
@@ -39,7 +39,7 @@ public class CartItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemsId, productId, cart != null ? cart.getCartId() : 0);
+        return Objects.hash(itemId, productId, cart != null ? cart.getCartId() : 0);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CartItem {
         if (getClass() != obj.getClass())
             return false;
         CartItem other = (CartItem) obj;
-        return Objects.equals(itemsId, other.itemsId) && Objects.equals(productId, other.productId) &&
+        return Objects.equals(itemId, other.itemId) && Objects.equals(productId, other.productId) &&
                 Objects.equals(cart != null ? cart.getCartId() : null, other.cart != null ? other.cart.getCartId() : null);
     }
 }
