@@ -11,12 +11,12 @@ import java.util.List;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-    @Query(value = "SELECT * FROM cart_item WHERE cart_id =:cartId AND product_id =:productId", nativeQuery = true)
+    @Query(value = "SELECT * FROM cart_items WHERE cart_id =:cartId AND product_id =:productId", nativeQuery = true)
     CartItem findByCartIdAndProductId(@Param("cartId") int cartId, @Param("productId") String productId);
 
-    @Query(value = "SELECT * FROM cart_item WHERE cart_id =:cartId", nativeQuery = true)
+    @Query(value = "SELECT * FROM cart_items WHERE cart_id =:cartId", nativeQuery = true)
     List<CartItem> findAllByCartId(@Param("cartId") int cartId);
 
-    @Query(value = "SELECT * FROM cart_item WHERE cart_id =:cartId AND items_id =:itemsId", nativeQuery = true)
+    @Query(value = "SELECT * FROM cart_items WHERE cart_id =:cartId AND items_id =:itemsId", nativeQuery = true)
     CartItem findByCartIdAndItemsId(@Param("cartId") int cartId, @Param("itemsId") String itemsId);
 }
