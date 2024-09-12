@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_image")
+@Table(name = "product_images")
 public class ProductImage {
 
     @Id

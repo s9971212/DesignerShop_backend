@@ -1,8 +1,8 @@
 USE designershop;
 
-DROP TABLE IF EXISTS cart_item;
+DROP TABLE IF EXISTS cart_items;
 
-CREATE TABLE cart_item (
+CREATE TABLE cart_items (
     items_id INT AUTO_INCREMENT PRIMARY KEY,
     quantity INT DEFAULT 1 NOT NULL,
     added_date DATETIME NOT NULL,

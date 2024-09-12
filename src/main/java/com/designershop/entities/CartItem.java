@@ -15,7 +15,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "cart_item")
+@Table(name = "cart_items")
 public class CartItem {
 
     @Id

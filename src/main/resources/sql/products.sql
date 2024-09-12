@@ -1,8 +1,8 @@
 USE designershop;
 
-DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS products;
 
-CREATE TABLE product (
+CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name NVARCHAR(100) NOT NULL,
     product_description TEXT NULL,
