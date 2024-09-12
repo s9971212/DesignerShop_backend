@@ -8,21 +8,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user/products")
+@RequestMapping("/api/productLikes")
 @RequiredArgsConstructor
-public class UserProductsController {
+public class ProductLikesController {
 
-    private final UserProductsService userProductsService;
+    private final ProductLikesService productLikesService;
 
     @GetMapping
     public ResponseEntity<String> readProductLikes(@RequestParam String productId) throws ProductException {
-        String response = userProductsService.readProductLikes(productId);
+        String response = productLikesService.readProductLikes(productId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/{productId}")
     public ResponseEntity<String> updateProductLikes(@PathVariable String productId) throws UserException, ProductException {
-        String productName = userProductsService.updateProductLikes(productId);
+        String productName = productLikesService.updateProductLikes(productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(productName);
     }
 }

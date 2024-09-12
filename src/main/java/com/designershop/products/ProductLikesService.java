@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class UserProductsService {
+public class ProductLikesService {
 
     private final HttpSession session;
     private final ProductRepository productRepository;
