@@ -48,4 +48,10 @@ public class CartsController {
         String userId = cartsService.updateCartItem(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCartItem(@PathVariable String id) throws UserException, CartException {
+        String userId = cartsService.deleteCartItem(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userId);
+    }
 }

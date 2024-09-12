@@ -109,6 +109,7 @@ public class CartsService {
         return userProfile.getUserId();
     }
 
+    @Transactional
     public List<ReadCartItemResponseModel> readAllCartItem() throws UserException, CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
@@ -125,6 +126,8 @@ public class CartsService {
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cart.getCartId());
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
+
+            readCartItemResponseModel.setItemsId(Integer.toString(cartItem.getItemsId()));
 
             Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
             readCartItemResponseModel.setUserName(product.getUserProfile().getUserName());
@@ -181,11 +184,9 @@ public class CartsService {
             throw new CartException("庫存數量不足，請重新確認");
         }
 
-        LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
-
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());
         if (Objects.nonNull(cart)) {
-            cart.setUpdatedDate(currentDateTime);
+            cart.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
             cartRepository.save(cart);
         }
 
@@ -196,6 +197,29 @@ public class CartsService {
 
         cartItem.setQuantity(quantity);
         cartItemRepository.save(cartItem);
+
+        return userProfile.getUserId();
+    }
+
+    @Transactional
+    public String deleteCartItem(String itemsId) throws UserException, CartException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        Cart cart = cartRepository.findByUserId(userProfile.getUserId());
+        if (Objects.nonNull(cart)) {
+            cart.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
+            cartRepository.save(cart);
+        }
+
+        CartItem cartItem = cartItemRepository.findByCartIdAndItemsId(cart.getCartId(), itemsId);
+        if (Objects.isNull(cartItem)) {
+            throw new CartException("此商品不存在購物車內，請重新確認");
+        }
+
+        cartItemRepository.delete(cartItem);
 
         return userProfile.getUserId();
     }

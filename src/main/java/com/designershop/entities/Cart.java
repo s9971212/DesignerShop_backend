@@ -35,7 +35,7 @@ public class Cart {
     @Column(name = "user_id", nullable = false, length = 10)
     private String userId;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItem;
 
     @Override
