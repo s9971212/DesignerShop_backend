@@ -36,7 +36,7 @@ public class Cart {
     private String userId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItem;
+    private List<CartItem> cartItems;
 
     @Override
     public int hashCode() {
