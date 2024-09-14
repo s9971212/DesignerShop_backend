@@ -69,9 +69,9 @@ public class AdminUsersService {
             throw new UserException("手機格式錯誤");
         }
 
-        List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email,
+        List<UserProfile> userProfiles = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email,
                 phoneNo);
-        for (UserProfile userProfile : userProfileList) {
+        for (UserProfile userProfile : userProfiles) {
             if (StringUtils.equals(account, userProfile.getAccount())) {
                 throw new UserException("此帳號已被註冊，請使用別的帳號");
             } else if (StringUtils.equals(email, userProfile.getEmail())) {

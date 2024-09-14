@@ -214,7 +214,7 @@ public class CartsService {
             cartRepository.save(cart);
         }
 
-        CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getCartId(), itemId);
+        CartItem cartItem = cartItemRepository.findByItemIdAndCartId(itemId, cart.getCartId());
         if (Objects.isNull(cartItem)) {
             throw new CartException("此商品不存在購物車內，請重新確認");
         }
