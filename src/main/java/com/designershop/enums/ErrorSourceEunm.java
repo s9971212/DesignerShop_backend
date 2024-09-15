@@ -14,5 +14,7 @@ public enum ErrorSourceEunm {
     // Product
     P,
     // Cart
-    C
+    C,
+    // Order
+    O
 }

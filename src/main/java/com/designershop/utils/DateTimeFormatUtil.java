@@ -20,9 +20,9 @@ public final class DateTimeFormatUtil {
         return LocalDateTime.now();
     }
 
-    public static String currentLocalDateFormat() {
+    public static String currentLocalDateFormat(DateTimeFormatter dateTimeFormatter) {
         LocalDate currentDate = LocalDate.now();
-        return currentDate.format(SIMPLE_YEAR_MONTH);
+        return currentDate.format(dateTimeFormatter);
     }
 
     public static LocalDateTime localDateTimeFormat(String date) {

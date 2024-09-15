@@ -33,7 +33,7 @@ public class SecurityConfig {
                         "/api/verification/send", // 發送驗證碼
                         "/api/verification/check" // 檢查驗證碼
                 ).permitAll()
-                .requestMatchers("/api/users/**", "/api/productLikes/**", "/api/carts/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/api/users/**", "/api/productLikes/**", "/api/carts/**", "/api/orders/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/api/seller/products/**").hasAuthority("ROLE_SELLER")
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated().and().logout().logoutUrl("/logout").logoutSuccessUrl("/api/auth")
