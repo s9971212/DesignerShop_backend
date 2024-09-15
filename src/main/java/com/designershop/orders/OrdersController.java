@@ -25,7 +25,7 @@ public class OrdersController {
 
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody @Valid CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
-        Order order = ordersService.createOrder(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(order.getUserId());
+        String form = ordersService.createOrder(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(form);
     }
 }

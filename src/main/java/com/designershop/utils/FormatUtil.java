@@ -34,7 +34,7 @@ public final class FormatUtil {
 
         String maxOrderId = "00000";
         if (Objects.nonNull(order) && StringUtils.equals(currentDate, order.getOrderId().substring(2, 9))) {
-            maxOrderId = order.getUserId().substring(9, 14);
+            maxOrderId = order.getOrderId().substring(9, 14);
         }
 
         if (StringUtils.equals("99999", maxOrderId)) {

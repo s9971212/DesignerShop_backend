@@ -1,5 +1,6 @@
 package com.designershop.orders;
 
+import com.designershop.ecpay.EcpayService;
 import com.designershop.entities.*;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateCartItemRequestModel;
@@ -26,6 +27,8 @@ import java.util.Objects;
 public class OrdersService {
 
     private final HttpSession session;
+    private final EcpayService ecpayService;
+    private final CartsService cartsService;
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
@@ -33,7 +36,7 @@ public class OrdersService {
     private final OrderItemRepository orderItemRepository;
 
     @Transactional
-    public Order createOrder(CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
+    public String createOrder(CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
         List<String> itemIds = request.getItemIds();
 
         if (itemIds.isEmpty()) {
@@ -54,6 +57,7 @@ public class OrdersService {
         String orderId = FormatUtil.orderIdGenerate(order);
         BigDecimal totalPrice = new BigDecimal(0);
         List<OrderItem> orderItems = new ArrayList<>();
+        List<String> productNames = new ArrayList<>();
         for (String itemId : itemIds) {
             CartItem cartItem = cartItemRepository.findByItemIdAndCartId(itemId, cart.getCartId());
             if (Objects.isNull(cartItem)) {
@@ -81,6 +85,7 @@ public class OrdersService {
             orderItem.setProductId(product.getProductId());
 
             orderItems.add(orderItem);
+            productNames.add(product.getProductName());
         }
 
         Order orderCreate = new Order();
@@ -96,6 +101,11 @@ public class OrdersService {
             orderItemRepository.save(orderItem);
         }
 
-        return orderCreate;
+        for (String itemId : itemIds) {
+            cartsService.deleteCartItem(itemId);
+        }
+
+        String createdDate = DateTimeFormatUtil.localDateTimeFormat(orderCreate.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_SLASH_TIME);
+        return ecpayService.ecpayCheckout(orderCreate.getOrderId(), createdDate, Integer.toString(orderCreate.getTotalPrice().intValue()), String.join("#", productNames));
     }
 }
