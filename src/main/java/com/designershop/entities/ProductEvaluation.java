@@ -35,14 +35,14 @@ public class ProductEvaluation {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "updated_user", length = 10)
+    @Column(name = "updated_user", length = 12)
     private String updatedUser;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
-    @Column(name = "user_id", nullable = false, length = 10)
+    @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
     @Column(name = "product_id", nullable = false)

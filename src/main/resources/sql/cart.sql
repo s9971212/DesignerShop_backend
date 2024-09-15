@@ -6,6 +6,6 @@ CREATE TABLE cart (
     cart_id INT AUTO_INCREMENT PRIMARY KEY,
     created_date DATETIME NOT NULL,
     updated_date DATETIME NULL,
-    user_id NVARCHAR(10) NOT NULL,
+    user_id NVARCHAR(12) NOT NULL,
     UNIQUE (user_id)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;

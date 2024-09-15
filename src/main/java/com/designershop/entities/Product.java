@@ -51,7 +51,7 @@ public class Product {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "updated_user", length = 10)
+    @Column(name = "updated_user", length = 12)
     private String updatedUser;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

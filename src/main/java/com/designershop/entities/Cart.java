@@ -32,7 +32,7 @@ public class Cart {
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
-    @Column(name = "user_id", nullable = false, length = 10)
+    @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)

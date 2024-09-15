@@ -11,14 +11,9 @@ public final class FormatUtil {
     public static String userIdGenerate(UserProfile userProfile) throws UserException {
         String currentDate = DateTimeFormatUtil.currentLocalDateFormat().substring(1);
 
-        String userId = "0240700000";
-        if (Objects.nonNull(userProfile)) {
-            userId = userProfile.getUserId();
-        }
-
         String maxUserId = "00000";
-        if (StringUtils.equals(currentDate, userId.substring(0, 5))) {
-            maxUserId = userId.substring(5, 10);
+        if (Objects.nonNull(userProfile) && StringUtils.equals(currentDate, userProfile.getUserId().substring(2, 7))) {
+            maxUserId = userProfile.getUserId().substring(7, 12);
         }
 
         if (StringUtils.equals("99999", maxUserId)) {
@@ -27,6 +22,6 @@ public final class FormatUtil {
 
         int max = Integer.parseInt(maxUserId);
         String formatMax = String.format("%05d", ++max);
-        return currentDate.concat(formatMax);
+        return String.join("", "DU", currentDate, formatMax);
     }
 }

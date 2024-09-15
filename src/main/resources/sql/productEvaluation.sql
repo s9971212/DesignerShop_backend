@@ -7,9 +7,9 @@ CREATE TABLE product_evaluation (
     stars DECIMAL(3 , 2 ) NOT NULL,
     evaluation TEXT NULL,
     created_date DATETIME NOT NULL,
-    updated_user NVARCHAR(10) NULL,
+    updated_user NVARCHAR(12) NULL,
     updated_date DATETIME NULL,
-    user_id NVARCHAR(10) NOT NULL,
+    user_id NVARCHAR(12) NOT NULL,
     product_id INT NOT NULL,
     UNIQUE (user_id , product_id)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;

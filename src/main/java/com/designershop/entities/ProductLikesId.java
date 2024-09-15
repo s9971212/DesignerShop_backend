@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 public class ProductLikesId implements Serializable {
 
-    @Column(name = "user_id", nullable = false, length = 10)
+    @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
     @Column(name = "product_id", nullable = false)

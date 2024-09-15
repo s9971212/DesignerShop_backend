@@ -78,9 +78,13 @@ public class CartsService {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
+        if (product.isDeleted()) {
+            throw new ProductException("此商品已被刪除，請重新確認");
+        }
+
         int quantity = Integer.parseInt(quantityString);
         if (product.getStockQuantity() < quantity) {
-            throw new CartException("庫存數量不足，請重新確認");
+            throw new ProductException("庫存數量不足，請重新確認");
         }
 
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
@@ -179,9 +183,13 @@ public class CartsService {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
+        if (product.isDeleted()) {
+            throw new ProductException("此商品已被刪除，請重新確認");
+        }
+
         int quantity = Integer.parseInt(quantityString);
         if (product.getStockQuantity() < quantity) {
-            throw new CartException("庫存數量不足，請重新確認");
+            throw new ProductException("庫存數量不足，請重新確認");
         }
 
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());

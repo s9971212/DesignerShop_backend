@@ -22,7 +22,7 @@ import java.util.Set;
 public class UserProfile {
 
     @Id
-    @Column(name = "user_id", nullable = false, length = 10)
+    @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
     @Column(name = "account", nullable = false, length = 30)
@@ -77,7 +77,7 @@ public class UserProfile {
     @Column(name = "pwd_error_count", nullable = false)
     private int pwdErrorCount = 0;
 
-    @Column(name = "updated_user", length = 10)
+    @Column(name = "updated_user", length = 12)
     private String updatedUser;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
