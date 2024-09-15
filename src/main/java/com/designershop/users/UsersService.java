@@ -45,13 +45,13 @@ public class UsersService {
         BeanUtils.copyProperties(userProfile, response);
 
         if (Objects.nonNull(userProfile.getBirthday())) {
-            response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+            response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
-        response.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate()));
+        response.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         if (Objects.nonNull(userProfile.getPwdChangedDate())) {
-            response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate()));
+            response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
-        response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+        response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
 
         return response;
     }

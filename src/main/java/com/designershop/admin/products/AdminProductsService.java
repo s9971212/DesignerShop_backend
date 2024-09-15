@@ -56,8 +56,9 @@ public class AdminProductsService {
             throw new EmptyException("商品圖片至少須有一張");
         }
 
-        if (!priceString.matches("\\d+(\\.\\d+)?")) {
-            throw new ProductException("價格只能有數字或小數點，請重新確認");
+        // 因應綠界價格只能正整數修改正規表示式，允許小數點可使用\d+(\.\d+)?
+        if (!priceString.matches("\\d+")) {
+            throw new ProductException("價格只能有數字，請重新確認");
         }
 
         if (!stockQuantityString.matches("\\d+")) {
@@ -138,7 +139,7 @@ public class AdminProductsService {
             }
             adminReadProductResponseModel.setImages(images);
 
-            adminReadProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+            adminReadProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             adminReadProductResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
 
             response.add(adminReadProductResponseModel);
@@ -170,7 +171,7 @@ public class AdminProductsService {
         }
         response.setImages(images);
 
-        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setIsDeleted(product.isDeleted() ? "Y" : "N");
 
         return response;
@@ -200,8 +201,9 @@ public class AdminProductsService {
             throw new EmptyException("商品圖片至少須有一張");
         }
 
-        if (!priceString.matches("\\d+(\\.\\d+)?")) {
-            throw new ProductException("價格只能有數字或小數點，請重新確認");
+        // 因應綠界價格只能正整數修改正規表示式，允許小數點可使用\d+(\.\d+)?
+        if (!priceString.matches("\\d+")) {
+            throw new ProductException("價格只能有數字，請重新確認");
         }
 
         if (!stockQuantityString.matches("\\d+")) {

@@ -86,7 +86,7 @@ public class AdminUsersService {
         String encodePwd = new BCryptPasswordEncoder().encode(password);
         LocalDateTime birthday = null;
         if (StringUtils.isNotBlank(birthdayString)) {
-            birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
+            birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         }
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
 
@@ -135,7 +135,7 @@ public class AdminUsersService {
         Map<String, Object> map = new HashMap<>();
         map.put("email", userProfileCreate.getEmail());
         map.put("account", userProfileCreate.getAccount());
-        map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfileCreate.getPwdExpireDate()));
+        map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfileCreate.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 註冊成功通知", "register", map);
 
         return account;
@@ -170,16 +170,16 @@ public class AdminUsersService {
 
             if (Objects.nonNull(userProfile.getBirthday())) {
                 adminReadUserResponseModel
-                        .setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+                        .setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
             adminReadUserResponseModel
-                    .setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate()));
+                    .setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             if (Objects.nonNull(userProfile.getPwdChangedDate())) {
                 adminReadUserResponseModel
-                        .setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate()));
+                        .setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
             adminReadUserResponseModel
-                    .setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+                    .setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
 
             adminReadUserResponseModel.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
 
@@ -218,13 +218,13 @@ public class AdminUsersService {
         }
 
         if (Objects.nonNull(userProfile.getBirthday())) {
-            response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday()));
+            response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
-        response.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate()));
+        response.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         if (Objects.nonNull(userProfile.getPwdChangedDate())) {
-            response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate()));
+            response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
-        response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+        response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
 
         response.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
 
@@ -278,7 +278,7 @@ public class AdminUsersService {
 
         LocalDateTime birthday = userProfile.getBirthday();
         if (StringUtils.isNotBlank(birthdayString)) {
-            birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString);
+            birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         }
 
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
@@ -362,7 +362,7 @@ public class AdminUsersService {
         Map<String, Object> map = new HashMap<>();
         map.put("email", userProfile.getEmail());
         map.put("account", userProfile.getAccount());
-        map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate()));
+        map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 密碼變更通知", "password-changed", map);
 
         return userProfile.getAccount();

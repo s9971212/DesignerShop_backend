@@ -75,7 +75,7 @@ public class ProductsService {
                     images.add(productImage.getImage());
                 }
                 readProductResponseModel.setImages(images);
-                readProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+                readProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
                 response.add(readProductResponseModel);
             }
         }
@@ -109,7 +109,7 @@ public class ProductsService {
             images.add(productImage.getImage());
         }
         response.setImages(images);
-        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate()));
+        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
 
         return response;
     }

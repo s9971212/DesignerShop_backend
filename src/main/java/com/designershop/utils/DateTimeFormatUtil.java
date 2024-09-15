@@ -25,11 +25,11 @@ public final class DateTimeFormatUtil {
         return currentDate.format(dateTimeFormatter);
     }
 
-    public static LocalDateTime localDateTimeFormat(String date) {
-        return LocalDateTime.from(FULL_DATE_DASH_TIME.parse(date));
+    public static LocalDateTime localDateTimeFormat(String date, DateTimeFormatter dateTimeFormatter) {
+        return LocalDateTime.from(dateTimeFormatter.parse(date));
     }
 
-    public static String localDateTimeFormat(LocalDateTime localDateTime) {
-        return localDateTime.format(FULL_DATE_DASH_TIME);
+    public static String localDateTimeFormat(LocalDateTime localDateTime, DateTimeFormatter dateTimeFormatter) {
+        return localDateTime.format(dateTimeFormatter);
     }
 }
