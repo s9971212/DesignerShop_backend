@@ -39,7 +39,7 @@ public class CartItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemId, productId, cart != null ? cart.getCartId() : 0);
+        return Objects.hash(itemId, productId);
     }
 
     @Override
@@ -51,7 +51,6 @@ public class CartItem {
         if (getClass() != obj.getClass())
             return false;
         CartItem other = (CartItem) obj;
-        return Objects.equals(itemId, other.itemId) && Objects.equals(productId, other.productId) &&
-                Objects.equals(cart != null ? cart.getCartId() : null, other.cart != null ? other.cart.getCartId() : null);
+        return Objects.equals(itemId, other.itemId) && Objects.equals(productId, other.productId);
     }
 }

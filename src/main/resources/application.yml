@@ -1,0 +1,41 @@
+#web server port
+server:
+  port: "8080"
+
+spring:
+  application:
+    name: designershop-backend
+  #mysql server setting
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/designershop?serverTimezone=Asia/Taipei&characterEncoding=UTF-8
+    username: root
+    password: 12345678
+  #setting data JPA
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: 'true'
+  #啟用或禁用驗證，驗證訊息本地化
+  mvc:
+    validation:
+      enabled: 'true'
+      locale: zh_TW
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: designershop0715@gmail.com
+    password: nuza amrh avbj aauh
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          auth: 'true'
+          starttls:
+            enable: 'true'
+    default-encoding: UTF-8

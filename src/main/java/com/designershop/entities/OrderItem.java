@@ -37,7 +37,7 @@ public class OrderItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemId, productId, order != null ? order.getOrderId() : 0);
+        return Objects.hash(itemId, productId);
     }
 
     @Override
@@ -49,7 +49,6 @@ public class OrderItem {
         if (getClass() != obj.getClass())
             return false;
         OrderItem other = (OrderItem) obj;
-        return Objects.equals(itemId, other.itemId) && Objects.equals(productId, other.productId) &&
-                Objects.equals(order != null ? order.getOrderId() : null, other.order != null ? other.order.getOrderId() : null);
+        return Objects.equals(itemId, other.itemId) && Objects.equals(productId, other.productId);
     }
 }
