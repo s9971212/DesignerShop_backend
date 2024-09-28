@@ -28,8 +28,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: designershop0715@gmail.com
-    password: nuza amrh avbj aauh
+    username: YOUR_GOOGLE_ACCOUNT@gmail.com
+    password: YOUR_APPLICATION_PASSWORD
     properties:
       mail:
         transport:
