@@ -31,15 +31,28 @@ public class Order {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
+    @Column(name = "address", nullable = false, length = 255)
+    private String address;
+
+    @Column(name = "contact_phone", nullable = false, length = 20)
+    private String contactPhone;
+
+    @Column(name = "contact_name", nullable = false, length = 100)
+    private String contactName;
+
     @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "delivery_id")
+    private OrderDelivery orderDelivery;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, userId);
+        return Objects.hash(orderId);
     }
 
     @Override
@@ -51,6 +64,6 @@ public class Order {
         if (getClass() != obj.getClass())
             return false;
         Order other = (Order) obj;
-        return Objects.equals(orderId, other.orderId) && Objects.equals(userId, other.userId);
+        return Objects.equals(orderId, other.orderId);
     }
 }

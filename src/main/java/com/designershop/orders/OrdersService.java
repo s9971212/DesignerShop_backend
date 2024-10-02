@@ -8,6 +8,7 @@ import com.designershop.orders.models.CreateOrderRequestModel;
 import com.designershop.orders.models.ReadCartItemResponseModel;
 import com.designershop.orders.models.UpdateCartItemRequestModel;
 import com.designershop.repositories.*;
+import com.designershop.utils.AddressUtil;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -32,15 +35,32 @@ public class OrdersService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderDeliveryRepository orderDeliveryRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
     @Transactional
     public String createOrder(CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
         List<String> itemIds = request.getItemIds();
+        String address = request.getAddress();
+        String district = request.getDistrict();
+        String city = request.getCity();
+        String state = request.getState();
+        String postalCode = request.getPostalCode();
+        String nation = request.getNation();
+        String contactPhone = request.getContactPhone();
+        String contactName = request.getContactName();
+
+        if (StringUtils.isBlank(address) || StringUtils.isBlank(nation) || StringUtils.isBlank(contactPhone) || StringUtils.isBlank(contactName)) {
+            throw new EmptyException("地址、聯絡電話與聯絡人姓名不得為空");
+        }
 
         if (itemIds.isEmpty()) {
             throw new EmptyException("至少須選擇一個商品");
+        }
+
+        if (!contactPhone.matches("^09\\d{8}$")) {
+            throw new OrderException("聯絡電話格式錯誤");
         }
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
@@ -53,6 +73,11 @@ public class OrdersService {
             throw new CartException("此購物車不存在，請重新確認");
         }
 
+        String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
+        Matcher matcher = Pattern.compile("\\d+").matcher(validatedAddress);
+        if (matcher.find()) {
+            postalCode = matcher.group();
+        }
         Order order = orderRepository.findMaxOrderId();
         String orderId = FormatUtil.orderIdGenerate(order);
         BigDecimal totalPrice = new BigDecimal(0);
@@ -88,11 +113,28 @@ public class OrdersService {
             productNames.add(product.getProductName());
         }
 
+        OrderDelivery orderDelivery = new OrderDelivery();
+        orderDelivery.setAddress(String.join("", validatedAddress, address));
+        orderDelivery.setDistrict(district);
+        orderDelivery.setCity(city);
+        orderDelivery.setState(state);
+        orderDelivery.setPostalCode(postalCode);
+        orderDelivery.setNation(nation);
+        orderDelivery.setContactPhone(contactPhone);
+        orderDelivery.setContactName(contactName);
+        orderDelivery.setUserId(userProfile.getUserId());
+
+        orderDeliveryRepository.save(orderDelivery);
+
         Order orderCreate = new Order();
         orderCreate.setOrderId(orderId);
         orderCreate.setTotalPrice(totalPrice);
         orderCreate.setCreatedDate(DateTimeFormatUtil.currentDateTime());
+        orderCreate.setAddress(String.join("", validatedAddress, address));
+        orderCreate.setContactPhone(contactPhone);
+        orderCreate.setContactName(contactName);
         orderCreate.setUserId(userProfile.getUserId());
+        orderCreate.setOrderDelivery(orderDelivery);
 
         orderRepository.save(orderCreate);
 

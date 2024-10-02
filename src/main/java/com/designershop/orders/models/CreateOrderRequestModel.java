@@ -13,4 +13,24 @@ public class CreateOrderRequestModel {
 
     @NotEmpty
     private List<String> itemIds;
+
+    @NotBlank
+    private String address;
+
+    private String district;
+
+    private String city;
+
+    private String state;
+
+    private String postalCode;
+
+    @NotBlank
+    private String nation;
+
+    @NotBlank
+    private String contactPhone;
+
+    @NotBlank
+    private String contactName;
 }
