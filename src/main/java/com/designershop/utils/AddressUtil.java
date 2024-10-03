@@ -28,7 +28,7 @@ public final class AddressUtil {
                 Map<String, Object> districtData = validateLocation(district, cityData, "districts");
                 String validatedPostalCode = validatePostalCode(postalCode, stateData, cityData, districtData);
 
-                return Stream.of(validatedPostalCode, nation, state, city, district).filter(StringUtils::isNotBlank).collect(Collectors.joining(""));
+                return String.join("", validatedPostalCode, " ", Stream.of(nation, state, city, district).filter(StringUtils::isNotBlank).collect(Collectors.joining("")));
             }
         }
 

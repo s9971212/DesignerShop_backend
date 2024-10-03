@@ -1,13 +1,13 @@
-package com.designershop.orders;
+package com.designershop.carts;
 
 import com.designershop.entities.*;
 import com.designershop.exceptions.CartException;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
-import com.designershop.orders.models.CreateCartItemRequestModel;
-import com.designershop.orders.models.ReadCartItemResponseModel;
-import com.designershop.orders.models.UpdateCartItemRequestModel;
+import com.designershop.carts.models.CreateCartItemRequestModel;
+import com.designershop.carts.models.ReadCartItemResponseModel;
+import com.designershop.carts.models.UpdateCartItemRequestModel;
 import com.designershop.repositories.CartItemRepository;
 import com.designershop.repositories.CartRepository;
 import com.designershop.repositories.ProductRepository;

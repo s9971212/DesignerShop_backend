@@ -1,4 +1,4 @@
-package com.designershop.orders.models;
+package com.designershop.carts.models;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
