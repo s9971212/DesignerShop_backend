@@ -14,8 +14,8 @@ public class ProductLikesController {
 
     private final ProductLikesService productLikesService;
 
-    @GetMapping
-    public ResponseEntity<String> readProductLikes(@RequestParam String productId) throws ProductException {
+    @GetMapping("/{productId}")
+    public ResponseEntity<String> readProductLikes(@PathVariable String productId) throws ProductException {
         String response = productLikesService.readProductLikes(productId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

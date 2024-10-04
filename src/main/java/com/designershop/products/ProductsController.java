@@ -24,15 +24,15 @@ public class ProductsController {
     //		return ResponseEntity.status(HttpStatus.OK).body(response);
     //	}
 
-    @GetMapping("/{userId}")
+    @GetMapping("/all/{userId}")
     public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws UserException {
         List<ReadProductResponseModel> response = productsService.readAllProductByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<ReadProductResponseModel> readProduct(@RequestParam String productId) throws ProductException {
-        ReadProductResponseModel response = productsService.readProduct(productId);
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadProductResponseModel> readProduct(@PathVariable String id) throws ProductException {
+        ReadProductResponseModel response = productsService.readProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

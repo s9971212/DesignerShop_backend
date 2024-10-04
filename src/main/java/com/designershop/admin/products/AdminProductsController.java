@@ -28,15 +28,15 @@ public class AdminProductsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productName);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/all/{userId}")
     public ResponseEntity<List<AdminReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws UserException {
         List<AdminReadProductResponseModel> response = adminProductsService.readAllProductByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<AdminReadProductResponseModel> readProduct(@RequestParam String productId) throws ProductException {
-        AdminReadProductResponseModel response = adminProductsService.readProduct(productId);
+    @GetMapping("/{id}")
+    public ResponseEntity<AdminReadProductResponseModel> readProduct(@PathVariable String id) throws ProductException {
+        AdminReadProductResponseModel response = adminProductsService.readProduct(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -36,7 +36,7 @@ public class CartsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ReadCartItemResponseModel>> readAllCartItem() throws UserException, CartException {
         List<ReadCartItemResponseModel> response = cartsService.readAllCartItem();
         return ResponseEntity.status(HttpStatus.OK).body(response);
