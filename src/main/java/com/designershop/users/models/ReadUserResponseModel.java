@@ -11,6 +11,9 @@ import lombok.Setter;
 public class ReadUserResponseModel {
 
     @NotBlank
+    private String userId;
+
+    @NotBlank
     private String account;
 
     @NotBlank
