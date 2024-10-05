@@ -1,5 +1,6 @@
 package com.designershop.carts;
 
+import com.designershop.carts.models.ReadCartItemRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.CartException;
 import com.designershop.exceptions.EmptyException;
@@ -128,6 +129,60 @@ public class CartsService {
         List<ReadCartItemResponseModel> response = new ArrayList<>();
 
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cart.getCartId());
+        for (CartItem cartItem : cartItemList) {
+            ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
+
+            readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
+
+            Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
+            readCartItemResponseModel.setUserName(product.getUserProfile().getUserName());
+            readCartItemResponseModel.setProductName(product.getProductName());
+            readCartItemResponseModel.setPrice(product.getPrice().toString());
+            readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
+
+            List<String> images = new ArrayList<>();
+            for (ProductImage productImage : product.getProductImages()) {
+                images.add(productImage.getImage());
+            }
+            readCartItemResponseModel.setImages(images);
+
+            readCartItemResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
+
+            int quantity = cartItem.getQuantity();
+            if (product.getStockQuantity() < quantity) {
+                quantity = product.getStockQuantity();
+                cartItem.setQuantity(quantity);
+                cartItemRepository.save(cartItem);
+            }
+            readCartItemResponseModel.setQuantity(Integer.toString(quantity));
+
+            response.add(readCartItemResponseModel);
+        }
+
+        return response;
+    }
+
+    @Transactional
+    public List<ReadCartItemResponseModel> readCartItemByItemIds(ReadCartItemRequestModel request) throws EmptyException, UserException, CartException {
+        List<String> itemIds = request.getItemIds();
+
+        if (itemIds.isEmpty()) {
+            throw new EmptyException("至少須選擇一個商品");
+        }
+
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        Cart cart = cartRepository.findByUserId(userProfile.getUserId());
+        if (Objects.isNull(cart)) {
+            createCart();
+        }
+
+        List<ReadCartItemResponseModel> response = new ArrayList<>();
+
+        List<CartItem> cartItemList = cartItemRepository.findByItemIds(itemIds);
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
 

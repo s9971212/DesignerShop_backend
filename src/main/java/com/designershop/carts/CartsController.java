@@ -1,5 +1,6 @@
 package com.designershop.carts;
 
+import com.designershop.carts.models.ReadCartItemRequestModel;
 import com.designershop.entities.Cart;
 import com.designershop.exceptions.CartException;
 import com.designershop.exceptions.EmptyException;
@@ -39,6 +40,12 @@ public class CartsController {
     @GetMapping("/all")
     public ResponseEntity<List<ReadCartItemResponseModel>> readAllCartItem() throws UserException, CartException {
         List<ReadCartItemResponseModel> response = cartsService.readAllCartItem();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReadCartItemResponseModel>> readCartItemByItemIds(@RequestBody @Valid ReadCartItemRequestModel request) throws EmptyException,UserException, CartException {
+        List<ReadCartItemResponseModel> response = cartsService.readCartItemByItemIds(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
