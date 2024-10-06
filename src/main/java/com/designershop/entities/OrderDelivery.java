@@ -48,6 +48,9 @@ public class OrderDelivery {
     @Column(name = "contact_name", nullable = false, length = 100)
     private String contactName;
 
+    @Column(name = "is_default", nullable = false)
+    private boolean isDefault = false;
+
     @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 

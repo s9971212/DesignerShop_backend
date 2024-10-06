@@ -44,7 +44,8 @@ public class CartsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadCartItemResponseModel>> readCartItemByItemIds(@RequestBody @Valid ReadCartItemRequestModel request) throws EmptyException,UserException, CartException {
+    public ResponseEntity<List<ReadCartItemResponseModel>> readCartItemByItemIds(@RequestBody @Valid ReadCartItemRequestModel request)
+            throws EmptyException, UserException, CartException {
         List<ReadCartItemResponseModel> response = cartsService.readCartItemByItemIds(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

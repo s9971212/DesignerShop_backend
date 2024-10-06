@@ -12,5 +12,6 @@ CREATE TABLE order_delivery (
     nation NVARCHAR(100) NOT NULL,
     contact_phone NVARCHAR(20) NOT NULL,
     contact_name NVARCHAR(100) NOT NULL,
+    is_default TINYINT(1) DEFAULT 0 NOT NULL,
     user_id NVARCHAR(12) NOT NULL
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
