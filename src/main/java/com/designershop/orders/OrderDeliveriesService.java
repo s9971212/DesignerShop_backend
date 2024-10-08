@@ -28,7 +28,7 @@ public class OrderDeliveriesService {
     private final OrderDeliveryRepository orderDeliveryRepository;
 
     @Transactional
-    public String createOrderDeliveries(CreateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
+    public String createOrderDelivery(CreateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
         String city = request.getCity();
@@ -86,7 +86,7 @@ public class OrderDeliveriesService {
     }
 
     @Transactional
-    public List<ReadOrderDeliveryResponseModel> readAllOrderDeliveries() throws UserException, OrderException {
+    public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws UserException, OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");

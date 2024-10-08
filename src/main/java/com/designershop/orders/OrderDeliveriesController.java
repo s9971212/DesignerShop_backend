@@ -21,15 +21,15 @@ public class OrderDeliveriesController {
     private final OrderDeliveriesService orderDeliveriesService;
 
     @PostMapping
-    public ResponseEntity<String> createOrderDeliveries(@RequestBody @Valid CreateOrderDeliveryRequestModel request)
+    public ResponseEntity<String> createOrderDelivery(@RequestBody @Valid CreateOrderDeliveryRequestModel request)
             throws EmptyException, UserException, OrderException {
-        String address = orderDeliveriesService.createOrderDeliveries(request);
+        String address = orderDeliveriesService.createOrderDelivery(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(address);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReadOrderDeliveryResponseModel>> readAllOrderDeliveries() throws UserException, OrderException {
-        List<ReadOrderDeliveryResponseModel> response = orderDeliveriesService.readAllOrderDeliveries();
+    public ResponseEntity<List<ReadOrderDeliveryResponseModel>> readAllOrderDelivery() throws UserException, OrderException {
+        List<ReadOrderDeliveryResponseModel> response = orderDeliveriesService.readAllOrderDelivery();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
