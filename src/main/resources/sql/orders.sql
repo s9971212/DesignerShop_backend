@@ -12,5 +12,5 @@ CREATE TABLE orders (
     user_id NVARCHAR(12) NOT NULL,
     delivery_id INT NOT NULL,
     FOREIGN KEY (delivery_id)
-        REFERENCES order_delivery (delivery_id)
+        REFERENCES order_deliveries (delivery_id)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;

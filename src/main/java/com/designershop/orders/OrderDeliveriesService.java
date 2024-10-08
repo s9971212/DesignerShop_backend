@@ -1,16 +1,21 @@
 package com.designershop.orders;
 
+import com.designershop.carts.models.ReadCartItemResponseModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderDeliveryRequestModel;
+import com.designershop.orders.models.ReadOrderDeliveryResponseModel;
 import com.designershop.repositories.*;
 import com.designershop.utils.AddressUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,7 +28,7 @@ public class OrderDeliveriesService {
     private final OrderDeliveryRepository orderDeliveryRepository;
 
     @Transactional
-    public String createOrderDelivery(CreateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
+    public String createOrderDeliveries(CreateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
         String city = request.getCity();
@@ -64,7 +69,7 @@ public class OrderDeliveriesService {
         }
 
         OrderDelivery orderDeliveryCreate = new OrderDelivery();
-        orderDeliveryCreate.setAddress(String.join("", validatedAddress, address));
+        orderDeliveryCreate.setAddress(address);
         orderDeliveryCreate.setDistrict(district);
         orderDeliveryCreate.setCity(city);
         orderDeliveryCreate.setState(state);
@@ -77,6 +82,28 @@ public class OrderDeliveriesService {
 
         orderDeliveryRepository.save(orderDeliveryCreate);
 
-        return orderDeliveryCreate.getAddress();
+        return String.join("", validatedAddress, address);
+    }
+
+    @Transactional
+    public List<ReadOrderDeliveryResponseModel> readAllOrderDeliveries() throws UserException, OrderException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        List<ReadOrderDeliveryResponseModel> response = new ArrayList<>();
+
+        List<OrderDelivery> orderDeliveryList = orderDeliveryRepository.findAllByUserId(userProfile.getUserId());
+        for (OrderDelivery orderDelivery : orderDeliveryList) {
+            ReadOrderDeliveryResponseModel readOrderDeliveryResponseModel = new ReadOrderDeliveryResponseModel();
+            BeanUtils.copyProperties(orderDelivery, readOrderDeliveryResponseModel);
+            readOrderDeliveryResponseModel.setDeliveryId(Integer.toString(orderDelivery.getDeliveryId()));
+            readOrderDeliveryResponseModel.setIsDefault(orderDelivery.isDefault() ? "Y" : "N");
+
+            response.add(readOrderDeliveryResponseModel);
+        }
+
+        return response;
     }
 }

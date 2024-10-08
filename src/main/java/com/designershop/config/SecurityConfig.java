@@ -29,11 +29,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeHttpRequests()
                 .requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
-                        "/api/productLikes",
-                        "/api/verification/send", // 發送驗證碼
-                        "/api/verification/check" // 檢查驗證碼
+                        "/api/product_likes"
                 ).permitAll()
-                .requestMatchers("/api/users/**", "/api/productLikes/**", "/api/carts/**", "/api/orders/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/api/users/**", "/api/product_likes/**", "/api/carts/**", "/api/orders/**", "/api/order_deliveries/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/api/seller/products/**").hasAuthority("ROLE_SELLER")
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated().and().logout().logoutUrl("/logout").logoutSuccessUrl("/api/auth")

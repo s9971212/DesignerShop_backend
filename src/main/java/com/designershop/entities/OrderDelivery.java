@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "order_delivery")
+@Table(name = "order_deliveries")
 public class OrderDelivery {
 
     @Id

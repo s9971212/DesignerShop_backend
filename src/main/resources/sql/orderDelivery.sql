@@ -1,8 +1,8 @@
 USE designershop;
 
-DROP TABLE IF EXISTS order_delivery;
+DROP TABLE IF EXISTS order_deliveries;
 
-CREATE TABLE order_delivery (
+CREATE TABLE order_deliveries (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
     address NVARCHAR(255) NOT NULL,
     district NVARCHAR(100) NULL,
