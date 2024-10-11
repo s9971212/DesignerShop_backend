@@ -1,11 +1,14 @@
 package com.designershop.orders;
 
+import com.designershop.carts.models.UpdateCartItemRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderDeliveryRequestModel;
 import com.designershop.orders.models.ReadOrderDeliveryResponseModel;
+import com.designershop.orders.models.UpdateOrderDeliveryRequestModel;
 import com.designershop.repositories.*;
 import com.designershop.utils.AddressUtil;
+import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -139,5 +142,81 @@ public class OrderDeliveriesService {
         response.setIsDefault(orderDelivery.isDefault() ? "Y" : "N");
 
         return response;
+    }
+
+    @Transactional
+    public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
+        String address = request.getAddress();
+        String district = request.getDistrict();
+        String city = request.getCity();
+        String state = request.getState();
+        String postalCode = request.getPostalCode();
+        String nation = request.getNation();
+        String contactPhone = request.getContactPhone();
+        String contactName = request.getContactName();
+        String defaultCheckBox = request.getDefaultCheckBox();
+
+        if (StringUtils.isBlank(deliveryId) || StringUtils.isBlank(address) || StringUtils.isBlank(nation) || StringUtils.isBlank(contactPhone)
+                || StringUtils.isBlank(contactName) || StringUtils.isBlank(defaultCheckBox)) {
+            throw new EmptyException("地址、聯絡電話、聯絡人姓名與設為預設地址不得為空");
+        }
+
+        if (!contactPhone.matches("^09\\d{8}$")) {
+            throw new OrderException("聯絡電話格式錯誤");
+        }
+
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(deliveryId);
+        if (Objects.isNull(orderDelivery)) {
+            throw new OrderException("此訂單配送不存在，請重新確認");
+        }
+
+        String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
+        Matcher matcher = Pattern.compile("\\d+").matcher(validatedAddress);
+        if (matcher.find()) {
+            postalCode = matcher.group();
+        }
+
+        OrderDelivery orderDeliveryDefault = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
+        boolean isDefault = orderDelivery.isDefault() || StringUtils.equals("Y", defaultCheckBox);
+        if (!orderDelivery.isDefault() && isDefault) {
+            orderDeliveryDefault.setDefault(false);
+            orderDeliveryRepository.save(orderDeliveryDefault);
+        }
+
+        orderDelivery.setAddress(address);
+        orderDelivery.setDistrict(district);
+        orderDelivery.setCity(city);
+        orderDelivery.setState(state);
+        orderDelivery.setPostalCode(postalCode);
+        orderDelivery.setNation(nation);
+        orderDelivery.setContactPhone(contactPhone);
+        orderDelivery.setContactName(contactName);
+        orderDelivery.setDefault(isDefault);
+        orderDelivery.setUserId(userProfile.getUserId());
+
+        orderDeliveryRepository.save(orderDelivery);
+
+        return String.join("", validatedAddress, address);
+    }
+
+    public String deleteOrderDelivery(String deliveryId) throws UserException, OrderException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(deliveryId);
+        if (Objects.isNull(orderDelivery)) {
+            throw new OrderException("此訂單配送不存在，請重新確認");
+        }
+
+        orderDeliveryRepository.delete(orderDelivery);
+
+        return userProfile.getUserId();
     }
 }

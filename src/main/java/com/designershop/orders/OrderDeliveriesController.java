@@ -1,8 +1,10 @@
 package com.designershop.orders;
 
+import com.designershop.carts.models.UpdateCartItemRequestModel;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderDeliveryRequestModel;
 import com.designershop.orders.models.ReadOrderDeliveryResponseModel;
+import com.designershop.orders.models.UpdateOrderDeliveryRequestModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,5 +45,18 @@ public class OrderDeliveriesController {
             throws UserException, OrderException {
         ReadOrderDeliveryResponseModel response = orderDeliveriesService.readOrderDeliveryByIsDefault();
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateOrderDelivery(@PathVariable String id, @RequestBody @Valid UpdateOrderDeliveryRequestModel request)
+            throws EmptyException, UserException, OrderException {
+        String address = orderDeliveriesService.updateOrderDelivery(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(address);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteOrderDelivery(@PathVariable String id) throws UserException, OrderException {
+        String userId = orderDeliveriesService.deleteOrderDelivery(id);
+        return ResponseEntity.status(HttpStatus.OK).body(userId);
     }
 }
