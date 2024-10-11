@@ -1,6 +1,5 @@
 package com.designershop.orders;
 
-import com.designershop.carts.models.ReadCartItemResponseModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderDeliveryRequestModel;
@@ -59,13 +58,11 @@ public class OrderDeliveriesService {
             postalCode = matcher.group();
         }
 
-        boolean isDefault = StringUtils.equals("Y", defaultCheckBox);
-        if (isDefault) {
-            OrderDelivery orderDelivery = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
-            if (Objects.nonNull(orderDelivery)) {
-                orderDelivery.setDefault(false);
-                orderDeliveryRepository.save(orderDelivery);
-            }
+        OrderDelivery orderDelivery = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
+        boolean isDefault = Objects.isNull(orderDelivery) || StringUtils.equals("Y", defaultCheckBox);
+        if (Objects.nonNull(orderDelivery) && isDefault) {
+            orderDelivery.setDefault(false);
+            orderDeliveryRepository.save(orderDelivery);
         }
 
         OrderDelivery orderDeliveryCreate = new OrderDelivery();
@@ -85,8 +82,7 @@ public class OrderDeliveriesService {
         return String.join("", validatedAddress, address);
     }
 
-    @Transactional
-    public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws UserException, OrderException {
+    public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws UserException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
@@ -103,6 +99,44 @@ public class OrderDeliveriesService {
 
             response.add(readOrderDeliveryResponseModel);
         }
+
+        return response;
+    }
+
+    public ReadOrderDeliveryResponseModel readOrderDelivery(String deliveryId) throws UserException, OrderException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(deliveryId);
+        if (Objects.isNull(orderDelivery)) {
+            throw new OrderException("此訂單配送不存在，請重新確認");
+        }
+
+        ReadOrderDeliveryResponseModel response = new ReadOrderDeliveryResponseModel();
+        BeanUtils.copyProperties(orderDelivery, response);
+        response.setDeliveryId(Integer.toString(orderDelivery.getDeliveryId()));
+        response.setIsDefault(orderDelivery.isDefault() ? "Y" : "N");
+
+        return response;
+    }
+
+    public ReadOrderDeliveryResponseModel readOrderDeliveryByIsDefault() throws UserException, OrderException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        OrderDelivery orderDelivery = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
+        if (Objects.isNull(orderDelivery)) {
+            throw new OrderException("此訂單配送不存在，請重新確認");
+        }
+
+        ReadOrderDeliveryResponseModel response = new ReadOrderDeliveryResponseModel();
+        BeanUtils.copyProperties(orderDelivery, response);
+        response.setDeliveryId(Integer.toString(orderDelivery.getDeliveryId()));
+        response.setIsDefault(orderDelivery.isDefault() ? "Y" : "N");
 
         return response;
     }

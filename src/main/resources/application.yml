@@ -9,8 +9,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/designershop?serverTimezone=Asia/Taipei&characterEncoding=UTF-8
-    username: root
-    password: 12345678
+    username: YOUR_USERNAME
+    password: YOUR_PASSWORD
   #setting data JPA
   jpa:
     hibernate:

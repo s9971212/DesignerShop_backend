@@ -1,9 +1,7 @@
 package com.designershop.orders;
 
-import com.designershop.carts.models.ReadCartItemResponseModel;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderDeliveryRequestModel;
-import com.designershop.orders.models.CreateOrderRequestModel;
 import com.designershop.orders.models.ReadOrderDeliveryResponseModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +26,22 @@ public class OrderDeliveriesController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReadOrderDeliveryResponseModel>> readAllOrderDelivery() throws UserException, OrderException {
+    public ResponseEntity<List<ReadOrderDeliveryResponseModel>> readAllOrderDelivery() throws UserException {
         List<ReadOrderDeliveryResponseModel> response = orderDeliveriesService.readAllOrderDelivery();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDelivery(@PathVariable String id)
+            throws UserException, OrderException {
+        ReadOrderDeliveryResponseModel response = orderDeliveriesService.readOrderDelivery(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDeliveryByIsDefault()
+            throws UserException, OrderException {
+        ReadOrderDeliveryResponseModel response = orderDeliveriesService.readOrderDeliveryByIsDefault();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
