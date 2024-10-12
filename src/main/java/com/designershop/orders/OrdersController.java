@@ -15,9 +15,10 @@ public class OrdersController {
 
     private final OrdersService ordersService;
 
-    @PostMapping
-    public ResponseEntity<String> createOrder(@RequestBody @Valid CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
-        String form = ordersService.createOrder(request);
+    @PostMapping("/{deliveryId}")
+    public ResponseEntity<String> createOrder(@PathVariable String deliveryId, @RequestBody @Valid CreateOrderRequestModel request)
+            throws EmptyException, UserException, ProductException, CartException, OrderException {
+        String form = ordersService.createOrder(deliveryId,request);
         return ResponseEntity.status(HttpStatus.CREATED).body(form);
     }
 }

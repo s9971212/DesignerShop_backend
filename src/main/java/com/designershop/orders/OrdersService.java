@@ -37,27 +37,15 @@ public class OrdersService {
     private final OrderItemRepository orderItemRepository;
 
     @Transactional
-    public String createOrder(CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
+    public String createOrder(String deliveryId, CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
         List<String> itemIds = request.getItemIds();
-        String address = request.getAddress();
-        String district = request.getDistrict();
-        String city = request.getCity();
-        String state = request.getState();
-        String postalCode = request.getPostalCode();
-        String nation = request.getNation();
-        String contactPhone = request.getContactPhone();
-        String contactName = request.getContactName();
 
-        if (StringUtils.isBlank(address) || StringUtils.isBlank(nation) || StringUtils.isBlank(contactPhone) || StringUtils.isBlank(contactName)) {
+        if (StringUtils.isBlank(deliveryId)) {
             throw new EmptyException("地址、聯絡電話與聯絡人姓名不得為空");
         }
 
         if (itemIds.isEmpty()) {
             throw new EmptyException("至少須選擇一個商品");
-        }
-
-        if (!contactPhone.matches("^09\\d{8}$")) {
-            throw new OrderException("聯絡電話格式錯誤");
         }
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
@@ -70,11 +58,11 @@ public class OrdersService {
             throw new CartException("此購物車不存在，請重新確認");
         }
 
-        String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
-        Matcher matcher = Pattern.compile("\\d+").matcher(validatedAddress);
-        if (matcher.find()) {
-            postalCode = matcher.group();
+        OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(deliveryId);
+        if (Objects.isNull(orderDelivery)) {
+            throw new OrderException("此訂單配送不存在，請重新確認");
         }
+
         Order order = orderRepository.findMaxOrderId();
         String orderId = FormatUtil.orderIdGenerate(order);
         BigDecimal totalPrice = new BigDecimal(0);
@@ -110,26 +98,13 @@ public class OrdersService {
             productNames.add(product.getProductName());
         }
 
-        OrderDelivery orderDelivery = new OrderDelivery();
-        orderDelivery.setAddress(String.join("", validatedAddress, address));
-        orderDelivery.setDistrict(district);
-        orderDelivery.setCity(city);
-        orderDelivery.setState(state);
-        orderDelivery.setPostalCode(postalCode);
-        orderDelivery.setNation(nation);
-        orderDelivery.setContactPhone(contactPhone);
-        orderDelivery.setContactName(contactName);
-        orderDelivery.setUserId(userProfile.getUserId());
-
-        orderDeliveryRepository.save(orderDelivery);
-
         Order orderCreate = new Order();
         orderCreate.setOrderId(orderId);
         orderCreate.setTotalPrice(totalPrice);
         orderCreate.setCreatedDate(DateTimeFormatUtil.currentDateTime());
-        orderCreate.setAddress(String.join("", validatedAddress, address));
-        orderCreate.setContactPhone(contactPhone);
-        orderCreate.setContactName(contactName);
+        orderCreate.setFullAddress(orderDelivery.getFullAddress());
+        orderCreate.setContactPhone(orderDelivery.getContactPhone());
+        orderCreate.setContactName(orderDelivery.getContactName());
         orderCreate.setUserId(userProfile.getUserId());
         orderCreate.setOrderDelivery(orderDelivery);
 
