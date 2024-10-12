@@ -24,7 +24,10 @@ public class OrderDelivery {
     @Column(name = "delivery_id", nullable = false)
     private int deliveryId;
 
-    @Column(name = "address", nullable = false, length = 255)
+    @Column(name = "full_address", nullable = false, length = 1024)
+    private String fullAddress;
+
+    @Column(name = "address", nullable = false, length = 256)
     private String address;
 
     @Column(name = "district", length = 100)

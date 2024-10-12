@@ -56,7 +56,8 @@ public class OrderDeliveriesService {
         }
 
         String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
-        Matcher matcher = Pattern.compile("\\d+").matcher(validatedAddress);
+        String fullAddress = String.join("", validatedAddress, address);
+        Matcher matcher = Pattern.compile("^\\d+").matcher(validatedAddress);
         if (matcher.find()) {
             postalCode = matcher.group();
         }
@@ -69,6 +70,7 @@ public class OrderDeliveriesService {
         }
 
         OrderDelivery orderDeliveryCreate = new OrderDelivery();
+        orderDeliveryCreate.setFullAddress(fullAddress);
         orderDeliveryCreate.setAddress(address);
         orderDeliveryCreate.setDistrict(district);
         orderDeliveryCreate.setCity(city);
@@ -82,7 +84,7 @@ public class OrderDeliveriesService {
 
         orderDeliveryRepository.save(orderDeliveryCreate);
 
-        return String.join("", validatedAddress, address);
+        return fullAddress;
     }
 
     public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws UserException {
@@ -176,7 +178,8 @@ public class OrderDeliveriesService {
         }
 
         String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
-        Matcher matcher = Pattern.compile("\\d+").matcher(validatedAddress);
+        String fullAddress = String.join("", validatedAddress, address);
+        Matcher matcher = Pattern.compile("^\\d+").matcher(validatedAddress);
         if (matcher.find()) {
             postalCode = matcher.group();
         }
@@ -188,6 +191,7 @@ public class OrderDeliveriesService {
             orderDeliveryRepository.save(orderDeliveryDefault);
         }
 
+        orderDelivery.setFullAddress(fullAddress);
         orderDelivery.setAddress(address);
         orderDelivery.setDistrict(district);
         orderDelivery.setCity(city);
@@ -201,7 +205,7 @@ public class OrderDeliveriesService {
 
         orderDeliveryRepository.save(orderDelivery);
 
-        return String.join("", validatedAddress, address);
+        return fullAddress;
     }
 
     public String deleteOrderDelivery(String deliveryId) throws UserException, OrderException {

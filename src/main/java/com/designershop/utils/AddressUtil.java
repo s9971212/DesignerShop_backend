@@ -28,7 +28,8 @@ public final class AddressUtil {
                 Map<String, Object> districtData = validateLocation(district, cityData, "districts");
                 String validatedPostalCode = validatePostalCode(postalCode, stateData, cityData, districtData);
 
-                return String.join("", validatedPostalCode, " ", Stream.of(nation, state, city, district).filter(StringUtils::isNotBlank).collect(Collectors.joining("")));
+                return String.join("", validatedPostalCode, StringUtils.isNotBlank(validatedPostalCode) ? " " : "",
+                        nation, Stream.of(state, city, district).filter(StringUtils::isNotBlank).collect(Collectors.joining("")));
             }
         }
 
@@ -55,6 +56,6 @@ public final class AddressUtil {
                 .map(data -> Integer.toString((Integer) data.get("postalCode"))).findFirst()
                 .orElse("");
 
-        return StringUtils.isNotBlank(postalCode) && postalCode.startsWith(validatedPostalCode) ? postalCode : validatedPostalCode;
+        return (StringUtils.isNotBlank(postalCode) && postalCode.startsWith(validatedPostalCode)) ? postalCode : validatedPostalCode;
     }
 }

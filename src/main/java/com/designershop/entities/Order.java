@@ -31,8 +31,8 @@ public class Order {
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
-    @Column(name = "address", nullable = false, length = 255)
-    private String address;
+    @Column(name = "full_address", nullable = false, length = 1024)
+    private String fullAddress;
 
     @Column(name = "contact_phone", nullable = false, length = 20)
     private String contactPhone;

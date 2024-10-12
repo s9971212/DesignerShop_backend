@@ -6,7 +6,7 @@ CREATE TABLE orders (
     order_id NVARCHAR(14) PRIMARY KEY,
     total_price DECIMAL(10 , 2 ) NOT NULL,
     created_date DATETIME NOT NULL,
-    address NVARCHAR(255) NOT NULL,
+    full_address NVARCHAR(1024) NOT NULL,
     contact_phone NVARCHAR(20) NOT NULL,
     contact_name NVARCHAR(100) NOT NULL,
     user_id NVARCHAR(12) NOT NULL,

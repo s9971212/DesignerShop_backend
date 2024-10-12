@@ -4,7 +4,8 @@ DROP TABLE IF EXISTS order_deliveries;
 
 CREATE TABLE order_deliveries (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
-    address NVARCHAR(255) NOT NULL,
+    full_address NVARCHAR(1024) NOT NULL,
+    address NVARCHAR(256) NOT NULL,
     district NVARCHAR(100) NULL,
     city NVARCHAR(100) NULL,
     state NVARCHAR(100) NULL,

@@ -12,6 +12,9 @@ public class ReadOrderDeliveryResponseModel {
     private String deliveryId;
 
     @NotBlank
+    private String fullAddress;
+
+    @NotBlank
     private String address;
 
     private String district;
