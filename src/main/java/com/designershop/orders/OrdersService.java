@@ -5,6 +5,9 @@ import com.designershop.ecpay.EcpayService;
 import com.designershop.entities.*;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderRequestModel;
+import com.designershop.orders.models.ReadOrderDeliveryResponseModel;
+import com.designershop.orders.models.ReadOrderItemResponseModel;
+import com.designershop.orders.models.ReadOrderResponseModel;
 import com.designershop.repositories.*;
 import com.designershop.utils.AddressUtil;
 import com.designershop.utils.DateTimeFormatUtil;
@@ -12,6 +15,7 @@ import com.designershop.utils.FormatUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,5 +125,45 @@ public class OrdersService {
 
         String createdDate = DateTimeFormatUtil.localDateTimeFormat(orderCreate.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_SLASH_TIME);
         return ecpayService.ecpayCheckout(orderCreate.getOrderId(), createdDate, Integer.toString(orderCreate.getTotalPrice().intValue()), String.join("#", productNames));
+    }
+
+    public List<ReadOrderResponseModel> readAllOrder() throws UserException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        List<ReadOrderResponseModel> response = new ArrayList<>();
+
+        List<Order> orderList = orderRepository.findAllByUserId(userProfile.getUserId());
+        for (Order order : orderList) {
+            ReadOrderResponseModel readOrderResponseModel = new ReadOrderResponseModel();
+            BeanUtils.copyProperties(order, readOrderResponseModel);
+            readOrderResponseModel.setTotalPrice(order.getTotalPrice().toString());
+
+            List<ReadOrderItemResponseModel> orderItems = new ArrayList<>();
+
+            List<OrderItem> orderItemList = orderItemRepository.findAllByOrderId(order.getOrderId());
+            for (OrderItem orderItem : orderItemList) {
+                ReadOrderItemResponseModel readOrderItemResponseModel = new ReadOrderItemResponseModel();
+                readOrderItemResponseModel.setItemId(Integer.toString(orderItem.getItemId()));
+                readOrderItemResponseModel.setPriceAtPurchase(orderItem.getPriceAtPurchase().toString());
+                readOrderItemResponseModel.setQuantity(Integer.toString(orderItem.getQuantity()));
+                readOrderItemResponseModel.setProductId(Integer.toString(orderItem.getProductId()));
+
+                Product product = productRepository.findByProductId(Integer.toString(orderItem.getProductId()));
+                BeanUtils.copyProperties(product, readOrderItemResponseModel);
+                readOrderItemResponseModel.setPrice(product.getPrice().toString());
+                readOrderItemResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
+                readOrderItemResponseModel.setImage(product.getProductImages().get(0).getImage());
+
+                orderItems.add(readOrderItemResponseModel);
+            }
+            readOrderResponseModel.setOrderItems(orderItems);
+
+            response.add(readOrderResponseModel);
+        }
+
+        return response;
     }
 }
