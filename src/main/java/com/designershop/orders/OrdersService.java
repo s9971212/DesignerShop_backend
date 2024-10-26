@@ -127,6 +127,7 @@ public class OrdersService {
         return ecpayService.ecpayCheckout(orderCreate.getOrderId(), createdDate, Integer.toString(orderCreate.getTotalPrice().intValue()), String.join("#", productNames));
     }
 
+    @Transactional
     public List<ReadOrderResponseModel> readAllOrder() throws UserException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
