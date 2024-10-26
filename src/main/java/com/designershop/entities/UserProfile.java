@@ -118,9 +118,6 @@ public class UserProfile {
     @JoinTable(name = "user_role_profile", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<UserRole> userRoles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products;
-
     @Override
     public int hashCode() {
         return Objects.hash(userId, account, email, phoneNo);

@@ -12,6 +12,7 @@ import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
 import com.designershop.mail.MailService;
+import com.designershop.repositories.ProductRepository;
 import com.designershop.repositories.UserProfileRepository;
 import com.designershop.repositories.UserRoleRepository;
 import com.designershop.utils.DateTimeFormatUtil;
@@ -37,6 +38,7 @@ public class AdminUsersService {
     private final AdminProductsService adminProductsService;
     private final UserProfileRepository userProfileRepository;
     private final UserRoleRepository userRoleRepository;
+    private final ProductRepository productRepository;
 
     public String createUser(AdminCreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
         String userType = request.getUserType();
@@ -382,7 +384,8 @@ public class AdminUsersService {
         userProfile.setDeleted(true);
         userProfileRepository.save(userProfile);
 
-        for (Product product : userProfile.getProducts()) {
+        List<Product> productList = productRepository.findAllByUserId(userId);
+        for (Product product : productList) {
             adminProductsService.deleteProduct(Integer.toString(product.getProductId()));
         }
 

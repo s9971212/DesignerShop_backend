@@ -53,15 +53,13 @@ public class SellerProductsService {
     }
 
     public void validateUserPermission(String productId) throws UserException, ProductException {
-        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(sessionUserProfile)) {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
         Product product = productRepository.findByProductId(productId);
-        UserProfile userProfile = product.getUserProfile();
-        if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile)
-                || !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
+        if (!StringUtils.equals(userProfile.getUserId(), product.getUserId())) {
             throw new UserException("此帳戶不存在，請重新確認");
         }
 

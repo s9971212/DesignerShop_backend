@@ -96,9 +96,9 @@ public class AdminProductsService {
         productCreate.setCreatedDate(currentDateTime);
         productCreate.setUpdatedUser(updatedUser);
         productCreate.setUpdatedDate(currentDateTime);
+        productCreate.setUserId(userProfile.getUserId());
         productCreate.setProductCategory(productCategory);
         productCreate.setProductBrand(productBrand);
-        productCreate.setUserProfile(userProfile);
 
         productRepository.save(productCreate);
 

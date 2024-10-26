@@ -15,13 +15,11 @@ CREATE TABLE products (
     updated_user NVARCHAR(12) NULL,
     updated_date DATETIME NULL,
     is_deleted TINYINT(1) DEFAULT 0 NOT NULL,
+    user_id NVARCHAR(12) NOT NULL,
     category_id INT NOT NULL,
     brand_id INT NOT NULL,
-    user_id NVARCHAR(12) NOT NULL,
     FOREIGN KEY (category_id)
         REFERENCES product_category (category_id),
     FOREIGN KEY (brand_id)
-        REFERENCES product_brand (brand_id),
-    FOREIGN KEY (user_id)
-        REFERENCES user_profile (user_id)
+        REFERENCES product_brand (brand_id)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
