@@ -26,11 +26,11 @@ public class Product {
     @Column(name = "product_id", nullable = false)
     private int productId;
 
-    @Column(name = "product_name", nullable = false, length = 100)
-    private String productName;
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
-    @Column(name = "product_description", columnDefinition = "TEXT")
-    private String productDescription;
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
@@ -95,8 +95,8 @@ public class Product {
     @PrePersist
     @PreUpdate
     public void handleEmptyStrings() {
-        if (StringUtils.isBlank(this.productDescription)) {
-            this.productDescription = null;
+        if (StringUtils.isBlank(this.description)) {
+            this.description = null;
         }
     }
 }

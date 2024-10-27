@@ -62,7 +62,7 @@ public class UsersService {
 
         UserProfile userProfile = validateUserPermission(userId);
         for (UserRole userRole : userProfile.getUserRoles()) {
-            switch (userRole.getRoleCategory()) {
+            switch (userRole.getCategory()) {
                 case "buyer":
                     adminUpdateUserRequestModel.setUserType(userRole.getRoleId());
                     break;

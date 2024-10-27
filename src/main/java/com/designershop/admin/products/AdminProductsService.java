@@ -39,8 +39,8 @@ public class AdminProductsService {
     public String createProduct(String userId, AdminCreateProductRequestModel request) throws EmptyException, ProductException {
         String category = request.getCategory();
         String brand = request.getBrand();
-        String productName = request.getProductName();
-        String productDescription = request.getProductDescription();
+        String productName = request.getName();
+        String productDescription = request.getDescription();
         String priceString = request.getPrice();
         String stockQuantityString = request.getStockQuantity();
         List<String> images = request.getImages();
@@ -65,7 +65,7 @@ public class AdminProductsService {
             throw new ProductException("庫存數量只能有數字，請重新確認");
         }
 
-        ProductCategory productCategory = productCategoryRepository.findByCategoryName(category);
+        ProductCategory productCategory = productCategoryRepository.findByCategory(category);
         if (Objects.isNull(productCategory)) {
             throw new ProductException("此商品類別不存在，請重新確認");
         }
@@ -88,8 +88,8 @@ public class AdminProductsService {
         }
 
         Product productCreate = new Product();
-        productCreate.setProductName(productName);
-        productCreate.setProductDescription(productDescription);
+        productCreate.setName(productName);
+        productCreate.setDescription(productDescription);
         productCreate.setPrice(price);
         productCreate.setOriginalPrice(price);
         productCreate.setStockQuantity(stockQuantity);
@@ -125,7 +125,7 @@ public class AdminProductsService {
             AdminReadProductResponseModel adminReadProductResponseModel = new AdminReadProductResponseModel();
             BeanUtils.copyProperties(product, adminReadProductResponseModel);
             adminReadProductResponseModel.setProductId(Integer.toString(product.getProductId()));
-            adminReadProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
+            adminReadProductResponseModel.setCategory(product.getProductCategory().getCategory());
             adminReadProductResponseModel.setBrand(product.getProductBrand().getBrand());
             adminReadProductResponseModel.setPrice(product.getPrice().toString());
             adminReadProductResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
@@ -157,7 +157,7 @@ public class AdminProductsService {
         AdminReadProductResponseModel response = new AdminReadProductResponseModel();
         BeanUtils.copyProperties(product, response);
         response.setProductId(Integer.toString(product.getProductId()));
-        response.setCategory(product.getProductCategory().getCategoryName());
+        response.setCategory(product.getProductCategory().getCategory());
         response.setBrand(product.getProductBrand().getBrand());
         response.setPrice(product.getPrice().toString());
         response.setOriginalPrice(product.getOriginalPrice().toString());
@@ -182,8 +182,8 @@ public class AdminProductsService {
             throws EmptyException, ProductException {
         String category = request.getCategory();
         String brand = request.getBrand();
-        String productName = request.getProductName();
-        String productDescription = request.getProductDescription();
+        String name = request.getName();
+        String description = request.getDescription();
         String priceString = request.getPrice();
         String stockQuantityString = request.getStockQuantity();
         String isDeletedString = request.getIsDeleted();
@@ -191,7 +191,7 @@ public class AdminProductsService {
         String termsCheckBox = request.getTermsCheckBox();
 
         if (StringUtils.isBlank(productId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
-                || StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
+                || StringUtils.isBlank(name) || StringUtils.isBlank(priceString)
                 || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString)
                 || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
@@ -215,7 +215,7 @@ public class AdminProductsService {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
-        ProductCategory productCategory = productCategoryRepository.findByCategoryName(category);
+        ProductCategory productCategory = productCategoryRepository.findByCategory(category);
         if (Objects.isNull(productCategory)) {
             throw new ProductException("此商品類別不存在，請重新確認");
         }
@@ -235,8 +235,8 @@ public class AdminProductsService {
 
         boolean isDeleted = StringUtils.equals("Y", isDeletedString);
 
-        product.setProductName(productName);
-        product.setProductDescription(productDescription);
+        product.setName(name);
+        product.setDescription(description);
         product.setPrice(price);
         if (priceCompare < 0) {
             product.setOriginalPrice(price);
@@ -261,7 +261,7 @@ public class AdminProductsService {
             }
         }
 
-        return productName;
+        return name;
     }
 
     public String deleteProduct(String productId) throws ProductException {
@@ -277,6 +277,6 @@ public class AdminProductsService {
         product.setDeleted(true);
         productRepository.save(product);
 
-        return product.getProductName();
+        return product.getName();
     }
 }

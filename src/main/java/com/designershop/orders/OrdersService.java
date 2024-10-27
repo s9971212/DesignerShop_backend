@@ -99,7 +99,7 @@ public class OrdersService {
             orderItem.setProductId(product.getProductId());
 
             orderItems.add(orderItem);
-            productNames.add(product.getProductName());
+            productNames.add(product.getName());
         }
 
         Order orderCreate = new Order();

@@ -21,9 +21,9 @@ public class AdminReadProductResponseModel {
     private String brand;
 
     @NotBlank
-    private String productName;
+    private String name;
 
-    private String productDescription;
+    private String description;
 
     @NotBlank
     private String price;

@@ -50,12 +50,12 @@ public class AdminUsersService {
         String passwordCheck = request.getPasswordCheck();
         String email = request.getEmail();
         String phoneNo = request.getPhoneNo();
-        String userName = request.getUserName();
+        String name = request.getName();
         String gender = request.getGender();
         String birthdayString = request.getBirthday();
         String idCardNo = request.getIdCardNo();
         String homeNo = request.getHomeNo();
-        String userImage = request.getUserImage();
+        String userImage = request.getImage();
         String termsCheckBox = request.getTermsCheckBox();
 
         if (StringUtils.isBlank(account) || StringUtils.isBlank(password) || StringUtils.isBlank(passwordCheck)
@@ -117,12 +117,12 @@ public class AdminUsersService {
         userProfileCreate.setPassword(encodePwd);
         userProfileCreate.setEmail(email);
         userProfileCreate.setPhoneNo(phoneNo);
-        userProfileCreate.setUserName(userName);
+        userProfileCreate.setName(name);
         userProfileCreate.setGender(gender);
         userProfileCreate.setBirthday(birthday);
         userProfileCreate.setIdCardNo(idCardNo);
         userProfileCreate.setHomeNo(homeNo);
-        userProfileCreate.setUserImage(userImage);
+        userProfileCreate.setImage(userImage);
         userProfileCreate.setRegisterDate(currentDateTime);
         userProfileCreate.setPwdExpireDate(currentDateTime.plusMonths(3));
         userProfileCreate.setUpdatedUser(updatedUser);
@@ -152,7 +152,7 @@ public class AdminUsersService {
             BeanUtils.copyProperties(userProfile, adminReadUserResponseModel);
 
             for (UserRole userRole : userProfile.getUserRoles()) {
-                switch (userRole.getRoleCategory()) {
+                switch (userRole.getCategory()) {
                     case "buyer":
                         adminReadUserResponseModel.setUserType(userRole.getRoleId());
                         break;
@@ -201,7 +201,7 @@ public class AdminUsersService {
         BeanUtils.copyProperties(userProfile, response);
 
         for (UserRole userRole : userProfile.getUserRoles()) {
-            switch (userRole.getRoleCategory()) {
+            switch (userRole.getCategory()) {
                 case "buyer":
                     response.setUserType(userRole.getRoleId());
                     break;
@@ -241,12 +241,12 @@ public class AdminUsersService {
         String account = request.getAccount();
         String email = request.getEmail();
         String phoneNo = request.getPhoneNo();
-        String userName = request.getUserName();
+        String name = request.getName();
         String gender = request.getGender();
         String birthdayString = request.getBirthday();
         String idCardNo = request.getIdCardNo();
         String homeNo = request.getHomeNo();
-        String userImage = request.getUserImage();
+        String image = request.getImage();
         String isDeletedString = request.getIsDeleted();
         String termsCheckBox = request.getTermsCheckBox();
 
@@ -303,12 +303,12 @@ public class AdminUsersService {
         userProfile.setAccount(account);
         userProfile.setEmail(email);
         userProfile.setPhoneNo(phoneNo);
-        userProfile.setUserName(userName);
+        userProfile.setName(name);
         userProfile.setGender(gender);
         userProfile.setBirthday(birthday);
         userProfile.setIdCardNo(idCardNo);
         userProfile.setHomeNo(homeNo);
-        userProfile.setUserImage(userImage);
+        userProfile.setImage(image);
         userProfile.setUpdatedUser(sessionUserProfile.getUserId());
         userProfile.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         userProfile.setDeleted(isDeleted);

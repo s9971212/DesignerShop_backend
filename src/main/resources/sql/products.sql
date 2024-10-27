@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS products;
 
 CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name NVARCHAR(100) NOT NULL,
-    product_description TEXT NULL,
+    name NVARCHAR(100) NOT NULL,
+    description TEXT NULL,
     price DECIMAL(10 , 2 ) NOT NULL,
     original_price DECIMAL(10 , 2 ) NOT NULL,
     stock_quantity INT DEFAULT 0 NOT NULL,

@@ -4,12 +4,12 @@ DROP TABLE IF EXISTS user_role;
 
 CREATE TABLE user_role (
     role_id NVARCHAR(2) PRIMARY KEY,
-    role_name NVARCHAR(10) NOT NULL,
-    role_category NVARCHAR(10) NOT NULL,
-    UNIQUE (role_name)
+    name NVARCHAR(10) NOT NULL,
+    category NVARCHAR(10) NOT NULL,
+    UNIQUE (name)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
-INSERT INTO user_role (role_id, role_name, role_category) VALUES
+INSERT INTO user_role (role_id, name, category) VALUES
 ('B1', '新手買家', 'buyer'),
 ('B2', '初階買家', 'buyer'),
 ('B9', '神級買家', 'buyer'),

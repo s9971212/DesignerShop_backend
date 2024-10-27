@@ -65,7 +65,7 @@ public class ProductLikesService {
         product.setLikes((int) likes);
         productRepository.save(product);
 
-        return product.getProductName();
+        return product.getName();
     }
 
     public Product validateProductPermission(String productId) throws ProductException {

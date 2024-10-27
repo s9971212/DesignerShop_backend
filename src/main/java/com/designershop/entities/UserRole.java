@@ -21,18 +21,18 @@ public class UserRole {
     @Column(name = "role_id", nullable = false, length = 2)
     private String roleId;
 
-    @Column(name = "role_name", nullable = false, length = 10)
-    private String roleName;
+    @Column(name = "name", nullable = false, length = 10)
+    private String name;
 
-    @Column(name = "role_category", nullable = false, length = 10)
-    private String roleCategory;
+    @Column(name = "category", nullable = false, length = 10)
+    private String category;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
     private Set<UserProfile> userProfiles;
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleId, roleName);
+        return Objects.hash(roleId, name);
     }
 
     @Override
@@ -44,6 +44,6 @@ public class UserRole {
         if (getClass() != obj.getClass())
             return false;
         UserRole other = (UserRole) obj;
-        return Objects.equals(roleId, other.roleId) && Objects.equals(roleName, other.roleName);
+        return Objects.equals(roleId, other.roleId) && Objects.equals(name, other.name);
     }
 }

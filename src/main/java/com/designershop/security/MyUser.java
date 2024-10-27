@@ -19,7 +19,7 @@ public class MyUser implements UserDetails {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         if (!userProfile.getUserRoles().isEmpty()) {
             for (UserRole userRole : userProfile.getUserRoles()) {
-                switch (userRole.getRoleCategory()) {
+                switch (userRole.getCategory()) {
                     case "buyer":
                         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
                         break;

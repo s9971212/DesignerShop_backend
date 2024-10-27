@@ -37,8 +37,8 @@ public class UserProfile {
     @Column(name = "phone_no", nullable = false, length = 20)
     private String phoneNo;
 
-    @Column(name = "user_name", length = 30)
-    private String userName;
+    @Column(name = "name", length = 30)
+    private String name;
 
     @Column(name = "gender", length = 10)
     private String gender;
@@ -53,8 +53,8 @@ public class UserProfile {
     @Column(name = "home_no", length = 20)
     private String homeNo;
 
-    @Column(name = "user_image", columnDefinition = "TEXT")
-    private String userImage;
+    @Column(name = "image", columnDefinition = "TEXT")
+    private String image;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "register_date", nullable = false)
@@ -139,8 +139,8 @@ public class UserProfile {
     @PrePersist
     @PreUpdate
     public void handleEmptyStrings() {
-        if (StringUtils.isBlank(this.userName)) {
-            this.userName = null;
+        if (StringUtils.isBlank(this.name)) {
+            this.name = null;
         }
         if (StringUtils.isBlank(this.gender)) {
             this.gender = null;
@@ -151,8 +151,8 @@ public class UserProfile {
         if (StringUtils.isBlank(this.homeNo)) {
             this.homeNo = null;
         }
-        if (StringUtils.isBlank(this.userImage)) {
-            this.userImage = null;
+        if (StringUtils.isBlank(this.image)) {
+            this.image = null;
         }
     }
 }

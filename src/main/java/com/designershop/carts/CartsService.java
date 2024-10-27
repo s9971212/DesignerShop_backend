@@ -133,10 +133,10 @@ public class CartsService {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
 
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
-            readCartItemResponseModel.setUserName(userProfile.getUserName());
+            readCartItemResponseModel.setUserName(userProfile.getName());
 
             Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
-            readCartItemResponseModel.setProductName(product.getProductName());
+            readCartItemResponseModel.setProductName(product.getName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
 
@@ -187,10 +187,10 @@ public class CartsService {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
 
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
-            readCartItemResponseModel.setUserName(userProfile.getUserName());
+            readCartItemResponseModel.setUserName(userProfile.getName());
 
             Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
-            readCartItemResponseModel.setProductName(product.getProductName());
+            readCartItemResponseModel.setProductName(product.getName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
 

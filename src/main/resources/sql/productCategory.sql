@@ -4,11 +4,11 @@ DROP TABLE IF EXISTS product_category;
 
 CREATE TABLE product_category (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
-    category_name NVARCHAR(50) NOT NULL,
-    UNIQUE (category_name)
+    category NVARCHAR(50) NOT NULL,
+    UNIQUE (category)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
-INSERT INTO product_category (category_name) VALUES
+INSERT INTO product_category (category) VALUES
 ('女生衣著'),
 ('男生衣著'),
 ('運動/健身'),

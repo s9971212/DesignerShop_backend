@@ -27,7 +27,7 @@ public class CreateUserRequestModel {
     @Pattern(regexp = "^09\\d{8}$")
     private String phoneNo;
 
-    private String userName;
+    private String name;
 
     private String gender;
 
@@ -37,7 +37,7 @@ public class CreateUserRequestModel {
 
     private String homeNo;
 
-    private String userImage;
+    private String image;
 
     @NotBlank
     private String termsCheckBox;

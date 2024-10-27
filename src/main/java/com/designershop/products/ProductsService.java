@@ -62,7 +62,7 @@ public class ProductsService {
                 ReadProductResponseModel readProductResponseModel = new ReadProductResponseModel();
                 BeanUtils.copyProperties(product, readProductResponseModel);
                 readProductResponseModel.setProductId(Integer.toString(product.getProductId()));
-                readProductResponseModel.setCategory(product.getProductCategory().getCategoryName());
+                readProductResponseModel.setCategory(product.getProductCategory().getCategory());
                 readProductResponseModel.setBrand(product.getProductBrand().getBrand());
                 readProductResponseModel.setPrice(product.getPrice().toString());
                 readProductResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
@@ -96,7 +96,7 @@ public class ProductsService {
         ReadProductResponseModel response = new ReadProductResponseModel();
         BeanUtils.copyProperties(product, response);
         response.setProductId(Integer.toString(product.getProductId()));
-        response.setCategory(product.getProductCategory().getCategoryName());
+        response.setCategory(product.getProductCategory().getCategory());
         response.setBrand(product.getProductBrand().getBrand());
         response.setPrice(product.getPrice().toString());
         response.setOriginalPrice(product.getOriginalPrice().toString());

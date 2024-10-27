@@ -33,7 +33,7 @@ public class AdminReadUserResponseModel {
     @Pattern(regexp = "^09\\d{8}$")
     private String phoneNo;
 
-    private String userName;
+    private String name;
 
     private String gender;
 
@@ -43,7 +43,7 @@ public class AdminReadUserResponseModel {
 
     private String homeNo;
 
-    private String userImage;
+    private String image;
 
     @NotBlank
     private String registerDate;

@@ -22,15 +22,15 @@ public class ProductCategory {
     @Column(name = "category_id", nullable = false)
     private int categoryId;
 
-    @Column(name = "category_name", nullable = false, length = 50)
-    private String categoryName;
+    @Column(name = "category", nullable = false, length = 50)
+    private String category;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productCategory")
     private List<Product> products;
 
     @Override
     public int hashCode() {
-        return Objects.hash(categoryId, categoryName);
+        return Objects.hash(categoryId, category);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class ProductCategory {
         if (getClass() != obj.getClass())
             return false;
         ProductCategory other = (ProductCategory) obj;
-        return Objects.equals(categoryId, other.categoryId) && Objects.equals(categoryName, other.categoryName);
+        return Objects.equals(categoryId, other.categoryId) && Objects.equals(category, other.category);
     }
 }
