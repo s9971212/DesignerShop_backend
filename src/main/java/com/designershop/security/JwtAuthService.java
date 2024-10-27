@@ -46,7 +46,7 @@ public class JwtAuthService {
 
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
         if (LocalDateTime.now().isAfter(userProfile.getPwdExpireDate())) {
-            userProfile.setIsLock("Y");
+            userProfile.setLock(true);
             userProfile.setLockDate(currentDateTime);
             userProfileRepository.save(userProfile);
             throw new PasswordExpiredException("密碼已過期，請修改密碼");
@@ -54,7 +54,7 @@ public class JwtAuthService {
 
         if (Objects.nonNull(userProfile.getUnlockDate())) {
             if (LocalDateTime.now().isAfter(userProfile.getUnlockDate())) {
-                userProfile.setIsLock("N");
+                userProfile.setLock(false);
                 userProfile.setLockDate(null);
                 userProfile.setUnlockDate(null);
                 userProfileRepository.save(userProfile);
@@ -94,7 +94,7 @@ public class JwtAuthService {
             if (pwdErrorCount == 5) {
 
                 userProfile.setPwdErrorCount(0);
-                userProfile.setIsLock("Y");
+                userProfile.setLock(true);
                 userProfile.setLockDate(currentDateTime);
                 userProfile.setUnlockDate(currentDateTime.plusMinutes(5));
                 userProfileRepository.save(userProfile);

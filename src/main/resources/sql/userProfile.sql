@@ -22,7 +22,7 @@ CREATE TABLE user_profile (
     pwd_error_count INT DEFAULT 0 NOT NULL,
     updated_user NVARCHAR(12) NULL,
     updated_date DATETIME NULL,
-    is_lock NVARCHAR(1) NULL,
+    is_lock TINYINT(1) DEFAULT 0 NOT NULL,
     lock_date DATETIME NULL,
     unlock_date DATETIME NULL,
     sign_on_token NVARCHAR(1024) NULL,

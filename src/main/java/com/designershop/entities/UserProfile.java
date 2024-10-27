@@ -84,8 +84,8 @@ public class UserProfile {
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
-    @Column(name = "is_lock", length = 1)
-    private String isLock;
+    @Column(name = "is_lock", nullable = false)
+    private boolean isLock = false;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "lock_date")
