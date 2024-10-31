@@ -18,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "product_evaluations")
-public class ProductEvaluations {
+public class ProductEvaluation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
