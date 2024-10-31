@@ -61,7 +61,7 @@ public class ProductEvaluation {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ProductEvaluations other = (ProductEvaluations) obj;
+        ProductEvaluation other = (ProductEvaluation) obj;
         return Objects.equals(evaluationId, other.evaluationId) && Objects.equals(userId, other.userId) && Objects.equals(productId, other.productId);
     }
 
