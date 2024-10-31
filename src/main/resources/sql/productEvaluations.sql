@@ -1,8 +1,8 @@
 USE designershop;
 
-DROP TABLE IF EXISTS product_evaluation;
+DROP TABLE IF EXISTS product_evaluations;
 
-CREATE TABLE product_evaluation (
+CREATE TABLE product_evaluations (
     evaluation_id INT AUTO_INCREMENT PRIMARY KEY,
     stars DECIMAL(3 , 2 ) NOT NULL,
     evaluation TEXT NULL,

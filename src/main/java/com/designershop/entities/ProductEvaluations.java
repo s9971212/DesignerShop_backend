@@ -17,8 +17,8 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_evaluation")
-public class ProductEvaluation {
+@Table(name = "product_evaluations")
+public class ProductEvaluations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +61,7 @@ public class ProductEvaluation {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        ProductEvaluation other = (ProductEvaluation) obj;
+        ProductEvaluations other = (ProductEvaluations) obj;
         return Objects.equals(evaluationId, other.evaluationId) && Objects.equals(userId, other.userId) && Objects.equals(productId, other.productId);
     }
 
