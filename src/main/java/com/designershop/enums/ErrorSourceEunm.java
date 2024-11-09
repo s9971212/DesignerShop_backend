@@ -12,9 +12,11 @@ public enum ErrorSourceEunm {
     // User
     U,
     // Product
-    P,
+    PD,
     // Cart
     C,
     // Order
-    O
+    OD,
+    // Coupon
+    CP
 }

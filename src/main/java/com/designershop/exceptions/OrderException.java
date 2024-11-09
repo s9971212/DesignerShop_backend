@@ -24,7 +24,7 @@ public class OrderException extends Exception implements IBaseException {
 
     @Override
     public String getSystemName() {
-        return ErrorSourceEunm.O.name();
+        return ErrorSourceEunm.OD.name();
     }
 
     @Override

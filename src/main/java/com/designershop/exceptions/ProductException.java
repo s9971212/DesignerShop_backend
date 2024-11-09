@@ -24,7 +24,7 @@ public class ProductException extends Exception implements IBaseException {
 
     @Override
     public String getSystemName() {
-        return ErrorSourceEunm.P.name();
+        return ErrorSourceEunm.PD.name();
     }
 
     @Override
