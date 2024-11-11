@@ -30,9 +30,9 @@ public class AdminProductsService {
 
     private final HttpSession session;
     private final UserProfileRepository userProfileRepository;
-    private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductBrandRepository productBrandRepository;
+    private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
     @Transactional

@@ -1,6 +1,6 @@
 package com.designershop.exceptions;
 
-import com.designershop.enums.ErrorSourceEunm;
+import com.designershop.enums.ErrorSourceEnum;
 import lombok.Getter;
 import org.apache.logging.log4j.Level;
 
@@ -24,7 +24,7 @@ public class CartException extends Exception implements IBaseException {
 
     @Override
     public String getSystemName() {
-        return ErrorSourceEunm.C.name();
+        return ErrorSourceEnum.C.name();
     }
 
     @Override

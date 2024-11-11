@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorSourceEunm {
+public enum ErrorSourceEnum {
 
     // Empty
     E,
