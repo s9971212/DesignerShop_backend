@@ -1,5 +1,6 @@
 package com.designershop.repositories;
 
+import com.designershop.entities.CartItem;
 import com.designershop.entities.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,7 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, String
 
     @Query(value = "SELECT * FROM user_profile WHERE refresh_hash =:token", nativeQuery = true)
     UserProfile findByRefreshHash(@Param("token") String token);
+
+    @Query(value = "SELECT * FROM user_profile WHERE user_id IN (:userIds)", nativeQuery = true)
+    List<UserProfile> findByUserIds(@Param("userIds") List<String> userIds);
 }

@@ -1,6 +1,7 @@
 package com.designershop.repositories;
 
 import com.designershop.entities.Product;
+import com.designershop.entities.ProductBrand;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,4 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT * FROM products WHERE product_id =:productId", nativeQuery = true)
     Product findByProductId(@Param("productId") String productId);
+
+    @Query(value = "SELECT * FROM products WHERE product_id IN (:productIds)", nativeQuery = true)
+    List<Product> findByProductIds(@Param("productIds") List<String> productIds);
 }
