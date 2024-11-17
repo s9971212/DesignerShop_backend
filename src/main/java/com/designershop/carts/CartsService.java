@@ -56,7 +56,7 @@ public class CartsService {
         return cartCreate;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String createCartItem(String productId, CreateCartItemRequestModel request)
             throws EmptyException, UserException, ProductException, CartException {
         String quantityString = request.getQuantity();
@@ -114,7 +114,7 @@ public class CartsService {
         return userProfile.getUserId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<ReadCartItemResponseModel> readAllCartItem() throws UserException, CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
@@ -162,7 +162,7 @@ public class CartsService {
         return response;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<ReadCartItemResponseModel> readCartItemByItemIds(ReadCartItemRequestModel request) throws EmptyException, UserException, CartException {
         List<String> itemIds = request.getItemIds();
 
@@ -216,7 +216,7 @@ public class CartsService {
         return response;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String updateCartItem(String productId, UpdateCartItemRequestModel request) throws EmptyException, UserException, ProductException, CartException {
         String quantityString = request.getQuantity();
 
@@ -264,7 +264,7 @@ public class CartsService {
         return userProfile.getUserId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String deleteCartItem(String itemId) throws UserException, CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {

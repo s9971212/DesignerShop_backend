@@ -29,7 +29,7 @@ public class OrderDeliveriesService {
     private final HttpSession session;
     private final OrderDeliveryRepository orderDeliveryRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String createOrderDelivery(CreateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
@@ -146,7 +146,7 @@ public class OrderDeliveriesService {
         return response;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();

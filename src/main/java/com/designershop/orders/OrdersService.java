@@ -40,7 +40,7 @@ public class OrdersService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String createOrder(String deliveryId, CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
         List<String> itemIds = request.getItemIds();
 
@@ -127,7 +127,7 @@ public class OrdersService {
         return ecpayService.ecpayCheckout(orderCreate.getOrderId(), createdDate, Integer.toString(orderCreate.getTotalPrice().intValue()), String.join("#", productNames));
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public List<ReadOrderResponseModel> readAllOrder() throws UserException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {

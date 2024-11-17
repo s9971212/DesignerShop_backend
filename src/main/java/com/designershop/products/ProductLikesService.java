@@ -39,7 +39,7 @@ public class ProductLikesService {
         return Objects.nonNull(productLikes) ? "Y" : "N";
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String updateProductLikes(String productId) throws UserException, ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {

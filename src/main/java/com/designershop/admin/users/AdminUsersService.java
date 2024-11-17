@@ -370,7 +370,7 @@ public class AdminUsersService {
         return userProfile.getAccount();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String deleteUser(String userId) throws UserException, ProductException, MessagingException {
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (Objects.isNull(userProfile)) {

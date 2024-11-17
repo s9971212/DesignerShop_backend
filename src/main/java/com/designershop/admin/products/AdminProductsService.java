@@ -35,7 +35,7 @@ public class AdminProductsService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String createProduct(String userId, AdminCreateProductRequestModel request) throws EmptyException, ProductException {
         String category = request.getCategory();
         String brand = request.getBrand();
@@ -177,7 +177,7 @@ public class AdminProductsService {
         return response;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public String updateProduct(String productId, AdminUpdateProductRequestModel request)
             throws EmptyException, ProductException {
         String category = request.getCategory();
