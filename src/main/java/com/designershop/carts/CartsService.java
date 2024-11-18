@@ -16,6 +16,7 @@ import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,7 +132,7 @@ public class CartsService {
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cart.getCartId());
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
-
+            BeanUtils.copyProperties(cartItem, readCartItemResponseModel);
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
             readCartItemResponseModel.setUserName(userProfile.getName());
 
@@ -185,7 +186,7 @@ public class CartsService {
         List<CartItem> cartItemList = cartItemRepository.findByItemIds(itemIds);
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
-
+            BeanUtils.copyProperties(cartItem, readCartItemResponseModel);
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
             readCartItemResponseModel.setUserName(userProfile.getName());
 
