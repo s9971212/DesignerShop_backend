@@ -70,7 +70,7 @@ public class OrdersService {
         Order order = orderRepository.findMaxOrderId();
         String orderId = FormatUtil.orderIdGenerate(order);
         BigDecimal totalPrice = new BigDecimal(0);
-        List<OrderItem> orderItems = new ArrayList<>();
+        List<OrderItem> orderItemList = new ArrayList<>();
         List<String> productNames = new ArrayList<>();
         for (String itemId : itemIds) {
             CartItem cartItem = cartItemRepository.findByItemIdAndCartId(itemId, cart.getCartId());
@@ -98,7 +98,7 @@ public class OrdersService {
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setProductId(product.getProductId());
 
-            orderItems.add(orderItem);
+            orderItemList.add(orderItem);
             productNames.add(product.getName());
         }
 
@@ -114,7 +114,7 @@ public class OrdersService {
 
         orderRepository.save(orderCreate);
 
-        for (OrderItem orderItem : orderItems) {
+        for (OrderItem orderItem : orderItemList) {
             orderItem.setOrder(orderCreate);
             orderItemRepository.save(orderItem);
         }

@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS coupons;
 CREATE TABLE coupons (
     coupon_id INT AUTO_INCREMENT PRIMARY KEY,
     code NVARCHAR(50) NOT NULL,
-    discount_type ENUM('percentage', 'fixed') NOT NULL,
+    discount_type ENUM('PERCENTAGE', 'FIXED') NOT NULL,
     discount_value DECIMAL(10 , 2 ) NOT NULL,
     minimum_order_price DECIMAL(10 , 2 ) NULL,
     usage_limit INT NULL,
