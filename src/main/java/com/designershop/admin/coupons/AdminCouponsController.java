@@ -1,6 +1,7 @@
 package com.designershop.admin.coupons;
 
 import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
+import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.admin.products.models.AdminReadProductResponseModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
@@ -28,5 +29,11 @@ public class AdminCouponsController {
             throws EmptyException, CouponException {
         String code = adminCouponsService.createCoupon(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AdminReadCouponResponseModel>> readAllCoupon() {
+        List<AdminReadCouponResponseModel> response = adminCouponsService.readAllCoupon();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

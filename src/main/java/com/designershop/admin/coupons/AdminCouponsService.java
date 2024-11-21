@@ -1,6 +1,7 @@
 package com.designershop.admin.coupons;
 
 import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
+import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
 import com.designershop.admin.products.models.AdminReadProductResponseModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
 import com.designershop.entities.*;
@@ -109,6 +110,48 @@ public class AdminCouponsService {
         validateCouponPermission(couponCreate.getCouponId(), userIds, categoryIds, brandIds, productIds);
 
         return code;
+    }
+
+    public List<AdminReadCouponResponseModel> readAllCoupon() {
+        List<AdminReadCouponResponseModel> response = new ArrayList<>();
+
+        List<Coupon> couponList = couponRepository.findAll();
+        for (Coupon coupon : couponList) {
+            int couponId = coupon.getCouponId();
+
+            AdminReadCouponResponseModel adminReadCouponResponseModel = new AdminReadCouponResponseModel();
+            BeanUtils.copyProperties(coupon, adminReadCouponResponseModel);
+            adminReadCouponResponseModel.setCouponId(Integer.toString(couponId));
+            adminReadCouponResponseModel.setDiscountType(coupon.getDiscountType().name().toLowerCase());
+            adminReadCouponResponseModel.setDiscountValue(coupon.getDiscountValue().toString());
+            if (Objects.nonNull(coupon.getMinimumOrderPrice())) {
+                adminReadCouponResponseModel.setMinimumOrderPrice(coupon.getMinimumOrderPrice().toString());
+            }
+            if (Objects.nonNull(coupon.getUsageLimit())) {
+                adminReadCouponResponseModel.setUsageLimit(Integer.toString(coupon.getUsageLimit()));
+            }
+            adminReadCouponResponseModel.setStartDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getStartDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+            adminReadCouponResponseModel.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+            adminReadCouponResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+            adminReadCouponResponseModel.setIsActive(coupon.isActive() ? "Y" : "N");
+
+            List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(couponId);
+            List<String> userIds = couponUserProfileList.stream().map(couponUserProfile -> couponUserProfile.getId().getUserId()).toList();
+            adminReadCouponResponseModel.setUserIds(userIds);
+            List<CouponProductCategory> couponProductCategoryList = couponProductCategoryRepository.findAllByCouponId(couponId);
+            List<String> categoryIds = couponProductCategoryList.stream().map(couponProductCategory -> Integer.toString(couponProductCategory.getId().getCategoryId())).toList();
+            adminReadCouponResponseModel.setCategoryIds(categoryIds);
+            List<CouponProductBrand> couponProductBrandList = couponProductBrandRepository.findAllByCouponId(couponId);
+            List<String> brandIds = couponProductBrandList.stream().map(couponProductBrand -> Integer.toString(couponProductBrand.getId().getBrandId())).toList();
+            adminReadCouponResponseModel.setBrandIds(brandIds);
+            List<CouponProduct> couponProductList = couponProductRepository.findAllByCouponId(couponId);
+            List<String> productIds = couponProductList.stream().map(couponProduct -> Integer.toString(couponProduct.getId().getProductId())).toList();
+            adminReadCouponResponseModel.setProductIds(productIds);
+
+            response.add(adminReadCouponResponseModel);
+        }
+
+        return response;
     }
 
     public void validateCouponPermission(int couponId, List<String> userIds, List<String> categoryIds, List<String> brandIds, List<String> productIds) throws CouponException {
