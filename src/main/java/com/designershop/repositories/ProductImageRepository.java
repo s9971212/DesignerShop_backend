@@ -12,5 +12,5 @@ import java.util.List;
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
 
     @Query(value = "SELECT * FROM product_images WHERE product_id =:productId", nativeQuery = true)
-    List<ProductImage> findAllByProductId(@Param("productId") String productId);
+    List<ProductImage> findAllByProductId(@Param("productId") int productId);
 }

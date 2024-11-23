@@ -35,7 +35,7 @@ public class ProductLikesService {
             return "N";
         }
 
-        ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), productId);
+        ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), Integer.parseInt(productId));
         return Objects.nonNull(productLikes) ? "Y" : "N";
     }
 
@@ -48,7 +48,7 @@ public class ProductLikesService {
 
         Product product = validateProductPermission(productId);
 
-        ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), productId);
+        ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), Integer.parseInt(productId));
         if (Objects.isNull(productLikes)) {
             ProductLikesId productLikesId = new ProductLikesId();
             productLikesId.setUserId(userProfile.getUserId());
@@ -61,7 +61,7 @@ public class ProductLikesService {
             productLikesRepository.delete(productLikes);
         }
 
-        long likes = productLikesRepository.findCountByProductId(productId);
+        long likes = productLikesRepository.findCountByProductId(Integer.parseInt(productId));
         product.setLikes((int) likes);
         productRepository.save(product);
 
@@ -69,7 +69,7 @@ public class ProductLikesService {
     }
 
     public Product validateProductPermission(String productId) throws ProductException {
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }

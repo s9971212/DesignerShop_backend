@@ -84,7 +84,7 @@ public class ProductsService {
     }
 
     public ReadProductResponseModel readProduct(String productId) throws ProductException {
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }

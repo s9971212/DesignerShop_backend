@@ -149,7 +149,7 @@ public class AdminProductsService {
     }
 
     public AdminReadProductResponseModel readProduct(String productId) throws ProductException {
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }
@@ -210,7 +210,7 @@ public class AdminProductsService {
             throw new ProductException("庫存數量只能有數字，請重新確認");
         }
 
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }
@@ -250,7 +250,7 @@ public class AdminProductsService {
 
         productRepository.save(product);
 
-        Set<String> productImages = productImageRepository.findAllByProductId(productId).stream()
+        Set<String> productImages = productImageRepository.findAllByProductId(Integer.parseInt(productId)).stream()
                 .map(ProductImage::getImage).collect(Collectors.toSet());
         for (String image : images) {
             if (!productImages.contains(image)) {
@@ -265,7 +265,7 @@ public class AdminProductsService {
     }
 
     public String deleteProduct(String productId) throws ProductException {
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }

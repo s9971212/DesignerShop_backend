@@ -58,7 +58,7 @@ public class SellerProductsService {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (!StringUtils.equals(userProfile.getUserId(), product.getUserId())) {
             throw new UserException("此帳戶不存在，請重新確認");
         }

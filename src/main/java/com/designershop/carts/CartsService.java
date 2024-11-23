@@ -75,7 +75,7 @@ public class CartsService {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }
@@ -99,7 +99,7 @@ public class CartsService {
             cartRepository.save(cart);
         }
 
-        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getCartId(), productId);
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getCartId(), Integer.parseInt(productId));
         if (Objects.nonNull(cartItem)) {
             throw new CartException("此商品已在購物車內，請重新確認");
         }
@@ -136,7 +136,7 @@ public class CartsService {
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
             readCartItemResponseModel.setUserName(userProfile.getName());
 
-            Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
+            Product product = productRepository.findByProductId(cartItem.getProductId());
             readCartItemResponseModel.setProductName(product.getName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
@@ -190,7 +190,7 @@ public class CartsService {
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
             readCartItemResponseModel.setUserName(userProfile.getName());
 
-            Product product = productRepository.findByProductId(Integer.toString(cartItem.getProductId()));
+            Product product = productRepository.findByProductId(cartItem.getProductId());
             readCartItemResponseModel.setProductName(product.getName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
@@ -234,7 +234,7 @@ public class CartsService {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        Product product = productRepository.findByProductId(productId);
+        Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }
@@ -254,7 +254,7 @@ public class CartsService {
             cartRepository.save(cart);
         }
 
-        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getCartId(), productId);
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getCartId(), Integer.parseInt(productId));
         if (Objects.isNull(cartItem)) {
             throw new CartException("此商品不存在購物車內，請重新確認");
         }
@@ -278,7 +278,7 @@ public class CartsService {
             cartRepository.save(cart);
         }
 
-        CartItem cartItem = cartItemRepository.findByItemIdAndCartId(itemId, cart.getCartId());
+        CartItem cartItem = cartItemRepository.findByItemIdAndCartId(Integer.parseInt(itemId), cart.getCartId());
         if (Objects.isNull(cartItem)) {
             throw new CartException("此商品不存在購物車內，請重新確認");
         }

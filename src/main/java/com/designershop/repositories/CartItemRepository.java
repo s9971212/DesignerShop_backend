@@ -12,7 +12,7 @@ import java.util.List;
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     @Query(value = "SELECT * FROM cart_items WHERE cart_id =:cartId AND product_id =:productId", nativeQuery = true)
-    CartItem findByCartIdAndProductId(@Param("cartId") int cartId, @Param("productId") String productId);
+    CartItem findByCartIdAndProductId(@Param("cartId") int cartId, @Param("productId") int productId);
 
     @Query(value = "SELECT * FROM cart_items WHERE cart_id =:cartId", nativeQuery = true)
     List<CartItem> findAllByCartId(@Param("cartId") int cartId);
@@ -21,5 +21,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     List<CartItem> findByItemIds(@Param("itemIds") List<String> itemIds);
 
     @Query(value = "SELECT * FROM cart_items WHERE item_id =:itemId AND cart_id =:cartId", nativeQuery = true)
-    CartItem findByItemIdAndCartId(@Param("itemId") String itemId, @Param("cartId") int cartId);
+    CartItem findByItemIdAndCartId(@Param("itemId") int itemId, @Param("cartId") int cartId);
 }

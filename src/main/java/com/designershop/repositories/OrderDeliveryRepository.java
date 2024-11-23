@@ -21,5 +21,5 @@ public interface OrderDeliveryRepository extends JpaRepository<OrderDelivery, Lo
     List<OrderDelivery> findAllByUserId(@Param("userId") String userId);
 
     @Query(value = "SELECT * FROM order_deliveries WHERE delivery_id =:deliveryId", nativeQuery = true)
-    OrderDelivery findByDeliveryId(@Param("deliveryId") String deliveryId);
+    OrderDelivery findByDeliveryId(@Param("deliveryId") int deliveryId);
 }
