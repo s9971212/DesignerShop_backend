@@ -2,6 +2,7 @@ package com.designershop.admin.coupons;
 
 import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
 import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
+import com.designershop.admin.coupons.models.AdminUpdateCouponRequestModel;
 import com.designershop.admin.products.models.AdminReadProductResponseModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
 import com.designershop.entities.*;
@@ -107,7 +108,7 @@ public class AdminCouponsService {
 
         couponRepository.save(couponCreate);
 
-        validateCouponPermission(couponCreate.getCouponId(), userIds, categoryIds, brandIds, productIds);
+        createCouponPermission(couponCreate.getCouponId(), userIds, categoryIds, brandIds, productIds);
 
         return code;
     }
@@ -154,25 +155,171 @@ public class AdminCouponsService {
         return response;
     }
 
-    public void validateCouponPermission(int couponId, List<String> userIds, List<String> categoryIds, List<String> brandIds, List<String> productIds) throws CouponException {
-        if (!userIds.isEmpty()) {
-            validateUserIds(couponId, userIds);
+    public AdminReadCouponResponseModel readCoupon(String couponId) throws CouponException {
+        Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
+        if (Objects.isNull(coupon)) {
+            throw new CouponException("此優惠券不存在，請重新確認");
         }
 
-        if (!categoryIds.isEmpty()) {
-            validateCategoryIds(couponId, categoryIds);
+        AdminReadCouponResponseModel response = new AdminReadCouponResponseModel();
+        BeanUtils.copyProperties(coupon, response);
+        response.setCouponId(couponId);
+        response.setDiscountType(coupon.getDiscountType().name().toLowerCase());
+        response.setDiscountValue(coupon.getDiscountValue().toString());
+        if (Objects.nonNull(coupon.getMinimumOrderPrice())) {
+            response.setMinimumOrderPrice(coupon.getMinimumOrderPrice().toString());
         }
+        if (Objects.nonNull(coupon.getUsageLimit())) {
+            response.setUsageLimit(Integer.toString(coupon.getUsageLimit()));
+        }
+        response.setStartDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getStartDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+        response.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+        response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+        response.setIsActive(coupon.isActive() ? "Y" : "N");
 
-        if (!brandIds.isEmpty()) {
-            validateBrandIds(couponId, brandIds);
-        }
+        List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(Integer.parseInt(couponId));
+        List<String> userIds = couponUserProfileList.stream().map(couponUserProfile -> couponUserProfile.getId().getUserId()).toList();
+        response.setUserIds(userIds);
+        List<CouponProductCategory> couponProductCategoryList = couponProductCategoryRepository.findAllByCouponId(Integer.parseInt(couponId));
+        List<String> categoryIds = couponProductCategoryList.stream().map(couponProductCategory -> Integer.toString(couponProductCategory.getId().getCategoryId())).toList();
+        response.setCategoryIds(categoryIds);
+        List<CouponProductBrand> couponProductBrandList = couponProductBrandRepository.findAllByCouponId(Integer.parseInt(couponId));
+        List<String> brandIds = couponProductBrandList.stream().map(couponProductBrand -> Integer.toString(couponProductBrand.getId().getBrandId())).toList();
+        response.setBrandIds(brandIds);
+        List<CouponProduct> couponProductList = couponProductRepository.findAllByCouponId(Integer.parseInt(couponId));
+        List<String> productIds = couponProductList.stream().map(couponProduct -> Integer.toString(couponProduct.getId().getProductId())).toList();
+        response.setProductIds(productIds);
 
-        if (!productIds.isEmpty()) {
-            validateProductIds(couponId, productIds);
-        }
+        return response;
     }
 
-    private void validateUserIds(int couponId, List<String> userIds) throws CouponException {
+    @Transactional(rollbackFor = Exception.class)
+    public String updateCoupon(String couponId, AdminUpdateCouponRequestModel request) throws EmptyException, CouponException {
+        String code = request.getCode();
+        String discountType = request.getDiscountType();
+        String discountValueString = request.getDiscountValue();
+        String minimumOrderPriceString = request.getMinimumOrderPrice();
+        String usageLimitString = request.getUsageLimit();
+        String couponDescription = request.getDescription();
+        String image = request.getImage();
+        String startDateString = request.getStartDate();
+        String endDateString = request.getEndDate();
+        String isActiveString = request.getIsActive();
+        List<String> userIds = request.getUserIds();
+        List<String> categoryIds = request.getCategoryIds();
+        List<String> brandIds = request.getBrandIds();
+        List<String> productIds = request.getProductIds();
+
+        if (StringUtils.isBlank(discountType) || StringUtils.isBlank(discountValueString) || StringUtils.isBlank(startDateString)
+                || StringUtils.isBlank(endDateString) || StringUtils.isBlank(isActiveString)) {
+            throw new EmptyException("折扣類型、折扣值、開始日期、結束日期與是否啟用不得為空");
+        }
+
+        if (!discountValueString.matches("\\d+(\\.\\d+)?")) {
+            throw new CouponException("折扣值只能有數字或小數點，請重新確認");
+        }
+
+        // 因應綠界價格只能正整數修改正規表示式，允許小數點可使用\d+(\.\d+)?
+        if (StringUtils.isNotBlank(minimumOrderPriceString) && !minimumOrderPriceString.matches("\\d+")) {
+            throw new CouponException("最低訂單金額只能有數字，請重新確認");
+        }
+
+        if (StringUtils.isNotBlank(usageLimitString) && !usageLimitString.matches("\\d+")) {
+            throw new CouponException("使用次數只能有數字，請重新確認");
+        }
+
+        Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
+        if (Objects.isNull(coupon)) {
+            throw new CouponException("此優惠券不存在，請重新確認");
+        }
+
+        if (StringUtils.isBlank(code)) {
+            code = RandomStringUtils.randomAlphanumeric(10);
+        }
+        BigDecimal discountValue = new BigDecimal(discountValueString);
+        BigDecimal minimumOrderPrice = null;
+        if (StringUtils.isNotBlank(minimumOrderPriceString)) {
+            minimumOrderPrice = new BigDecimal(minimumOrderPriceString);
+        }
+        Integer usageLimit = null;
+        if (StringUtils.isNotBlank(usageLimitString)) {
+            usageLimit = Integer.parseInt(usageLimitString);
+        }
+        LocalDateTime startDate = DateTimeFormatUtil.localDateTimeFormat(startDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
+        LocalDateTime endDate = DateTimeFormatUtil.localDateTimeFormat(endDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
+        LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        boolean isActive = StringUtils.equals("Y", isActiveString);
+
+        coupon.setCode(code);
+        coupon.setDiscountType(DiscountTypeEnum.valueOf(discountType.toUpperCase()));
+        coupon.setDiscountValue(discountValue);
+        coupon.setMinimumOrderPrice(minimumOrderPrice);
+        coupon.setUsageLimit(usageLimit);
+        coupon.setDescription(couponDescription);
+        coupon.setImage(image);
+        coupon.setStartDate(startDate);
+        coupon.setEndDate(endDate);
+        coupon.setUpdatedUser(userProfile.getUserId());
+        coupon.setUpdatedDate(currentDateTime);
+        coupon.setActive(isActive);
+
+        couponRepository.save(coupon);
+
+        updateCouponPermission(coupon.getCouponId(), userIds, categoryIds, brandIds, productIds);
+
+        return code;
+    }
+
+    public void createCouponPermission(int couponId, List<String> userIds, List<String> categoryIds, List<String> brandIds, List<String> productIds) throws CouponException {
+        createCouponUserProfile(couponId, userIds);
+        createCouponProductCategory(couponId, categoryIds);
+        createCouponProductBrand(couponId, brandIds);
+        createCouponProduct(couponId, productIds);
+    }
+
+    public void updateCouponPermission(int couponId, List<String> userIds, List<String> categoryIds, List<String> brandIds, List<String> productIds) throws CouponException {
+        List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(couponId);
+        Set<String> existingUserIds = couponUserProfileList.stream().map(CouponUserProfile -> CouponUserProfile.getId().getUserId()).collect(Collectors.toSet());
+        List<CouponProductCategory> couponProductCategoryList = couponProductCategoryRepository.findAllByCouponId(couponId);
+        Set<String> existingCategoryIds = couponProductCategoryList.stream().map(CouponProductCategory -> Integer.toString(CouponProductCategory.getId().getCategoryId())).collect(Collectors.toSet());
+        List<CouponProductBrand> couponProductBrandList = couponProductBrandRepository.findAllByCouponId(couponId);
+        Set<String> existingBrandIds = couponProductBrandList.stream().map(CouponProductBrand -> Integer.toString(CouponProductBrand.getId().getBrandId())).collect(Collectors.toSet());
+        List<CouponProduct> couponProductList = couponProductRepository.findAllByCouponId(couponId);
+        Set<String> existingProductIds = couponProductList.stream().map(CouponProduct -> Integer.toString(CouponProduct.getId().getProductId())).collect(Collectors.toSet());
+
+        Set<String> userIdsToDelete = new HashSet<>(existingUserIds);
+        existingUserIds.retainAll(userIds);
+        userIds.removeAll(existingUserIds);
+        userIdsToDelete.removeAll(existingUserIds);
+
+        Set<String> categoryIdsToDelete = new HashSet<>(existingCategoryIds);
+        existingCategoryIds.retainAll(categoryIds);
+        categoryIds.removeAll(existingCategoryIds);
+        categoryIdsToDelete.removeAll(existingCategoryIds);
+
+        Set<String> brandIdsToDelete = new HashSet<>(existingBrandIds);
+        existingBrandIds.retainAll(brandIds);
+        brandIds.removeAll(existingBrandIds);
+        brandIdsToDelete.removeAll(existingBrandIds);
+
+        Set<String> productIdsToDelete = new HashSet<>(existingProductIds);
+        existingProductIds.retainAll(productIds);
+        productIds.removeAll(existingProductIds);
+        productIdsToDelete.removeAll(existingProductIds);
+
+        createCouponPermission(couponId, userIds, categoryIds, brandIds, productIds);
+        deleteCouponPermission(couponId, userIdsToDelete, categoryIdsToDelete, brandIdsToDelete, productIdsToDelete);
+    }
+
+    public void deleteCouponPermission(int couponId, Set<String> userIds, Set<String> categoryIds, Set<String> brandIds, Set<String> productIds) throws CouponException {
+        deleteCouponUserProfile(couponId, userIds);
+        deleteCouponProductCategory(couponId, categoryIds);
+        deleteCouponProductBrand(couponId, brandIds);
+        deleteCouponProduct(couponId, productIds);
+    }
+
+    private void createCouponUserProfile(int couponId, List<String> userIds) throws CouponException {
         List<UserProfile> userProfiles = userProfileRepository.findByUserIds(userIds);
         Map<String, UserProfile> userProfileMap = userProfiles.stream().collect(Collectors.toMap(UserProfile::getUserId, userProfile -> userProfile));
         for (String userId : userIds) {
@@ -195,7 +342,7 @@ public class AdminCouponsService {
         }
     }
 
-    private void validateCategoryIds(int couponId, List<String> categoryIds) throws CouponException {
+    private void createCouponProductCategory(int couponId, List<String> categoryIds) throws CouponException {
         List<ProductCategory> productCategories = productCategoryRepository.findByCategoryIds(categoryIds);
         Map<Integer, ProductCategory> productCategoryMap = productCategories.stream().collect(Collectors.toMap(ProductCategory::getCategoryId, ProductCategory -> ProductCategory));
         for (String categoryId : categoryIds) {
@@ -214,7 +361,7 @@ public class AdminCouponsService {
         }
     }
 
-    private void validateBrandIds(int couponId, List<String> brandIds) throws CouponException {
+    private void createCouponProductBrand(int couponId, List<String> brandIds) throws CouponException {
         List<ProductBrand> productBrands = productBrandRepository.findByBrandIds(brandIds);
         Map<Integer, ProductBrand> productBrandMap = productBrands.stream().collect(Collectors.toMap(ProductBrand::getBrandId, ProductBrand -> ProductBrand));
         for (String brandId : brandIds) {
@@ -233,7 +380,7 @@ public class AdminCouponsService {
         }
     }
 
-    private void validateProductIds(int couponId, List<String> productIds) throws CouponException {
+    private void createCouponProduct(int couponId, List<String> productIds) throws CouponException {
         List<Product> products = productRepository.findByProductIds(productIds);
         Map<Integer, Product> productMap = products.stream().collect(Collectors.toMap(Product::getProductId, Product -> Product));
         for (String productId : productIds) {
@@ -248,6 +395,50 @@ public class AdminCouponsService {
 
             CouponProduct couponProduct = new CouponProduct();
             couponProduct.setId(couponProductId);
+            couponProductRepository.save(couponProduct);
+        }
+    }
+
+    private void deleteCouponUserProfile(int couponId, Set<String> userIds) throws CouponException {
+        for (String userId : userIds) {
+            CouponUserProfile couponUserProfile = couponUserProfileRepository.findByCouponIdAndUserId(couponId, userId);
+            if (Objects.isNull(couponUserProfile)) {
+                throw new CouponException("某些帳戶不存在，請重新確認");
+            }
+
+            couponUserProfileRepository.delete(couponUserProfile);
+        }
+    }
+
+    private void deleteCouponProductCategory(int couponId, Set<String> categoryIds) throws CouponException {
+        for (String categoryId : categoryIds) {
+            CouponProductCategory couponProductCategory = couponProductCategoryRepository.findByCouponIdAndCategoryId(couponId, Integer.parseInt(categoryId));
+            if (Objects.isNull(couponProductCategory)) {
+                throw new CouponException("某些商品類別不存在，請重新確認");
+            }
+
+            couponProductCategoryRepository.delete(couponProductCategory);
+        }
+    }
+
+    private void deleteCouponProductBrand(int couponId, Set<String> brandIds) throws CouponException {
+        for (String brandId : brandIds) {
+            CouponProductBrand couponProductBrand = couponProductBrandRepository.findByCouponIdAndBrandId(couponId, Integer.parseInt(brandId));
+            if (Objects.isNull(couponProductBrand)) {
+                throw new CouponException("某些品牌不存在，請重新確認");
+            }
+
+            couponProductBrandRepository.save(couponProductBrand);
+        }
+    }
+
+    private void deleteCouponProduct(int couponId, Set<String> productIds) throws CouponException {
+        for (String productId : productIds) {
+            CouponProduct couponProduct = couponProductRepository.findByCouponIdAndProductId(couponId, Integer.parseInt(productId));
+            if (Objects.isNull(couponProduct)) {
+                throw new CouponException("某些商品不存在，請重新確認");
+            }
+
             couponProductRepository.save(couponProduct);
         }
     }

@@ -16,4 +16,7 @@ public interface CouponProductBrandRepository extends JpaRepository<CouponProduc
 
     @Query(value = "SELECT * FROM coupons_product_brand WHERE coupon_id =:couponId", nativeQuery = true)
     List<CouponProductBrand> findAllByCouponId(@Param("couponId") int couponId);
+
+    @Query(value = "SELECT * FROM coupons_product_brand WHERE coupon_id =:couponId AND brand_id =:brandId", nativeQuery = true)
+    CouponProductBrand findByCouponIdAndBrandId(@Param("couponId") int couponId, @Param("brandId") int brandId);
 }

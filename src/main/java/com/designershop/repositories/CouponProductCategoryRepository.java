@@ -16,4 +16,7 @@ public interface CouponProductCategoryRepository extends JpaRepository<CouponPro
 
     @Query(value = "SELECT * FROM coupons_product_category WHERE coupon_id =:couponId", nativeQuery = true)
     List<CouponProductCategory> findAllByCouponId(@Param("couponId") int couponId);
+
+    @Query(value = "SELECT * FROM coupons_product_category WHERE coupon_id =:couponId AND category_id =:categoryId", nativeQuery = true)
+    CouponProductCategory findByCouponIdAndCategoryId(@Param("couponId") int couponId, @Param("categoryId") int categoryId);
 }
