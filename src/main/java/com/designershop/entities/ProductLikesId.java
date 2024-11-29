@@ -17,9 +17,15 @@ import java.util.Objects;
 @NoArgsConstructor
 public class ProductLikesId implements Serializable {
 
+    /**
+     * 使用者ID，表示這個商品喜歡屬於哪一位使用者
+     */
     @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
+    /**
+     * 商品ID，表示這個商品喜歡屬於哪一個商品
+     */
     @Column(name = "product_id", nullable = false)
     private int productId;
 

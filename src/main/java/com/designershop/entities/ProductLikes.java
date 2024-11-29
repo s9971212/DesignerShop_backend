@@ -18,6 +18,9 @@ import java.util.Objects;
 @Table(name = "product_likes")
 public class ProductLikes {
 
+    /**
+     * 商品喜歡ID，包含使用者ID與商品ID
+     */
     @EmbeddedId
     private ProductLikesId id;
 

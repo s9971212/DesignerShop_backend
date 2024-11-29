@@ -17,9 +17,15 @@ import java.util.Objects;
 @NoArgsConstructor
 public class CouponUserProfileId implements Serializable {
 
+    /**
+     * 優惠券ID，表示這個優惠券使用者限定屬於哪一個優惠券
+     */
     @Column(name = "coupon_id", nullable = false)
     private int couponId;
 
+    /**
+     * 使用者ID，表示這個優惠券使用者限定屬於哪一位使用者
+     */
     @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 

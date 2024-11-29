@@ -19,22 +19,37 @@ import java.util.Objects;
 @Table(name = "cart")
 public class Cart {
 
+    /**
+     * 購物車ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id", nullable = false)
     private int cartId;
 
+    /**
+     * 創建該購物車的時間
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
+    /**
+     * 上次更新該購物車的時間
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
+    /**
+     * 使用者ID，表示這個購物車屬於哪一位使用者
+     */
     @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
+    /**
+     * 購物車中的所有商品項目
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 

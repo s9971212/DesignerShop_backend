@@ -16,14 +16,23 @@ import java.util.Objects;
 @Table(name = "product_images")
 public class ProductImage {
 
+    /**
+     * 商品圖片ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
     private int imageId;
 
+    /**
+     * 商品圖片資料
+     */
     @Column(name = "image", nullable = false, columnDefinition = "TEXT")
     private String image;
 
+    /**
+     * 該商品圖片所屬的商品
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;

@@ -17,9 +17,15 @@ import java.util.Objects;
 @NoArgsConstructor
 public class CouponProductBrandId implements Serializable {
 
+    /**
+     * 優惠券ID，表示這個優惠券商品品牌限定屬於哪一個優惠券
+     */
     @Column(name = "coupon_id", nullable = false)
     private int couponId;
 
+    /**
+     * 商品品牌ID，表示這個優惠券商品品牌限定屬於哪一個商品品牌
+     */
     @Column(name = "brand_id", nullable = false)
     private int brandId;
 

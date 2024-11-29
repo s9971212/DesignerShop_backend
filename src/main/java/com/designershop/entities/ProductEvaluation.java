@@ -20,31 +20,55 @@ import java.util.Objects;
 @Table(name = "product_evaluations")
 public class ProductEvaluation {
 
+    /**
+     * 商品評價ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluation_id", nullable = false)
     private int evaluationId;
 
+    /**
+     * 商品評分
+     */
     @Column(name = "stars", nullable = false, precision = 3, scale = 2)
     private BigDecimal stars;
 
+    /**
+     * 商品評價內容
+     */
     @Column(name = "evaluation", columnDefinition = "TEXT")
     private String evaluation;
 
+    /**
+     * 創建該商品評價的時間
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
+    /**
+     * 上次更新該商品評價的使用者ID
+     */
     @Column(name = "updated_user", length = 12)
     private String updatedUser;
 
+    /**
+     * 上次更新該商品評價的時間
+     */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
+    /**
+     * 使用者ID，表示這個商品評價屬於哪一位使用者
+     */
     @Column(name = "user_id", nullable = false, length = 12)
     private String userId;
 
+    /**
+     * 商品ID，表示這個商品評價屬於哪一個商品
+     */
     @Column(name = "product_id", nullable = false)
     private int productId;
 

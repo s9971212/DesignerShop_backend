@@ -18,6 +18,9 @@ import java.util.Objects;
 @Table(name = "coupons_products")
 public class CouponProduct {
 
+    /**
+     * 優惠券商品限定ID，包含優惠券ID與商品ID
+     */
     @EmbeddedId
     private CouponProductId id;
 

@@ -17,14 +17,23 @@ import java.util.Objects;
 @Table(name = "product_category")
 public class ProductCategory {
 
+    /**
+     * 商品類別ID
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id", nullable = false)
     private int categoryId;
 
+    /**
+     * 商品類別名稱
+     */
     @Column(name = "category", nullable = false, length = 50)
     private String category;
 
+    /**
+     * 商品類別中的所有商品
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "productCategory")
     private List<Product> products;
 

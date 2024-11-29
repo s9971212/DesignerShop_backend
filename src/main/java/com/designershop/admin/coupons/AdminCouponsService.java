@@ -57,7 +57,7 @@ public class AdminCouponsService {
 
         if (StringUtils.isBlank(discountType) || StringUtils.isBlank(discountValueString) || StringUtils.isBlank(startDateString)
                 || StringUtils.isBlank(endDateString) || StringUtils.isBlank(isActiveString)) {
-            throw new EmptyException("折扣類型、折扣值、開始日期、結束日期與是否啟用不得為空");
+            throw new EmptyException("折扣類型、折扣值、開始時間、結束時間與是否啟用不得為空");
         }
 
         if (!discountValueString.matches("\\d+(\\.\\d+)?")) {
@@ -212,7 +212,7 @@ public class AdminCouponsService {
 
         if (StringUtils.isBlank(discountType) || StringUtils.isBlank(discountValueString) || StringUtils.isBlank(startDateString)
                 || StringUtils.isBlank(endDateString) || StringUtils.isBlank(isActiveString)) {
-            throw new EmptyException("折扣類型、折扣值、開始日期、結束日期與是否啟用不得為空");
+            throw new EmptyException("折扣類型、折扣值、開始時間、結束時間與是否啟用不得為空");
         }
 
         if (!discountValueString.matches("\\d+(\\.\\d+)?")) {
