@@ -31,12 +31,12 @@ public class SellerProductsService {
         AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
         BeanUtils.copyProperties(request, adminCreateProductRequestModel);
 
-        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(sessionUserProfile)) {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        return adminProductsService.createProduct(sessionUserProfile.getUserId(), adminCreateProductRequestModel);
+        return adminProductsService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
     }
 
     public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, UserException, ProductException {

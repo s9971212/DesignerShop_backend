@@ -26,11 +26,11 @@ public class JwtTokenExpirationListener {
         if (authentication != null && authentication.getPrincipal() instanceof MyUser myUser) {
             HttpSession session = getSessionForUser(myUser.getUsername());
             if (session != null) {
-                UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-                if (Objects.nonNull(sessionUserProfile)) {
-                    sessionUserProfile.setSignOnStatus("N");
-                    sessionUserProfile.setSignOnToken(null);
-                    userProfileRepository.save(sessionUserProfile);
+                UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+                if (Objects.nonNull(userProfile)) {
+                    userProfile.setSignOnStatus("N");
+                    userProfile.setSignOnToken(null);
+                    userProfileRepository.save(userProfile);
                     session.removeAttribute("userProfile");
                 }
 

@@ -21,12 +21,12 @@ public class MyLogoutHandler implements LogoutHandler {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.nonNull(sessionUserProfile)) {
-            sessionUserProfile.setSignOnStatus("N");
-            sessionUserProfile.setPwdErrorCount(0);
-            sessionUserProfile.setSignOnToken(null);
-            userProfileRepository.save(sessionUserProfile);
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.nonNull(userProfile)) {
+            userProfile.setSignOnStatus("N");
+            userProfile.setPwdErrorCount(0);
+            userProfile.setSignOnToken(null);
+            userProfileRepository.save(userProfile);
         }
     }
 }

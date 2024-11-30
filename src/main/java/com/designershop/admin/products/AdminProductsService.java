@@ -231,7 +231,7 @@ public class AdminProductsService {
         int priceCompare = product.getOriginalPrice().compareTo(price);
         int stockQuantity = Integer.parseInt(stockQuantityString);
 
-        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
 
         boolean isDeleted = StringUtils.equals("Y", isDeletedString);
 
@@ -242,7 +242,7 @@ public class AdminProductsService {
             product.setOriginalPrice(price);
         }
         product.setStockQuantity(stockQuantity);
-        product.setUpdatedUser(sessionUserProfile.getUserId());
+        product.setUpdatedUser(userProfile.getUserId());
         product.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         product.setDeleted(isDeleted);
         product.setProductCategory(productCategory);
@@ -270,9 +270,9 @@ public class AdminProductsService {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
-        UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
 
-        product.setUpdatedUser(sessionUserProfile.getUserId());
+        product.setUpdatedUser(userProfile.getUserId());
         product.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         product.setDeleted(true);
         productRepository.save(product);

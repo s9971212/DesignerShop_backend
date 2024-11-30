@@ -42,11 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.isNotBlank(username)
                 && ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
             MyUser myUser = myUserDetailsService.loadUserByUsername(username);
-            UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
+            UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
 
             if (JwtUtil.validateToken(jwt, myUser)) {
-                if (Objects.nonNull(sessionUserProfile) && StringUtils.equals(sessionUserProfile.getSignOnToken(), jwt)
-                        && !sessionUserProfile.isLock() && !sessionUserProfile.isDeleted()) {
+                if (Objects.nonNull(userProfile) && StringUtils.equals(userProfile.getSignOnToken(), jwt)
+                        && !userProfile.isLock() && !userProfile.isDeleted()) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             myUser, null, myUser.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
