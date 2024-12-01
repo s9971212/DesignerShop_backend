@@ -19,4 +19,7 @@ public interface CouponUserProfileRepository extends JpaRepository<CouponUserPro
 
     @Query(value = "SELECT * FROM coupons_user_profile WHERE coupon_id =:couponId AND user_id =:userId", nativeQuery = true)
     CouponUserProfile findByCouponIdAndUserId(@Param("couponId") int couponId, @Param("userId") String userId);
+
+    @Query(value = "SELECT * FROM coupons_user_profile WHERE user_id =:userId", nativeQuery = true)
+    List<CouponUserProfile> findAllByUserId(@Param("userId") String userId);
 }
