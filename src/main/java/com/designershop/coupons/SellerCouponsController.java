@@ -36,4 +36,10 @@ public class SellerCouponsController {
         List<ReadCouponResponseModel> response = sellerCouponsService.readAllCoupon();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReadCouponResponseModel> readCoupon(@PathVariable String id) throws UserException,CouponException {
+        ReadCouponResponseModel response = sellerCouponsService.readCoupon(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
