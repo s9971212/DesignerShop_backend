@@ -76,6 +76,11 @@ public class AdminCouponsService {
         if (StringUtils.isBlank(code)) {
             code = RandomStringUtils.randomAlphanumeric(10);
         }
+        Coupon coupon = couponRepository.findByCode(code);
+        if (Objects.nonNull(coupon)) {
+            throw new CouponException("此優惠券代碼已被使用，請重新確認");
+        }
+
         BigDecimal discountValue = new BigDecimal(discountValueString);
         BigDecimal minimumOrderPrice = null;
         if (StringUtils.isNotBlank(minimumOrderPriceString)) {
@@ -228,13 +233,18 @@ public class AdminCouponsService {
             throw new CouponException("使用次數只能有數字，請重新確認");
         }
 
-        Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
+        Coupon coupon = couponRepository.findByCode(code);
+        if (Objects.nonNull(coupon)) {
+            throw new CouponException("此優惠券代碼已被使用，請重新確認");
+        }
+
+        coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
         if (Objects.isNull(coupon)) {
             throw new CouponException("此優惠券不存在，請重新確認");
         }
 
         if (StringUtils.isBlank(code)) {
-            code = RandomStringUtils.randomAlphanumeric(10);
+            code = coupon.getCode();
         }
         BigDecimal discountValue = new BigDecimal(discountValueString);
         BigDecimal minimumOrderPrice = null;

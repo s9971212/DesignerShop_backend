@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
+    @Query(value = "SELECT * FROM coupons WHERE code =:code", nativeQuery = true)
+    Coupon findByCode(@Param("code") String code);
+
     @Query(value = "SELECT * FROM coupons WHERE coupon_id =:couponId", nativeQuery = true)
     Coupon findByCouponId(@Param("couponId") int couponId);
 
