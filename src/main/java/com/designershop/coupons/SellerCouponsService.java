@@ -3,9 +3,11 @@ package com.designershop.coupons;
 import com.designershop.admin.coupons.AdminCouponsService;
 import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
 import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
+import com.designershop.admin.coupons.models.AdminUpdateCouponRequestModel;
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.coupons.models.CreateCouponRequestModel;
 import com.designershop.coupons.models.ReadCouponResponseModel;
+import com.designershop.coupons.models.UpdateCouponRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.CouponException;
 import com.designershop.exceptions.EmptyException;
@@ -139,5 +141,20 @@ public class SellerCouponsService {
         response.setProductIds(productIds);
 
         return response;
+    }
+
+    public String updateCoupon(String couponId, UpdateCouponRequestModel request) throws EmptyException, UserException, CouponException {
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        if (Objects.isNull(userProfile)) {
+            throw new UserException("此帳戶未登入，請重新確認");
+        }
+
+        AdminUpdateCouponRequestModel adminUpdateCouponRequestModel = new AdminUpdateCouponRequestModel();
+        BeanUtils.copyProperties(request, adminUpdateCouponRequestModel);
+        List<String> userIds = new ArrayList<>();
+        userIds.add(userProfile.getUserId());
+        adminUpdateCouponRequestModel.setUserIds(userIds);
+
+        return adminCouponsService.updateCoupon(couponId, adminUpdateCouponRequestModel);
     }
 }

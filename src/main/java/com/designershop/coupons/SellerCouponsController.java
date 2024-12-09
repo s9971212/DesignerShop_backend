@@ -5,6 +5,7 @@ import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
 import com.designershop.admin.coupons.models.AdminUpdateCouponRequestModel;
 import com.designershop.coupons.models.CreateCouponRequestModel;
 import com.designershop.coupons.models.ReadCouponResponseModel;
+import com.designershop.coupons.models.UpdateCouponRequestModel;
 import com.designershop.exceptions.CouponException;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
@@ -41,5 +42,12 @@ public class SellerCouponsController {
     public ResponseEntity<ReadCouponResponseModel> readCoupon(@PathVariable String id) throws UserException,CouponException {
         ReadCouponResponseModel response = sellerCouponsService.readCoupon(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateCoupon(@PathVariable String id, @RequestBody @Valid UpdateCouponRequestModel request)
+            throws EmptyException,UserException, CouponException {
+        String code = sellerCouponsService.updateCoupon(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }
 }
