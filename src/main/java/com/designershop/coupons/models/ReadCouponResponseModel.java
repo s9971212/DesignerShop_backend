@@ -24,6 +24,8 @@ public class ReadCouponResponseModel {
 
     private String minimumOrderPrice;
 
+    private String issuanceLimit;
+
     private String usageLimit;
 
     private String description;

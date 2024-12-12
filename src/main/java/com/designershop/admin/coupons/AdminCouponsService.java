@@ -143,6 +143,9 @@ public class AdminCouponsService {
             if (Objects.nonNull(coupon.getMinimumOrderPrice())) {
                 adminReadCouponResponseModel.setMinimumOrderPrice(coupon.getMinimumOrderPrice().toString());
             }
+            if (Objects.nonNull(coupon.getIssuanceLimit())) {
+                adminReadCouponResponseModel.setIssuanceLimit(Integer.toString(coupon.getIssuanceLimit()));
+            }
             if (Objects.nonNull(coupon.getUsageLimit())) {
                 adminReadCouponResponseModel.setUsageLimit(Integer.toString(coupon.getUsageLimit()));
             }
@@ -183,6 +186,9 @@ public class AdminCouponsService {
         response.setDiscountValue(coupon.getDiscountValue().toString());
         if (Objects.nonNull(coupon.getMinimumOrderPrice())) {
             response.setMinimumOrderPrice(coupon.getMinimumOrderPrice().toString());
+        }
+        if (Objects.nonNull(coupon.getIssuanceLimit())) {
+            response.setIssuanceLimit(Integer.toString(coupon.getIssuanceLimit()));
         }
         if (Objects.nonNull(coupon.getUsageLimit())) {
             response.setUsageLimit(Integer.toString(coupon.getUsageLimit()));
