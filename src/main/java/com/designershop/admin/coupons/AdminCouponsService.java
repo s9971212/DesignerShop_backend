@@ -44,6 +44,7 @@ public class AdminCouponsService {
         String discountType = request.getDiscountType();
         String discountValueString = request.getDiscountValue();
         String minimumOrderPriceString = request.getMinimumOrderPrice();
+        String issuanceLimitString = request.getIssuanceLimit();
         String usageLimitString = request.getUsageLimit();
         String couponDescription = request.getDescription();
         String image = request.getImage();
@@ -69,6 +70,10 @@ public class AdminCouponsService {
             throw new CouponException("最低訂單金額只能有數字，請重新確認");
         }
 
+        if (StringUtils.isNotBlank(issuanceLimitString) && !issuanceLimitString.matches("\\d+")) {
+            throw new CouponException("發放次數只能有數字，請重新確認");
+        }
+
         if (StringUtils.isNotBlank(usageLimitString) && !usageLimitString.matches("\\d+")) {
             throw new CouponException("使用次數只能有數字，請重新確認");
         }
@@ -86,6 +91,10 @@ public class AdminCouponsService {
         if (StringUtils.isNotBlank(minimumOrderPriceString)) {
             minimumOrderPrice = new BigDecimal(minimumOrderPriceString);
         }
+        Integer issuanceLimit = null;
+        if (StringUtils.isNotBlank(issuanceLimitString)) {
+            issuanceLimit = Integer.parseInt(issuanceLimitString);
+        }
         Integer usageLimit = null;
         if (StringUtils.isNotBlank(usageLimitString)) {
             usageLimit = Integer.parseInt(usageLimitString);
@@ -101,6 +110,7 @@ public class AdminCouponsService {
         couponCreate.setDiscountType(DiscountTypeEnum.valueOf(discountType.toUpperCase()));
         couponCreate.setDiscountValue(discountValue);
         couponCreate.setMinimumOrderPrice(minimumOrderPrice);
+        couponCreate.setIssuanceLimit(issuanceLimit);
         couponCreate.setUsageLimit(usageLimit);
         couponCreate.setDescription(couponDescription);
         couponCreate.setImage(image);
@@ -204,6 +214,7 @@ public class AdminCouponsService {
         String discountType = request.getDiscountType();
         String discountValueString = request.getDiscountValue();
         String minimumOrderPriceString = request.getMinimumOrderPrice();
+        String issuanceLimitString = request.getIssuanceLimit();
         String usageLimitString = request.getUsageLimit();
         String couponDescription = request.getDescription();
         String image = request.getImage();
@@ -229,6 +240,10 @@ public class AdminCouponsService {
             throw new CouponException("最低訂單金額只能有數字，請重新確認");
         }
 
+        if (StringUtils.isNotBlank(issuanceLimitString) && !issuanceLimitString.matches("\\d+")) {
+            throw new CouponException("發放次數只能有數字，請重新確認");
+        }
+
         if (StringUtils.isNotBlank(usageLimitString) && !usageLimitString.matches("\\d+")) {
             throw new CouponException("使用次數只能有數字，請重新確認");
         }
@@ -251,6 +266,10 @@ public class AdminCouponsService {
         if (StringUtils.isNotBlank(minimumOrderPriceString)) {
             minimumOrderPrice = new BigDecimal(minimumOrderPriceString);
         }
+        Integer issuanceLimit = null;
+        if (StringUtils.isNotBlank(issuanceLimitString)) {
+            issuanceLimit = Integer.parseInt(issuanceLimitString);
+        }
         Integer usageLimit = null;
         if (StringUtils.isNotBlank(usageLimitString)) {
             usageLimit = Integer.parseInt(usageLimitString);
@@ -265,6 +284,7 @@ public class AdminCouponsService {
         coupon.setDiscountType(DiscountTypeEnum.valueOf(discountType.toUpperCase()));
         coupon.setDiscountValue(discountValue);
         coupon.setMinimumOrderPrice(minimumOrderPrice);
+        coupon.setIssuanceLimit(issuanceLimit);
         coupon.setUsageLimit(usageLimit);
         coupon.setDescription(couponDescription);
         coupon.setImage(image);

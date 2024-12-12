@@ -56,6 +56,12 @@ public class Coupon {
     private BigDecimal minimumOrderPrice;
 
     /**
+     * 優惠券的發放次數限制
+     */
+    @Column(name = "issuance_limit")
+    private Integer issuanceLimit;
+
+    /**
      * 優惠券的使用次數限制
      */
     @Column(name = "usage_limit")

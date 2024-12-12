@@ -21,6 +21,8 @@ public class AdminCreateCouponRequestModel {
 
     private String minimumOrderPrice;
 
+    private String issuanceLimit;
+
     private String usageLimit;
 
     private String description;

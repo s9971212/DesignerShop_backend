@@ -19,6 +19,8 @@ public class UpdateCouponRequestModel {
 
     private String minimumOrderPrice;
 
+    private String issuanceLimit;
+
     private String usageLimit;
 
     private String description;

@@ -8,6 +8,7 @@ CREATE TABLE coupons (
     discount_type ENUM('PERCENTAGE', 'FIXED') NOT NULL,
     discount_value DECIMAL(10 , 2 ) NOT NULL,
     minimum_order_price DECIMAL(10 , 2 ) NULL,
+    issuance_limit INT NULL,
     usage_limit INT NULL,
     description TEXT NULL,
     image TEXT NULL,
