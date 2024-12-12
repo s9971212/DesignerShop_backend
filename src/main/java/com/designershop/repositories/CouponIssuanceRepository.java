@@ -2,6 +2,7 @@ package com.designershop.repositories;
 
 import com.designershop.entities.Coupon;
 import com.designershop.entities.CouponIssuance;
+import com.designershop.entities.CouponProductBrand;
 import com.designershop.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,9 @@ import java.util.List;
 
 @Repository
 public interface CouponIssuanceRepository extends JpaRepository<CouponIssuance, Long> {
+
+    @Query(value = "SELECT * FROM coupon_issuance WHERE user_id =:userId AND coupon_id =:couponId", nativeQuery = true)
+    List<CouponIssuance> findByUserIdAndCouponId(@Param("userId") String userId,@Param("couponId") int couponId);
 
     @Query(value = "SELECT * FROM coupon_issuance WHERE coupon_id =:couponId", nativeQuery = true)
     List<CouponIssuance> findAllByCouponId(@Param("couponId") int couponId);

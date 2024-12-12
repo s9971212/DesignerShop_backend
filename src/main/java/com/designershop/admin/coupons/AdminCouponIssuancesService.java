@@ -24,13 +24,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminCouponIssuancesService {
 
-    private final HttpSession session;
     private final UserProfileRepository userProfileRepository;
     private final CouponRepository couponRepository;
     private final CouponIssuanceRepository couponIssuanceRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public String createCouponIssuance(String couponId, AdminCreateCouponIssuanceRequestModel request) throws EmptyException, CouponException {
+    public String createCouponIssuance(String couponId, AdminCreateCouponIssuanceRequestModel request) throws CouponException {
         List<String> userIds = request.getUserIds();
 
         Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
@@ -50,10 +49,17 @@ public class AdminCouponIssuancesService {
                 throw new CouponException("某些帳戶已被刪除，請重新確認");
             }
 
-            CouponIssuance couponIssuanceCreate = new CouponIssuance();
-            couponIssuanceCreate.setUserId(userProfile.getUserId());
-            couponIssuanceCreate.setCoupon(coupon);
-            couponIssuanceRepository.save(couponIssuanceCreate);
+            List<CouponIssuance> couponIssuances=couponIssuanceRepository.findByUserIdAndCouponId(userId,coupon.getCouponId());
+            if (!couponIssuances.isEmpty()) {
+                throw new CouponException("某些帳戶已領取過優惠券，請重新確認");
+            }
+
+            for (int i = 0; i < coupon.getIssuanceLimit(); i++) {
+                CouponIssuance couponIssuanceCreate = new CouponIssuance();
+                couponIssuanceCreate.setUserId(userId);
+                couponIssuanceCreate.setCoupon(coupon);
+                couponIssuanceRepository.save(couponIssuanceCreate);
+            }
         }
 
         return coupon.getCode();
