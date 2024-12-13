@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
                                 "/api/product_likes").permitAll()
                         .requestMatchers("/api/users/**", "/api/product_likes/**", "/api/carts/**", "/api/orders/**",
-                                "/api/order_deliveries/**").hasAuthority("ROLE_USER")
+                                "/api/order_deliveries/**","/api/coupon_issuance/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/seller/**").hasAuthority("ROLE_SELLER")
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()

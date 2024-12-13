@@ -22,4 +22,7 @@ public interface CouponIssuanceRepository extends JpaRepository<CouponIssuance, 
 
     @Query(value = "SELECT * FROM coupon_issuance WHERE issuance_id =:issuanceId", nativeQuery = true)
     CouponIssuance findByIssuanceId(@Param("issuanceId") int issuanceId);
+
+    @Query(value = "SELECT * FROM coupon_issuance WHERE issuance_id =:issuanceId AND user_id =:userId", nativeQuery = true)
+    CouponIssuance findByIssuanceIdAndUserId(@Param("issuanceId") int issuanceId,@Param("userId") String userId);
 }

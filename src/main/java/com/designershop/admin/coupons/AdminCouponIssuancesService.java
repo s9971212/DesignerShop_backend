@@ -49,7 +49,7 @@ public class AdminCouponIssuancesService {
                 throw new CouponException("某些帳戶已被刪除，請重新確認");
             }
 
-            List<CouponIssuance> couponIssuances=couponIssuanceRepository.findByUserIdAndCouponId(userId,coupon.getCouponId());
+            List<CouponIssuance> couponIssuances = couponIssuanceRepository.findByUserIdAndCouponId(userId, Integer.parseInt(couponId));
             if (!couponIssuances.isEmpty()) {
                 throw new CouponException("某些帳戶已領取過優惠券，請重新確認");
             }
