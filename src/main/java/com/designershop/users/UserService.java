@@ -1,6 +1,6 @@
 package com.designershop.users;
 
-import com.designershop.admin.users.AdminUsersService;
+import com.designershop.admin.users.AdminUserService;
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
 import com.designershop.admin.users.models.AdminUpdateUserRequestModel;
@@ -26,17 +26,17 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class UsersService {
+public class UserService {
 
     private final HttpSession session;
-    private final AdminUsersService adminUsersService;
+    private final AdminUserService adminUserService;
     private final UserProfileRepository userProfileRepository;
 
     public String createUser(CreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
         AdminCreateUserRequestModel adminCreateUserRequestModel = new AdminCreateUserRequestModel();
         BeanUtils.copyProperties(request, adminCreateUserRequestModel);
         adminCreateUserRequestModel.setUserType("B1");
-        return adminUsersService.createUser(adminCreateUserRequestModel);
+        return adminUserService.createUser(adminCreateUserRequestModel);
     }
 
     public ReadUserResponseModel readUser(String userId) throws UserException {
@@ -82,19 +82,19 @@ public class UsersService {
 
         adminUpdateUserRequestModel.setIsDeleted("N");
 
-        return adminUsersService.updateUser(userId, adminUpdateUserRequestModel);
+        return adminUserService.updateUser(userId, adminUpdateUserRequestModel);
     }
 
     public String updatePassword(String userId, UpdatePasswordRequestModel request) throws EmptyException, UserException, MessagingException {
         AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
         BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
         validateUserPermission(userId);
-        return adminUsersService.updatePassword(userId, adminUpdatePasswordRequestModel);
+        return adminUserService.updatePassword(userId, adminUpdatePasswordRequestModel);
     }
 
     public String deleteUser(String userId) throws UserException, ProductException, MessagingException {
         validateUserPermission(userId);
-        return adminUsersService.deleteUser(userId);
+        return adminUserService.deleteUser(userId);
     }
 
     public UserProfile validateUserPermission(String userId) throws UserException {

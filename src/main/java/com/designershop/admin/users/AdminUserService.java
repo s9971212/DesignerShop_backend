@@ -1,6 +1,6 @@
 package com.designershop.admin.users;
 
-import com.designershop.admin.products.AdminProductsService;
+import com.designershop.admin.products.AdminProductService;
 import com.designershop.admin.users.models.AdminCreateUserRequestModel;
 import com.designershop.admin.users.models.AdminReadUserResponseModel;
 import com.designershop.admin.users.models.AdminUpdatePasswordRequestModel;
@@ -14,7 +14,7 @@ import com.designershop.exceptions.UserException;
 import com.designershop.mail.MailService;
 import com.designershop.repositories.ProductRepository;
 import com.designershop.repositories.UserProfileRepository;
-import com.designershop.repositories.UserRoleRepository;
+import com.designershop.users.UserRoleService;
 import com.designershop.utils.DateTimeFormatUtil;
 import com.designershop.utils.FormatUtil;
 import jakarta.mail.MessagingException;
@@ -31,13 +31,13 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class AdminUsersService {
+public class AdminUserService {
 
     private final HttpSession session;
+    private final UserRoleService userRoleService;
     private final MailService mailService;
-    private final AdminProductsService adminProductsService;
+    private final AdminProductService adminProductService;
     private final UserProfileRepository userProfileRepository;
-    private final UserRoleRepository userRoleRepository;
     private final ProductRepository productRepository;
 
     public String createUser(AdminCreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
@@ -91,25 +91,12 @@ public class AdminUsersService {
             birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         }
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
-
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
         String updatedUser = userId;
         if (Objects.nonNull(sessionUserProfile)) {
             updatedUser = sessionUserProfile.getUserId();
         }
-
-        Set<String> roleIds = new HashSet<>();
-        roleIds.add(userType);
-        roleIds.add(sellerType);
-        roleIds.add(designerType);
-        roleIds.add(adminType);
-        Set<UserRole> userRoles = new HashSet<>();
-        for (String roleId : roleIds) {
-            UserRole userRole = userRoleRepository.findByRoleId(roleId);
-            if (Objects.nonNull(userRole)) {
-                userRoles.add(userRole);
-            }
-        }
+        Set<UserRole> userRoles = userRoleService.readUserRole(userType,sellerType,designerType,adminType);
 
         UserProfile userProfileCreate = new UserProfile();
         userProfileCreate.setUserId(userId);
@@ -169,7 +156,6 @@ public class AdminUsersService {
                         break;
                 }
             }
-
             if (Objects.nonNull(userProfile.getBirthday())) {
                 adminReadUserResponseModel
                         .setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
@@ -182,7 +168,6 @@ public class AdminUsersService {
             }
             adminReadUserResponseModel
                     .setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
-
             adminReadUserResponseModel.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
 
             response.add(adminReadUserResponseModel);
@@ -218,7 +203,6 @@ public class AdminUsersService {
                     break;
             }
         }
-
         if (Objects.nonNull(userProfile.getBirthday())) {
             response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
@@ -227,7 +211,6 @@ public class AdminUsersService {
             response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
         response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
-
         response.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
 
         return response;
@@ -277,28 +260,13 @@ public class AdminUsersService {
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶不存在，請重新確認");
         }
-
         LocalDateTime birthday = userProfile.getBirthday();
         if (StringUtils.isNotBlank(birthdayString)) {
             birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         }
-
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-
         boolean isDeleted = StringUtils.equals("Y", isDeletedString);
-
-        Set<String> roleIds = new HashSet<>();
-        roleIds.add(userType);
-        roleIds.add(sellerType);
-        roleIds.add(designerType);
-        roleIds.add(adminType);
-        Set<UserRole> userRoles = new HashSet<>();
-        for (String roleId : roleIds) {
-            UserRole userRole = userRoleRepository.findByRoleId(roleId);
-            if (Objects.nonNull(userRole)) {
-                userRoles.add(userRole);
-            }
-        }
+        Set<UserRole> userRoles = userRoleService.readUserRole(userType,sellerType,designerType,adminType);
 
         userProfile.setAccount(account);
         userProfile.setEmail(email);
@@ -386,7 +354,7 @@ public class AdminUsersService {
 
         List<Product> productList = productRepository.findAllByUserId(userId);
         for (Product product : productList) {
-            adminProductsService.deleteProduct(Integer.toString(product.getProductId()));
+            adminProductService.deleteProduct(Integer.toString(product.getProductId()));
         }
 
         String[] receivers = {userProfile.getEmail()};

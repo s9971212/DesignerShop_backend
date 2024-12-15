@@ -2,27 +2,20 @@ package com.designershop.admin.coupons;
 
 import com.designershop.admin.coupons.models.*;
 import com.designershop.entities.*;
-import com.designershop.enums.DiscountTypeEnum;
 import com.designershop.exceptions.CouponException;
-import com.designershop.exceptions.EmptyException;
 import com.designershop.repositories.*;
 import com.designershop.utils.DateTimeFormatUtil;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdminCouponIssuancesService {
+public class AdminCouponIssuanceService {
 
     private final UserProfileRepository userProfileRepository;
     private final CouponRepository couponRepository;

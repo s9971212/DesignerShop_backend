@@ -18,48 +18,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/carts")
+@RequestMapping("/api/cart")
 @RequiredArgsConstructor
-public class CartsController {
+public class CartController {
 
-    private final CartsService cartsService;
+    private final CartService cartService;
 
     @PostMapping
     public ResponseEntity<String> createCart() throws UserException, CartException {
-        Cart cart = cartsService.createCart();
+        Cart cart = cartService.createCart();
         return ResponseEntity.status(HttpStatus.CREATED).body(cart.getUserId());
     }
 
     @PostMapping("/{productId}")
     public ResponseEntity<String> createCartItem(@PathVariable String productId, @RequestBody @Valid CreateCartItemRequestModel request)
             throws EmptyException, UserException, ProductException, CartException {
-        String userId = cartsService.createCartItem(productId, request);
+        String userId = cartService.createCartItem(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<ReadCartItemResponseModel>> readAllCartItem() throws UserException, CartException {
-        List<ReadCartItemResponseModel> response = cartsService.readAllCartItem();
+        List<ReadCartItemResponseModel> response = cartService.readAllCartItem();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ReadCartItemResponseModel>> readCartItemByItemIds(@RequestBody @Valid ReadCartItemRequestModel request)
             throws EmptyException, UserException, CartException {
-        List<ReadCartItemResponseModel> response = cartsService.readCartItemByItemIds(request);
+        List<ReadCartItemResponseModel> response = cartService.readCartItemByItemIds(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{productId}")
     public ResponseEntity<String> updateCartItem(@PathVariable String productId, @RequestBody @Valid UpdateCartItemRequestModel request)
             throws EmptyException, UserException, ProductException, CartException {
-        String userId = cartsService.updateCartItem(productId, request);
+        String userId = cartService.updateCartItem(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCartItem(@PathVariable String id) throws UserException, CartException {
-        String userId = cartsService.deleteCartItem(id);
+        String userId = cartService.deleteCartItem(id);
         return ResponseEntity.status(HttpStatus.OK).body(userId);
     }
 }

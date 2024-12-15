@@ -17,41 +17,41 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
-public class UsersController {
+public class UserController {
 
-    private final UsersService usersService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
-        String account = usersService.createUser(request);
+        String account = userService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
-        ReadUserResponseModel response = usersService.readUser(id);
+        ReadUserResponseModel response = userService.readUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody @Valid UpdateUserRequestModel request)
             throws EmptyException, UserException {
-        String account = usersService.updateUser(id, request);
+        String account = userService.updateUser(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> updatePassword(@PathVariable String id, @RequestBody @Valid UpdatePasswordRequestModel request)
             throws EmptyException, UserException, MessagingException {
-        String account = usersService.updatePassword(id, request);
+        String account = userService.updatePassword(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) throws UserException, ProductException, MessagingException {
-        String account = usersService.deleteUser(id);
+        String account = userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/logout")).build();
     }
 }

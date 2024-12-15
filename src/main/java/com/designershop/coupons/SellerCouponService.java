@@ -1,19 +1,15 @@
 package com.designershop.coupons;
 
-import com.designershop.admin.coupons.AdminCouponsService;
+import com.designershop.admin.coupons.AdminCouponService;
 import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
-import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
 import com.designershop.admin.coupons.models.AdminUpdateCouponRequestModel;
-import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.coupons.models.CreateCouponRequestModel;
 import com.designershop.coupons.models.ReadCouponResponseModel;
 import com.designershop.coupons.models.UpdateCouponRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.CouponException;
 import com.designershop.exceptions.EmptyException;
-import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
-import com.designershop.products.models.ReadProductResponseModel;
 import com.designershop.repositories.*;
 import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;
@@ -27,10 +23,10 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class SellerCouponsService {
+public class SellerCouponService {
 
     private final HttpSession session;
-    private final AdminCouponsService adminCouponsService;
+    private final AdminCouponService adminCouponService;
     private final CouponRepository couponRepository;
     private final CouponUserProfileRepository couponUserProfileRepository;
     private final CouponProductCategoryRepository couponProductCategoryRepository;
@@ -49,7 +45,7 @@ public class SellerCouponsService {
         userIds.add(userProfile.getUserId());
         adminCreateCouponRequestModel.setUserIds(userIds);
 
-        return adminCouponsService.createCoupon(adminCreateCouponRequestModel);
+        return adminCouponService.createCoupon(adminCreateCouponRequestModel);
     }
 
     public List<ReadCouponResponseModel> readAllCoupon() throws UserException {
@@ -161,6 +157,6 @@ public class SellerCouponsService {
         userIds.add(userProfile.getUserId());
         adminUpdateCouponRequestModel.setUserIds(userIds);
 
-        return adminCouponsService.updateCoupon(couponId, adminUpdateCouponRequestModel);
+        return adminCouponService.updateCoupon(couponId, adminUpdateCouponRequestModel);
     }
 }

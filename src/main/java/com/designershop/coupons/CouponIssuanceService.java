@@ -1,15 +1,11 @@
 package com.designershop.coupons;
 
-import com.designershop.admin.coupons.AdminCouponIssuancesService;
+import com.designershop.admin.coupons.AdminCouponIssuanceService;
 import com.designershop.admin.coupons.models.AdminCreateCouponIssuanceRequestModel;
-import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
-import com.designershop.admin.coupons.models.AdminReadCouponIssuanceResponseModel;
 import com.designershop.coupons.models.ReadCouponIssuanceResponseModel;
-import com.designershop.entities.Coupon;
 import com.designershop.entities.CouponIssuance;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.CouponException;
-import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.UserException;
 import com.designershop.repositories.CouponIssuanceRepository;
 import com.designershop.repositories.CouponRepository;
@@ -23,16 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CouponIssuancesService {
+public class CouponIssuanceService {
 
     private final HttpSession session;
-    private final AdminCouponIssuancesService adminCouponIssuancesService;
+    private final AdminCouponIssuanceService adminCouponIssuanceService;
     private final UserProfileRepository userProfileRepository;
     private final CouponRepository couponRepository;
     private final CouponIssuanceRepository couponIssuanceRepository;
@@ -49,7 +43,7 @@ public class CouponIssuancesService {
         userIds.add(userProfile.getUserId());
         adminCreateCouponIssuanceRequestModel.setUserIds(userIds);
 
-        return adminCouponIssuancesService.createCouponIssuance(couponId,adminCreateCouponIssuanceRequestModel);
+        return adminCouponIssuanceService.createCouponIssuance(couponId,adminCreateCouponIssuanceRequestModel);
     }
 
     public List<ReadCouponIssuanceResponseModel> readAllCouponIssuance(String couponId) throws UserException{

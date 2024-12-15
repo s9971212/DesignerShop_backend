@@ -14,26 +14,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/coupon_issuance")
 @RequiredArgsConstructor
-public class AdminCouponIssuancesController {
+public class AdminCouponIssuanceController {
 
-    private final AdminCouponIssuancesService adminCouponIssuancesService;
+    private final AdminCouponIssuanceService adminCouponIssuanceService;
 
     @PostMapping("/{couponId}")
     public ResponseEntity<String> createCouponIssuance(@PathVariable String couponId, @RequestBody @Valid AdminCreateCouponIssuanceRequestModel request)
             throws EmptyException, CouponException {
-        String code = adminCouponIssuancesService.createCouponIssuance(couponId, request);
+        String code = adminCouponIssuanceService.createCouponIssuance(couponId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }
 
     @GetMapping("/all/{couponId}")
     public ResponseEntity<List<AdminReadCouponIssuanceResponseModel>> readAllCouponIssuance(@PathVariable String couponId) {
-        List<AdminReadCouponIssuanceResponseModel> response = adminCouponIssuancesService.readAllCouponIssuance(couponId);
+        List<AdminReadCouponIssuanceResponseModel> response = adminCouponIssuanceService.readAllCouponIssuance(couponId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AdminReadCouponIssuanceResponseModel> readCouponIssuance(@PathVariable String id) throws CouponException {
-        AdminReadCouponIssuanceResponseModel response = adminCouponIssuancesService.readCouponIssuance(id);
+        AdminReadCouponIssuanceResponseModel response = adminCouponIssuanceService.readCouponIssuance(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

@@ -1,6 +1,5 @@
 package com.designershop.orders;
 
-import com.designershop.carts.models.UpdateCartItemRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderDeliveryRequestModel;
@@ -8,7 +7,6 @@ import com.designershop.orders.models.ReadOrderDeliveryResponseModel;
 import com.designershop.orders.models.UpdateOrderDeliveryRequestModel;
 import com.designershop.repositories.*;
 import com.designershop.utils.AddressUtil;
-import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +22,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
-public class OrderDeliveriesService {
+public class OrderDeliveryService {
 
     private final HttpSession session;
     private final OrderDeliveryRepository orderDeliveryRepository;

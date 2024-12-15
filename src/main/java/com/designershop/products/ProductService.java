@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class ProductsService {
+public class ProductService {
 
     private final UserProfileRepository userProfileRepository;
     private final ProductRepository productRepository;

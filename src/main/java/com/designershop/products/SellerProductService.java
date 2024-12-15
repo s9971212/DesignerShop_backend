@@ -1,6 +1,6 @@
 package com.designershop.products;
 
-import com.designershop.admin.products.AdminProductsService;
+import com.designershop.admin.products.AdminProductService;
 import com.designershop.admin.products.models.AdminCreateProductRequestModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
 import com.designershop.entities.Product;
@@ -21,10 +21,10 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class SellerProductsService {
+public class SellerProductService {
 
     private final HttpSession session;
-    private final AdminProductsService adminProductsService;
+    private final AdminProductService adminProductService;
     private final ProductRepository productRepository;
 
     public String createProduct(CreateProductRequestModel request) throws EmptyException, UserException, ProductException {
@@ -36,7 +36,7 @@ public class SellerProductsService {
             throw new UserException("此帳戶未登入，請重新確認");
         }
 
-        return adminProductsService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
+        return adminProductService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
     }
 
     public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, UserException, ProductException {
@@ -44,12 +44,12 @@ public class SellerProductsService {
         BeanUtils.copyProperties(request, adminUpdateProductRequestModel);
         validateUserPermission(productId);
         adminUpdateProductRequestModel.setIsDeleted("N");
-        return adminProductsService.updateProduct(productId, adminUpdateProductRequestModel);
+        return adminProductService.updateProduct(productId, adminUpdateProductRequestModel);
     }
 
     public String deleteProduct(String productId) throws UserException, ProductException {
         validateUserPermission(productId);
-        return adminProductsService.deleteProduct(productId);
+        return adminProductService.deleteProduct(productId);
     }
 
     public void validateUserPermission(String productId) throws UserException, ProductException {

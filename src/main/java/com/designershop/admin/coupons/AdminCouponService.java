@@ -3,8 +3,6 @@ package com.designershop.admin.coupons;
 import com.designershop.admin.coupons.models.AdminCreateCouponRequestModel;
 import com.designershop.admin.coupons.models.AdminReadCouponResponseModel;
 import com.designershop.admin.coupons.models.AdminUpdateCouponRequestModel;
-import com.designershop.admin.products.models.AdminReadProductResponseModel;
-import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
 import com.designershop.entities.*;
 import com.designershop.enums.DiscountTypeEnum;
 import com.designershop.exceptions.*;
@@ -25,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdminCouponsService {
+public class AdminCouponService {
 
     private final HttpSession session;
     private final UserProfileRepository userProfileRepository;

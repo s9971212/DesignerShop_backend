@@ -31,10 +31,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/error/**", "/api/auth", "/api/users", "/api/password_forgot", "/api/products/**",
+                        .requestMatchers("/error/**", "/api/auth", "/api/user", "/api/password_forgot", "/api/product/**",
                                 "/api/product_likes").permitAll()
-                        .requestMatchers("/api/users/**", "/api/product_likes/**", "/api/carts/**", "/api/orders/**",
-                                "/api/order_deliveries/**","/api/coupon_issuance/**").hasAuthority("ROLE_USER")
+                        .requestMatchers("/api/user/**", "/api/product_likes/**", "/api/cart/**", "/api/order/**",
+                                "/api/order_delivery/**","/api/coupon_issuance/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/seller/**").hasAuthority("ROLE_SELLER")
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()

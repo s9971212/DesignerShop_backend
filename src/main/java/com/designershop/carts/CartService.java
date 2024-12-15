@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class CartsService {
+public class CartService {
 
     private final HttpSession session;
     private final ProductRepository productRepository;

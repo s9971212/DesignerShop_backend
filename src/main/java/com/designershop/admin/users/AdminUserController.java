@@ -17,47 +17,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("/admin/user")
 @RequiredArgsConstructor
-public class AdminUsersController {
+public class AdminUserController {
 
-    private final AdminUsersService adminUsersService;
+    private final AdminUserService adminUserService;
 
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody @Valid AdminCreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
-        String account = adminUsersService.createUser(request);
+        String account = adminUserService.createUser(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
     @GetMapping
     public ResponseEntity<List<AdminReadUserResponseModel>> readAllUser() {
-        List<AdminReadUserResponseModel> response = adminUsersService.readAllUser();
+        List<AdminReadUserResponseModel> response = adminUserService.readAllUser();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AdminReadUserResponseModel> readUser(@PathVariable String id) throws UserException {
-        AdminReadUserResponseModel response = adminUsersService.readUser(id);
+        AdminReadUserResponseModel response = adminUserService.readUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody @Valid AdminUpdateUserRequestModel request)
             throws EmptyException, UserException {
-        String account = adminUsersService.updateUser(id, request);
+        String account = adminUserService.updateUser(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<String> updatePassword(@PathVariable String id, @RequestBody @Valid AdminUpdatePasswordRequestModel request)
             throws EmptyException, UserException, MessagingException {
-        String account = adminUsersService.updatePassword(id, request);
+        String account = adminUserService.updatePassword(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) throws UserException, ProductException, MessagingException {
-        String account = adminUsersService.deleteUser(id);
+        String account = adminUserService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(account);
     }
 }

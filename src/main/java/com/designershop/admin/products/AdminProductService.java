@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AdminProductsService {
+public class AdminProductService {
 
     private final HttpSession session;
     private final UserProfileRepository userProfileRepository;
