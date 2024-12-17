@@ -12,7 +12,7 @@ import java.util.List;
 public class UpdateProductRequestModel {
 
     @NotBlank
-    private String category;
+    private String categoryId;
 
     @NotBlank
     private String brand;

@@ -7,7 +7,10 @@ import com.designershop.entities.*;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
 import com.designershop.exceptions.UserException;
+import com.designershop.products.ProductBrandService;
+import com.designershop.products.ProductCategoryService;
 import com.designershop.repositories.*;
+import com.designershop.users.UserRoleService;
 import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +32,15 @@ import java.util.stream.Collectors;
 public class AdminProductService {
 
     private final HttpSession session;
+    private final ProductCategoryService productCategoryService;
+    private final ProductBrandService productBrandService;
     private final UserProfileRepository userProfileRepository;
-    private final ProductCategoryRepository productCategoryRepository;
-    private final ProductBrandRepository productBrandRepository;
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public String createProduct(String userId, AdminCreateProductRequestModel request) throws EmptyException, ProductException {
-        String category = request.getCategory();
+        String categoryId = request.getCategoryId();
         String brand = request.getBrand();
         String productName = request.getName();
         String productDescription = request.getDescription();
@@ -46,7 +49,7 @@ public class AdminProductService {
         List<String> images = request.getImages();
         String termsCheckBox = request.getTermsCheckBox();
 
-        if (StringUtils.isBlank(userId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(categoryId) || StringUtils.isBlank(brand)
                 || StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
                 || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
@@ -65,17 +68,8 @@ public class AdminProductService {
             throw new ProductException("庫存數量只能有數字，請重新確認");
         }
 
-        ProductCategory productCategory = productCategoryRepository.findByCategory(category);
-        if (Objects.isNull(productCategory)) {
-            throw new ProductException("此商品類別不存在，請重新確認");
-        }
-
-        ProductBrand productBrand = productBrandRepository.findByBrandIgnoreCase(brand);
-        if (Objects.isNull(productBrand)) {
-            productBrand = new ProductBrand();
-            productBrand.setBrand(brand);
-            productBrandRepository.save(productBrand);
-        }
+        ProductCategory productCategory = productCategoryService.readProductCategory(categoryId);
+        ProductBrand productBrand = productBrandService.readProductBrand(brand);
 
         BigDecimal price = new BigDecimal(priceString);
         int stockQuantity = Integer.parseInt(stockQuantityString);
@@ -180,7 +174,7 @@ public class AdminProductService {
     @Transactional(rollbackFor = Exception.class)
     public String updateProduct(String productId, AdminUpdateProductRequestModel request)
             throws EmptyException, ProductException {
-        String category = request.getCategory();
+        String categoryId = request.getCategoryId();
         String brand = request.getBrand();
         String name = request.getName();
         String description = request.getDescription();
@@ -190,7 +184,7 @@ public class AdminProductService {
         List<String> images = request.getImages();
         String termsCheckBox = request.getTermsCheckBox();
 
-        if (StringUtils.isBlank(productId) || StringUtils.isBlank(category) || StringUtils.isBlank(brand)
+        if (StringUtils.isBlank(productId) || StringUtils.isBlank(categoryId) || StringUtils.isBlank(brand)
                 || StringUtils.isBlank(name) || StringUtils.isBlank(priceString)
                 || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString)
                 || StringUtils.isBlank(termsCheckBox)) {
@@ -215,17 +209,8 @@ public class AdminProductService {
             throw new ProductException("此商品不存在，請重新確認");
         }
 
-        ProductCategory productCategory = productCategoryRepository.findByCategory(category);
-        if (Objects.isNull(productCategory)) {
-            throw new ProductException("此商品類別不存在，請重新確認");
-        }
-
-        ProductBrand productBrand = productBrandRepository.findByBrandIgnoreCase(brand);
-        if (Objects.isNull(productBrand)) {
-            productBrand = new ProductBrand();
-            productBrand.setBrand(brand);
-            productBrandRepository.save(productBrand);
-        }
+        ProductCategory productCategory = productCategoryService.readProductCategory(categoryId);
+        ProductBrand productBrand = productBrandService.readProductBrand(brand);
 
         BigDecimal price = new BigDecimal(priceString);
         int priceCompare = product.getOriginalPrice().compareTo(price);
