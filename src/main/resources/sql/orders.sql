@@ -9,6 +9,7 @@ CREATE TABLE orders (
     full_address NVARCHAR(1024) NOT NULL,
     contact_phone NVARCHAR(20) NOT NULL,
     contact_name NVARCHAR(100) NOT NULL,
+    status ENUM('PENDING', 'PAID', 'FAILED', 'SHIPPED') DEFAULT 'PENDING' NOT NULL,
     user_id NVARCHAR(12) NOT NULL,
     delivery_id INT NOT NULL,
     FOREIGN KEY (delivery_id)

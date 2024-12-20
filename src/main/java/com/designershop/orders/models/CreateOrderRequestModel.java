@@ -13,4 +13,7 @@ public class CreateOrderRequestModel {
 
     @NotEmpty
     private List<String> itemIds;
+
+    @NotEmpty
+    private List<String> couponIds;
 }

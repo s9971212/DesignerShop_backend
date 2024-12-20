@@ -1,5 +1,7 @@
 package com.designershop.entities;
 
+import com.designershop.enums.DiscountTypeEnum;
+import com.designershop.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -57,6 +59,13 @@ public class Order {
      */
     @Column(name = "contact_name", nullable = false, length = 100)
     private String contactName;
+
+    /**
+     * 訂單狀態
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusEnum status = StatusEnum.PENDING;
 
     /**
      * 使用者ID，表示這個訂單屬於哪一位使用者

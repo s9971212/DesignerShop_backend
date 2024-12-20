@@ -3,6 +3,7 @@ package com.designershop.orders;
 import com.designershop.carts.CartService;
 import com.designershop.ecpay.EcpayService;
 import com.designershop.entities.*;
+import com.designershop.enums.DiscountTypeEnum;
 import com.designershop.exceptions.*;
 import com.designershop.orders.models.CreateOrderRequestModel;
 import com.designershop.orders.models.ReadOrderItemResponseModel;
@@ -18,9 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,13 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final CouponRepository couponRepository;
+    private final CouponUserProfileRepository couponUserProfileRepository;
+    private final CouponProductCategoryRepository couponProductCategoryRepository;
+    private final CouponProductBrandRepository couponProductBrandRepository;
+    private final CouponProductRepository couponProductRepository;
+    private final CouponIssuanceRepository couponIssuanceRepository;
+    private final CouponUsageRepository couponUsageRepository;
     private final OrderDeliveryRepository orderDeliveryRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -39,6 +48,7 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public String createOrder(String deliveryId, CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
         List<String> itemIds = request.getItemIds();
+        List<String> couponIds = request.getCouponIds();
 
         if (StringUtils.isBlank(deliveryId)) {
             throw new EmptyException("地址、聯絡電話與聯絡人姓名不得為空");
@@ -63,9 +73,8 @@ public class OrderService {
             throw new OrderException("此訂單配送不存在，請重新確認");
         }
 
-        Order order = orderRepository.findMaxOrderId();
-        String orderId = FormatUtil.orderIdGenerate(order);
-        BigDecimal totalPrice = new BigDecimal(0);
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        Map<Product, BigDecimal> productPriceMap = new HashMap<>();
         List<OrderItem> orderItemList = new ArrayList<>();
         List<String> productNames = new ArrayList<>();
         for (String itemId : itemIds) {
@@ -87,21 +96,98 @@ public class OrderService {
                 throw new ProductException("庫存數量不足，請重新確認");
             }
 
-            totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+            BigDecimal price = product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+            totalPrice = totalPrice.add(price);
 
             OrderItem orderItem = new OrderItem();
             orderItem.setPriceAtPurchase(product.getPrice());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setProductId(product.getProductId());
 
+            productPriceMap.putIfAbsent(product, price);
             orderItemList.add(orderItem);
             productNames.add(product.getName());
+        }
+
+        Order order = orderRepository.findMaxOrderId();
+        String orderId = FormatUtil.orderIdGenerate(order);
+        LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
+
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+        for (String couponId : couponIds) {
+            Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
+            if (Objects.isNull(coupon) || !coupon.isActive() || LocalDateTime.now().isBefore(coupon.getStartDate()) || LocalDateTime.now().isAfter(coupon.getEndDate())) {
+                throw new OrderException("此優惠券不存在，請重新確認");
+            }
+
+            List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(Integer.parseInt(couponId));
+            Set<String> userIds = couponUserProfileList.stream().map(CouponUserProfile -> CouponUserProfile.getId().getUserId()).collect(Collectors.toSet());
+            List<CouponProductCategory> couponProductCategoryList = couponProductCategoryRepository.findAllByCouponId(Integer.parseInt(couponId));
+            Set<Integer> categoryIds = couponProductCategoryList.stream().map(CouponProductCategory -> CouponProductCategory.getId().getCategoryId()).collect(Collectors.toSet());
+            List<CouponProductBrand> couponProductBrandList = couponProductBrandRepository.findAllByCouponId(Integer.parseInt(couponId));
+            Set<Integer> brandIds = couponProductBrandList.stream().map(CouponProductBrand -> CouponProductBrand.getId().getBrandId()).collect(Collectors.toSet());
+            List<CouponProduct> couponProductList = couponProductRepository.findAllByCouponId(Integer.parseInt(couponId));
+            Set<Integer> productIds = couponProductList.stream().map(CouponProduct -> CouponProduct.getId().getProductId()).collect(Collectors.toSet());
+
+            BigDecimal price = BigDecimal.ZERO;
+            for (Map.Entry<Product, BigDecimal> productEntry : productPriceMap.entrySet()) {
+                Product product = productEntry.getKey();
+
+                if ((!userIds.isEmpty() && !userIds.contains(product.getUserId())) ||
+                        (!categoryIds.isEmpty() && !categoryIds.contains(product.getProductCategory().getCategoryId())) ||
+                        (!brandIds.isEmpty() && !brandIds.contains(product.getProductBrand().getBrandId())) ||
+                        (!productIds.isEmpty() && !productIds.contains(product.getProductId()))) {
+                    continue;
+                }
+
+                price = price.add(productEntry.getValue());
+            }
+
+            if (Objects.nonNull(coupon.getMinimumOrderPrice()) && price.compareTo(coupon.getMinimumOrderPrice()) < 0) {
+                throw new OrderException("訂單金額未達優惠券使用的最低訂單金額");
+            }
+
+            BigDecimal discount = BigDecimal.ZERO;
+            if (coupon.getDiscountType().equals(DiscountTypeEnum.PERCENTAGE)) {
+                discount = price.multiply(coupon.getDiscountValue().divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+            } else if (coupon.getDiscountType().equals(DiscountTypeEnum.FIXED)) {
+                discount = coupon.getDiscountValue();
+            }
+
+            if (discount.compareTo(price) > 0) {
+                discount = price;
+            }
+
+            totalDiscount = totalDiscount.add(discount);
+
+            List<CouponIssuance> couponIssuanceList = couponIssuanceRepository.findByUserIdAndCouponId(userProfile.getUserId(), coupon.getCouponId());
+            CouponIssuance unusedCoupon = couponIssuanceList.stream().filter(couponIssuance -> !couponIssuance.isUsed()).findFirst().orElse(null);
+            if (Objects.isNull(unusedCoupon)) {
+                throw new OrderException("此優惠券已被使用，請重新確認");
+            }
+
+            unusedCoupon.setUsed(true);
+            unusedCoupon.setUsedDate(currentDateTime);
+            couponIssuanceRepository.save(unusedCoupon);
+
+            CouponUsage couponUsage = new CouponUsage();
+            couponUsage.setUsedDate(currentDateTime);
+            couponUsage.setUserId(userProfile.getUserId());
+            couponUsage.setOrderId(orderId);
+            couponUsage.setCoupon(coupon);
+
+            couponUsageRepository.save(couponUsage);
+        }
+
+        totalPrice = totalPrice.subtract(totalDiscount);
+        if (totalPrice.compareTo(BigDecimal.ZERO) < 0) {
+            totalPrice = BigDecimal.ZERO;
         }
 
         Order orderCreate = new Order();
         orderCreate.setOrderId(orderId);
         orderCreate.setTotalPrice(totalPrice);
-        orderCreate.setCreatedDate(DateTimeFormatUtil.currentDateTime());
+        orderCreate.setCreatedDate(currentDateTime);
         orderCreate.setFullAddress(orderDelivery.getFullAddress());
         orderCreate.setContactPhone(orderDelivery.getContactPhone());
         orderCreate.setContactName(orderDelivery.getContactName());
