@@ -20,7 +20,7 @@ public class AdminCouponIssuanceController {
 
     @PostMapping("/{couponId}")
     public ResponseEntity<String> createCouponIssuance(@PathVariable String couponId, @RequestBody @Valid AdminCreateCouponIssuanceRequestModel request)
-            throws EmptyException, CouponException {
+            throws CouponException {
         String code = adminCouponIssuanceService.createCouponIssuance(couponId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }

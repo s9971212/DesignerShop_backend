@@ -27,40 +27,40 @@ public class SellerProductService {
     private final AdminProductService adminProductService;
     private final ProductRepository productRepository;
 
-    public String createProduct(CreateProductRequestModel request) throws EmptyException, UserException, ProductException {
+    public String createProduct(CreateProductRequestModel request) throws EmptyException,  ProductException {
         AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
         BeanUtils.copyProperties(request, adminCreateProductRequestModel);
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new ProductException("此帳戶未登入，請重新確認");
         }
 
         return adminProductService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
     }
 
-    public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, UserException, ProductException {
+    public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, ProductException {
         AdminUpdateProductRequestModel adminUpdateProductRequestModel = new AdminUpdateProductRequestModel();
         BeanUtils.copyProperties(request, adminUpdateProductRequestModel);
-        validateUserPermission(productId);
+        validateProductPermission(productId);
         adminUpdateProductRequestModel.setIsDeleted("N");
         return adminProductService.updateProduct(productId, adminUpdateProductRequestModel);
     }
 
-    public String deleteProduct(String productId) throws UserException, ProductException {
-        validateUserPermission(productId);
+    public String deleteProduct(String productId) throws ProductException {
+        validateProductPermission(productId);
         return adminProductService.deleteProduct(productId);
     }
 
-    public void validateUserPermission(String productId) throws UserException, ProductException {
+    public void validateProductPermission(String productId) throws ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new ProductException("此帳戶未登入，請重新確認");
         }
 
         Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (!StringUtils.equals(userProfile.getUserId(), product.getUserId())) {
-            throw new UserException("此帳戶不存在，請重新確認");
+            throw new ProductException("此帳戶不存在，請重新確認");
         }
 
         if (product.isDeleted()) {

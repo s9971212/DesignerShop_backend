@@ -46,7 +46,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public String createOrder(String deliveryId, CreateOrderRequestModel request) throws EmptyException, UserException, ProductException, CartException, OrderException {
+    public String createOrder(String deliveryId, CreateOrderRequestModel request) throws EmptyException, CartException, OrderException {
         List<String> itemIds = request.getItemIds();
         List<String> couponIds = request.getCouponIds();
 
@@ -60,12 +60,12 @@ public class OrderService {
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());
         if (Objects.isNull(cart)) {
-            throw new CartException("此購物車不存在，請重新確認");
+            throw new OrderException("此購物車不存在，請重新確認");
         }
 
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
@@ -80,20 +80,20 @@ public class OrderService {
         for (String itemId : itemIds) {
             CartItem cartItem = cartItemRepository.findByItemIdAndCartId(Integer.parseInt(itemId), cart.getCartId());
             if (Objects.isNull(cartItem)) {
-                throw new CartException("此商品不存在購物車內，請重新確認");
+                throw new OrderException("此商品不存在購物車內，請重新確認");
             }
 
             Product product = productRepository.findByProductId(cartItem.getProductId());
             if (Objects.isNull(product)) {
-                throw new ProductException("此商品不存在，請重新確認");
+                throw new OrderException("此商品不存在，請重新確認");
             }
 
             if (product.isDeleted()) {
-                throw new ProductException("此商品已被刪除，請重新確認");
+                throw new OrderException("此商品已被刪除，請重新確認");
             }
 
             if (product.getStockQuantity() < cartItem.getQuantity()) {
-                throw new ProductException("庫存數量不足，請重新確認");
+                throw new OrderException("庫存數量不足，請重新確認");
             }
 
             BigDecimal price = product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
@@ -210,10 +210,10 @@ public class OrderService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public List<ReadOrderResponseModel> readAllOrder() throws UserException {
+    public List<ReadOrderResponseModel> readAllOrder() throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         List<ReadOrderResponseModel> response = new ArrayList<>();

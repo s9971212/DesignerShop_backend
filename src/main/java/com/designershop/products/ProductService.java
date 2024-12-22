@@ -44,16 +44,16 @@ public class ProductService {
     //		return response;
     //	}
 
-    public List<ReadProductResponseModel> readAllProductByUser(String userId) throws UserException {
+    public List<ReadProductResponseModel> readAllProductByUser(String userId) throws ProductException {
         List<ReadProductResponseModel> response = new ArrayList<>();
 
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶不存在，請重新確認");
+            throw new ProductException("此帳戶不存在，請重新確認");
         }
 
         if (userProfile.isDeleted()) {
-            throw new UserException("此帳戶已被刪除，請重新確認");
+            throw new ProductException("此帳戶已被刪除，請重新確認");
         }
 
         List<Product> productList = productRepository.findAllByUserId(userId);

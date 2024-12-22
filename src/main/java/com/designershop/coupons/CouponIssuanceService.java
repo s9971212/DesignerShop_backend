@@ -27,15 +27,13 @@ public class CouponIssuanceService {
 
     private final HttpSession session;
     private final AdminCouponIssuanceService adminCouponIssuanceService;
-    private final UserProfileRepository userProfileRepository;
-    private final CouponRepository couponRepository;
     private final CouponIssuanceRepository couponIssuanceRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public String createCouponIssuance(String couponId) throws UserException, CouponException {
+    public String createCouponIssuance(String couponId) throws  CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         AdminCreateCouponIssuanceRequestModel adminCreateCouponIssuanceRequestModel = new AdminCreateCouponIssuanceRequestModel();
@@ -46,10 +44,10 @@ public class CouponIssuanceService {
         return adminCouponIssuanceService.createCouponIssuance(couponId,adminCreateCouponIssuanceRequestModel);
     }
 
-    public List<ReadCouponIssuanceResponseModel> readAllCouponIssuance(String couponId) throws UserException{
+    public List<ReadCouponIssuanceResponseModel> readAllCouponIssuance(String couponId) throws CouponException{
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         List<ReadCouponIssuanceResponseModel> response = new ArrayList<>();
@@ -70,10 +68,10 @@ public class CouponIssuanceService {
         return response;
     }
 
-    public ReadCouponIssuanceResponseModel readCouponIssuance(String issuanceId) throws UserException,CouponException {
+    public ReadCouponIssuanceResponseModel readCouponIssuance(String issuanceId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         CouponIssuance couponIssuance = couponIssuanceRepository.findByIssuanceIdAndUserId(Integer.parseInt(issuanceId),userProfile.getUserId());

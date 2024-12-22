@@ -40,10 +40,10 @@ public class ProductLikesService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String updateProductLikes(String productId) throws UserException, ProductException {
+    public String updateProductLikes(String productId) throws  ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new ProductException("此帳戶未登入，請重新確認");
         }
 
         Product product = validateProductPermission(productId);

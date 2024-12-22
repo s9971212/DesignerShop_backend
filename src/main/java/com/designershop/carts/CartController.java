@@ -25,40 +25,40 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
-    public ResponseEntity<String> createCart() throws UserException, CartException {
+    public ResponseEntity<String> createCart() throws CartException {
         Cart cart = cartService.createCart();
         return ResponseEntity.status(HttpStatus.CREATED).body(cart.getUserId());
     }
 
     @PostMapping("/{productId}")
     public ResponseEntity<String> createCartItem(@PathVariable String productId, @RequestBody @Valid CreateCartItemRequestModel request)
-            throws EmptyException, UserException, ProductException, CartException {
+            throws EmptyException, CartException {
         String userId = cartService.createCartItem(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReadCartItemResponseModel>> readAllCartItem() throws UserException, CartException {
+    public ResponseEntity<List<ReadCartItemResponseModel>> readAllCartItem() throws CartException {
         List<ReadCartItemResponseModel> response = cartService.readAllCartItem();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
     public ResponseEntity<List<ReadCartItemResponseModel>> readCartItemByItemIds(@RequestBody @Valid ReadCartItemRequestModel request)
-            throws EmptyException, UserException, CartException {
+            throws EmptyException, CartException {
         List<ReadCartItemResponseModel> response = cartService.readCartItemByItemIds(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{productId}")
     public ResponseEntity<String> updateCartItem(@PathVariable String productId, @RequestBody @Valid UpdateCartItemRequestModel request)
-            throws EmptyException, UserException, ProductException, CartException {
+            throws EmptyException, CartException {
         String userId = cartService.updateCartItem(productId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCartItem(@PathVariable String id) throws UserException, CartException {
+    public ResponseEntity<String> deleteCartItem(@PathVariable String id) throws CartException {
         String userId = cartService.deleteCartItem(id);
         return ResponseEntity.status(HttpStatus.OK).body(userId);
     }

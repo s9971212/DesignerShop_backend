@@ -20,13 +20,13 @@ public class OrderController {
 
     @PostMapping("/{deliveryId}")
     public ResponseEntity<String> createOrder(@PathVariable String deliveryId, @RequestBody @Valid CreateOrderRequestModel request)
-            throws EmptyException, UserException, ProductException, CartException, OrderException {
+            throws EmptyException, CartException, OrderException {
         String form = orderService.createOrder(deliveryId,request);
         return ResponseEntity.status(HttpStatus.CREATED).body(form);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReadOrderResponseModel>> readAllOrder() throws UserException {
+    public ResponseEntity<List<ReadOrderResponseModel>> readAllOrder() throws OrderException {
         List<ReadOrderResponseModel> response = orderService.readAllOrder();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

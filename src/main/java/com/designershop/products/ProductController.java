@@ -25,7 +25,7 @@ public class ProductController {
     //	}
 
     @GetMapping("/all/{userId}")
-    public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws UserException {
+    public ResponseEntity<List<ReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws ProductException {
         List<ReadProductResponseModel> response = productService.readAllProductByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -29,7 +29,7 @@ public class AdminProductController {
     }
 
     @GetMapping("/all/{userId}")
-    public ResponseEntity<List<AdminReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws UserException {
+    public ResponseEntity<List<AdminReadProductResponseModel>> readAllProductByUser(@PathVariable String userId) throws ProductException {
         List<AdminReadProductResponseModel> response = adminProductService.readAllProductByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

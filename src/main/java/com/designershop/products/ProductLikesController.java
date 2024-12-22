@@ -21,7 +21,7 @@ public class ProductLikesController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<String> updateProductLikes(@PathVariable String productId) throws UserException, ProductException {
+    public ResponseEntity<String> updateProductLikes(@PathVariable String productId) throws ProductException {
         String productName = productLikesService.updateProductLikes(productId);
         return ResponseEntity.status(HttpStatus.CREATED).body(productName);
     }

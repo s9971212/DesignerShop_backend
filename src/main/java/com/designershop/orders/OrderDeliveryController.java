@@ -21,40 +21,40 @@ public class OrderDeliveryController {
 
     @PostMapping
     public ResponseEntity<String> createOrderDelivery(@RequestBody @Valid CreateOrderDeliveryRequestModel request)
-            throws EmptyException, UserException, OrderException {
+            throws EmptyException, OrderException {
         String address = orderDeliveryService.createOrderDelivery(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(address);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ReadOrderDeliveryResponseModel>> readAllOrderDelivery() throws UserException {
+    public ResponseEntity<List<ReadOrderDeliveryResponseModel>> readAllOrderDelivery() throws OrderException {
         List<ReadOrderDeliveryResponseModel> response = orderDeliveryService.readAllOrderDelivery();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDelivery(@PathVariable String id)
-            throws UserException, OrderException {
+            throws  OrderException {
         ReadOrderDeliveryResponseModel response = orderDeliveryService.readOrderDelivery(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
     public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDeliveryByIsDefault()
-            throws UserException, OrderException {
+            throws  OrderException {
         ReadOrderDeliveryResponseModel response = orderDeliveryService.readOrderDeliveryByIsDefault();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateOrderDelivery(@PathVariable String id, @RequestBody @Valid UpdateOrderDeliveryRequestModel request)
-            throws EmptyException, UserException, OrderException {
+            throws EmptyException, OrderException {
         String address = orderDeliveryService.updateOrderDelivery(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(address);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrderDelivery(@PathVariable String id) throws UserException, OrderException {
+    public ResponseEntity<String> deleteOrderDelivery(@PathVariable String id) throws  OrderException {
         String userId = orderDeliveryService.deleteOrderDelivery(id);
         return ResponseEntity.status(HttpStatus.OK).body(userId);
     }

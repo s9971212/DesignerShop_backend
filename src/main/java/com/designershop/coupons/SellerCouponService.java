@@ -33,10 +33,10 @@ public class SellerCouponService {
     private final CouponProductBrandRepository couponProductBrandRepository;
     private final CouponProductRepository couponProductRepository;
 
-    public String createCoupon(CreateCouponRequestModel request) throws EmptyException, UserException, CouponException {
+    public String createCoupon(CreateCouponRequestModel request) throws EmptyException, CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         AdminCreateCouponRequestModel adminCreateCouponRequestModel = new AdminCreateCouponRequestModel();
@@ -48,12 +48,12 @@ public class SellerCouponService {
         return adminCouponService.createCoupon(adminCreateCouponRequestModel);
     }
 
-    public List<ReadCouponResponseModel> readAllCoupon() throws UserException {
+    public List<ReadCouponResponseModel> readAllCoupon() throws CouponException {
         List<ReadCouponResponseModel> response = new ArrayList<>();
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByUserId(userProfile.getUserId());
@@ -97,10 +97,10 @@ public class SellerCouponService {
         return response;
     }
 
-    public ReadCouponResponseModel readCoupon(String couponId) throws UserException, CouponException {
+    public ReadCouponResponseModel readCoupon(String couponId) throws  CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         CouponUserProfile couponUserProfile = couponUserProfileRepository.findByCouponIdAndUserId(Integer.parseInt(couponId), userProfile.getUserId());
@@ -145,10 +145,10 @@ public class SellerCouponService {
         return response;
     }
 
-    public String updateCoupon(String couponId, UpdateCouponRequestModel request) throws EmptyException, UserException, CouponException {
+    public String updateCoupon(String couponId, UpdateCouponRequestModel request) throws EmptyException,  CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new CouponException("此帳戶未登入，請重新確認");
         }
 
         AdminUpdateCouponRequestModel adminUpdateCouponRequestModel = new AdminUpdateCouponRequestModel();

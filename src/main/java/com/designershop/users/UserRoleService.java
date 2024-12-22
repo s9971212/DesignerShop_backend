@@ -15,7 +15,7 @@ public class UserRoleService {
 
     private final UserRoleRepository userRoleRepository;
 
-    public Set<UserRole> readUserRole(String userType, String sellerType, String designerType, String adminType) throws UserException {
+    public Set<UserRole> readUserRole(String userType, String sellerType, String designerType, String adminType) {
         Set<String> roleIds = new HashSet<>();
         roleIds.add(userType);
         roleIds.add(sellerType);

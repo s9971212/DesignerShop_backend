@@ -28,7 +28,7 @@ public class OrderDeliveryService {
     private final OrderDeliveryRepository orderDeliveryRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public String createOrderDelivery(CreateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
+    public String createOrderDelivery(CreateOrderDeliveryRequestModel request) throws EmptyException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
         String city = request.getCity();
@@ -50,7 +50,7 @@ public class OrderDeliveryService {
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
@@ -85,10 +85,10 @@ public class OrderDeliveryService {
         return fullAddress;
     }
 
-    public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws UserException {
+    public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         List<ReadOrderDeliveryResponseModel> response = new ArrayList<>();
@@ -106,10 +106,10 @@ public class OrderDeliveryService {
         return response;
     }
 
-    public ReadOrderDeliveryResponseModel readOrderDelivery(String deliveryId) throws UserException, OrderException {
+    public ReadOrderDeliveryResponseModel readOrderDelivery(String deliveryId) throws  OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
@@ -125,10 +125,10 @@ public class OrderDeliveryService {
         return response;
     }
 
-    public ReadOrderDeliveryResponseModel readOrderDeliveryByIsDefault() throws UserException, OrderException {
+    public ReadOrderDeliveryResponseModel readOrderDeliveryByIsDefault() throws  OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         OrderDelivery orderDelivery = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
@@ -145,7 +145,7 @@ public class OrderDeliveryService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException, UserException, OrderException {
+    public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException,  OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
         String city = request.getCity();
@@ -167,7 +167,7 @@ public class OrderDeliveryService {
 
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
@@ -206,10 +206,10 @@ public class OrderDeliveryService {
         return fullAddress;
     }
 
-    public String deleteOrderDelivery(String deliveryId) throws UserException, OrderException {
+    public String deleteOrderDelivery(String deliveryId) throws  OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
+            throw new OrderException("此帳戶未登入，請重新確認");
         }
 
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));

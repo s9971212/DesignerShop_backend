@@ -22,26 +22,26 @@ public class SellerCouponController {
     private final SellerCouponService sellerCouponService;
 
     @PostMapping
-    public ResponseEntity<String> createCoupon(@RequestBody @Valid CreateCouponRequestModel request) throws EmptyException, UserException,CouponException {
+    public ResponseEntity<String> createCoupon(@RequestBody @Valid CreateCouponRequestModel request) throws EmptyException, CouponException {
         String code = sellerCouponService.createCoupon(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadCouponResponseModel>> readAllCoupon() throws UserException{
+    public ResponseEntity<List<ReadCouponResponseModel>> readAllCoupon() throws CouponException{
         List<ReadCouponResponseModel> response = sellerCouponService.readAllCoupon();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReadCouponResponseModel> readCoupon(@PathVariable String id) throws UserException,CouponException {
+    public ResponseEntity<ReadCouponResponseModel> readCoupon(@PathVariable String id) throws CouponException {
         ReadCouponResponseModel response = sellerCouponService.readCoupon(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCoupon(@PathVariable String id, @RequestBody @Valid UpdateCouponRequestModel request)
-            throws EmptyException,UserException, CouponException {
+            throws EmptyException, CouponException {
         String code = sellerCouponService.updateCoupon(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }

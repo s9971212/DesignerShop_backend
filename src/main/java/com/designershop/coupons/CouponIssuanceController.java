@@ -19,19 +19,19 @@ public class CouponIssuanceController {
 
     @PostMapping("/{couponId}")
     public ResponseEntity<String> createCouponIssuance(@PathVariable String couponId)
-            throws UserException, CouponException {
+            throws CouponException {
         String code = couponIssuanceService.createCouponIssuance(couponId);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }
 
     @GetMapping("/all/{couponId}")
-    public ResponseEntity<List<ReadCouponIssuanceResponseModel>> readAllCouponIssuance(@PathVariable String couponId) throws UserException {
+    public ResponseEntity<List<ReadCouponIssuanceResponseModel>> readAllCouponIssuance(@PathVariable String couponId) throws CouponException {
         List<ReadCouponIssuanceResponseModel> response = couponIssuanceService.readAllCouponIssuance(couponId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReadCouponIssuanceResponseModel> readCouponIssuance(@PathVariable String id) throws UserException,CouponException {
+    public ResponseEntity<ReadCouponIssuanceResponseModel> readCouponIssuance(@PathVariable String id) throws CouponException {
         ReadCouponIssuanceResponseModel response = couponIssuanceService.readCouponIssuance(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
