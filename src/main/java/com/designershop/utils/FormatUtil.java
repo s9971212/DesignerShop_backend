@@ -8,6 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 public final class FormatUtil {
 
     public static String userIdGenerate(UserProfile userProfile) throws UserException {

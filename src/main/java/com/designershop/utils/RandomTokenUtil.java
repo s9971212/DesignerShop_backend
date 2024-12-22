@@ -2,7 +2,12 @@ package com.designershop.utils;
 
 import java.security.SecureRandom;
 
-public class RandomTokenUtil {
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
+public final class RandomTokenUtil {
 
     public static String randomTokenGenerate(int length) {
         SecureRandom random = new SecureRandom();

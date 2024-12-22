@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor

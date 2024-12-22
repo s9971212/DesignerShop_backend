@@ -29,6 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class AdminUserService {

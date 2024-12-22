@@ -7,6 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/product_likes")
 @RequiredArgsConstructor

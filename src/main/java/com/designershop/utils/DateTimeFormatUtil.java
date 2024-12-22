@@ -4,6 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 public final class DateTimeFormatUtil {
 
     public static final DateTimeFormatter SIMPLE_YEAR_MONTH = DateTimeFormatter.ofPattern("yyyyMM");

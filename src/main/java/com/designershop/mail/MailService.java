@@ -11,6 +11,11 @@ import org.thymeleaf.context.Context;
 
 import java.util.Map;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class MailService {

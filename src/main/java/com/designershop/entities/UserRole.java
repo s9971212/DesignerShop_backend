@@ -9,6 +9,11 @@ import lombok.Setter;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @Entity
 @Getter
 @Setter

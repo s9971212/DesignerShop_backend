@@ -11,6 +11,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 public final class AddressUtil {
 
     public static List<Map<String, Object>> loadDistrictsFromYaml() {

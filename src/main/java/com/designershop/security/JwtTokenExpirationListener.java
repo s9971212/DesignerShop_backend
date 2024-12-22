@@ -14,6 +14,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Objects;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenExpirationListener {

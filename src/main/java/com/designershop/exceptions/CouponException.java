@@ -4,6 +4,11 @@ import com.designershop.enums.ErrorSourceEnum;
 import lombok.Getter;
 import org.apache.logging.log4j.Level;
 
+/**
+ * @author Ivan Wang
+ * @date 2024/12/22
+ * @version 1.0
+ */
 @Getter
 public class CouponException extends Exception implements IBaseException {
 
