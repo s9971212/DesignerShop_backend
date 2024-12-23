@@ -1,6 +1,5 @@
 package com.designershop.entities;
 
-import com.designershop.enums.DiscountTypeEnum;
 import com.designershop.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

@@ -1,8 +1,6 @@
 package com.designershop.repositories;
 
-import com.designershop.entities.Cart;
 import com.designershop.entities.Order;
-import com.designershop.entities.OrderDelivery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

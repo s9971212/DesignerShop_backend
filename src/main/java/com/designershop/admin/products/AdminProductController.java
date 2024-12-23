@@ -5,7 +5,6 @@ import com.designershop.admin.products.models.AdminReadProductResponseModel;
 import com.designershop.admin.products.models.AdminUpdateProductRequestModel;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

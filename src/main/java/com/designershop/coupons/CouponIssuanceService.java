@@ -6,10 +6,7 @@ import com.designershop.coupons.models.ReadCouponIssuanceResponseModel;
 import com.designershop.entities.CouponIssuance;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.CouponException;
-import com.designershop.exceptions.UserException;
 import com.designershop.repositories.CouponIssuanceRepository;
-import com.designershop.repositories.CouponRepository;
-import com.designershop.repositories.UserProfileRepository;
 import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +32,7 @@ public class CouponIssuanceService {
     private final CouponIssuanceRepository couponIssuanceRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public String createCouponIssuance(String couponId) throws  CouponException {
+    public String createCouponIssuance(String couponId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CouponException("此帳戶未登入，請重新確認");

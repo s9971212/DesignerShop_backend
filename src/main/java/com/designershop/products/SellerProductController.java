@@ -2,7 +2,6 @@ package com.designershop.products;
 
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
 import com.designershop.products.models.CreateProductRequestModel;
 import com.designershop.products.models.UpdateProductRequestModel;
 import jakarta.validation.Valid;
@@ -24,7 +23,7 @@ public class SellerProductController {
     private final SellerProductService sellerProductService;
 
     @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody @Valid CreateProductRequestModel request) throws EmptyException,  ProductException {
+    public ResponseEntity<String> createProduct(@RequestBody @Valid CreateProductRequestModel request) throws EmptyException, ProductException {
         String productName = sellerProductService.createProduct(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(productName);
     }

@@ -1,18 +1,12 @@
 package com.designershop.products;
 
-import com.designershop.entities.*;
+import com.designershop.entities.ProductCategory;
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
-import com.designershop.products.models.ReadProductResponseModel;
 import com.designershop.repositories.ProductCategoryRepository;
-import com.designershop.repositories.ProductRepository;
-import com.designershop.repositories.UserProfileRepository;
-import com.designershop.utils.DateTimeFormatUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Objects;
 
 /**
  * @author Ivan Wang

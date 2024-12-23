@@ -4,7 +4,6 @@ import com.designershop.entities.Product;
 import com.designershop.entities.ProductImage;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
 import com.designershop.products.models.ReadProductResponseModel;
 import com.designershop.repositories.ProductRepository;
 import com.designershop.repositories.UserProfileRepository;

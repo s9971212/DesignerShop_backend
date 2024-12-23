@@ -1,7 +1,6 @@
 package com.designershop.products;
 
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

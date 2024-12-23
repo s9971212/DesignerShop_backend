@@ -5,7 +5,6 @@ import com.designershop.entities.ProductLikes;
 import com.designershop.entities.ProductLikesId;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
 import com.designershop.repositories.ProductLikesRepository;
 import com.designershop.repositories.ProductRepository;
 import jakarta.servlet.http.HttpSession;

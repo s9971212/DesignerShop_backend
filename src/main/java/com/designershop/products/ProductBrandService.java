@@ -1,10 +1,7 @@
 package com.designershop.products;
 
 import com.designershop.entities.ProductBrand;
-import com.designershop.entities.ProductCategory;
-import com.designershop.exceptions.ProductException;
 import com.designershop.repositories.ProductBrandRepository;
-import com.designershop.repositories.ProductCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

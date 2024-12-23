@@ -1,14 +1,12 @@
 package com.designershop.carts;
 
+import com.designershop.carts.models.CreateCartItemRequestModel;
 import com.designershop.carts.models.ReadCartItemRequestModel;
+import com.designershop.carts.models.ReadCartItemResponseModel;
+import com.designershop.carts.models.UpdateCartItemRequestModel;
 import com.designershop.entities.Cart;
 import com.designershop.exceptions.CartException;
 import com.designershop.exceptions.EmptyException;
-import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
-import com.designershop.carts.models.CreateCartItemRequestModel;
-import com.designershop.carts.models.ReadCartItemResponseModel;
-import com.designershop.carts.models.UpdateCartItemRequestModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

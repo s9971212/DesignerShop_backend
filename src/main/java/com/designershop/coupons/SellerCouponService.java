@@ -9,7 +9,6 @@ import com.designershop.coupons.models.UpdateCouponRequestModel;
 import com.designershop.entities.*;
 import com.designershop.exceptions.CouponException;
 import com.designershop.exceptions.EmptyException;
-import com.designershop.exceptions.UserException;
 import com.designershop.repositories.*;
 import com.designershop.utils.DateTimeFormatUtil;
 import jakarta.servlet.http.HttpSession;

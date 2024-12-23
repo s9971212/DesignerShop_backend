@@ -2,7 +2,6 @@ package com.designershop.coupons;
 
 import com.designershop.coupons.models.ReadCouponIssuanceResponseModel;
 import com.designershop.exceptions.CouponException;
-import com.designershop.exceptions.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

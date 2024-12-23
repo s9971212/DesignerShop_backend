@@ -1,8 +1,8 @@
 package com.designershop.admin.coupons;
 
-import com.designershop.admin.coupons.models.*;
+import com.designershop.admin.coupons.models.AdminCreateCouponIssuanceRequestModel;
+import com.designershop.admin.coupons.models.AdminReadCouponIssuanceResponseModel;
 import com.designershop.exceptions.CouponException;
-import com.designershop.exceptions.EmptyException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

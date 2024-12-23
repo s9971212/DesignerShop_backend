@@ -7,7 +7,6 @@ import com.designershop.entities.Product;
 import com.designershop.entities.UserProfile;
 import com.designershop.exceptions.EmptyException;
 import com.designershop.exceptions.ProductException;
-import com.designershop.exceptions.UserException;
 import com.designershop.products.models.CreateProductRequestModel;
 import com.designershop.products.models.UpdateProductRequestModel;
 import com.designershop.repositories.ProductRepository;
@@ -32,7 +31,7 @@ public class SellerProductService {
     private final AdminProductService adminProductService;
     private final ProductRepository productRepository;
 
-    public String createProduct(CreateProductRequestModel request) throws EmptyException,  ProductException {
+    public String createProduct(CreateProductRequestModel request) throws EmptyException, ProductException {
         AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
         BeanUtils.copyProperties(request, adminCreateProductRequestModel);
 

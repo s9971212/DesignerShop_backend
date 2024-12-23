@@ -5,7 +5,6 @@ import com.designershop.coupons.models.ReadCouponResponseModel;
 import com.designershop.coupons.models.UpdateCouponRequestModel;
 import com.designershop.exceptions.CouponException;
 import com.designershop.exceptions.EmptyException;
-import com.designershop.exceptions.UserException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

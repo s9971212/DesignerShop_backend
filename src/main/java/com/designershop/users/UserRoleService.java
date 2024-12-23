@@ -1,7 +1,6 @@
 package com.designershop.users;
 
 import com.designershop.entities.UserRole;
-import com.designershop.exceptions.UserException;
 import com.designershop.repositories.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
