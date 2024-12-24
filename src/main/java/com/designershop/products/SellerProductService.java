@@ -17,8 +17,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 /**
  * @author Ivan Wang
  * @version 1.0
@@ -35,10 +33,6 @@ public class SellerProductService {
     @Transactional(rollbackFor = Exception.class)
     public String createProduct(CreateProductRequestModel request) throws EmptyException, ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new ProductException("此帳戶未登入，請重新確認");
-        }
-
         AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
         BeanUtils.copyProperties(request, adminCreateProductRequestModel);
         return adminProductService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
@@ -60,12 +54,9 @@ public class SellerProductService {
 
     public void validateProductPermission(String productId) throws ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new ProductException("此帳戶未登入，請重新確認");
-        }
         Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (!StringUtils.equals(userProfile.getUserId(), product.getUserId())) {
-            throw new ProductException("此帳戶不存在，請重新確認");
+            throw new ProductException("此商品不存在，請重新確認");
         }
         if (product.isDeleted()) {
             throw new ProductException("此商品已被刪除，請重新確認");

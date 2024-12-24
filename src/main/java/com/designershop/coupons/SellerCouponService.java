@@ -40,10 +40,6 @@ public class SellerCouponService {
 
     public String createCoupon(CreateCouponRequestModel request) throws EmptyException, CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
-
         AdminCreateCouponRequestModel adminCreateCouponRequestModel = new AdminCreateCouponRequestModel();
         BeanUtils.copyProperties(request, adminCreateCouponRequestModel);
         List<String> userIds = new ArrayList<>();
@@ -54,13 +50,8 @@ public class SellerCouponService {
 
     @Transactional(rollbackFor = Exception.class)
     public List<ReadCouponResponseModel> readAllCoupon() throws CouponException {
-        List<ReadCouponResponseModel> response = new ArrayList<>();
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
-
+        List<ReadCouponResponseModel> response = new ArrayList<>();
         List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByUserId(userProfile.getUserId());
         List<Integer> couponIds = couponUserProfileList.stream().map(couponUserProfile -> couponUserProfile.getId().getCouponId()).toList();
         List<Coupon> couponList = couponRepository.findByCouponIds(couponIds);
@@ -103,9 +94,6 @@ public class SellerCouponService {
     @Transactional(rollbackFor = Exception.class)
     public ReadCouponResponseModel readCoupon(String couponId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
         CouponUserProfile couponUserProfile = couponUserProfileRepository.findByCouponIdAndUserId(Integer.parseInt(couponId), userProfile.getUserId());
         if (Objects.isNull(couponUserProfile)) {
             throw new CouponException("此優惠券不存在，請重新確認");
@@ -147,10 +135,6 @@ public class SellerCouponService {
 
     public String updateCoupon(String couponId, UpdateCouponRequestModel request) throws EmptyException, CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
-
         AdminUpdateCouponRequestModel adminUpdateCouponRequestModel = new AdminUpdateCouponRequestModel();
         BeanUtils.copyProperties(request, adminUpdateCouponRequestModel);
         List<String> userIds = new ArrayList<>();

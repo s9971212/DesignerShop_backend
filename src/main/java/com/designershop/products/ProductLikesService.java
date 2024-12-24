@@ -29,7 +29,6 @@ public class ProductLikesService {
 
     public String readProductLikes(String productId) throws ProductException {
         validateProductPermission(productId);
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             return "N";
@@ -42,12 +41,7 @@ public class ProductLikesService {
     @Transactional(rollbackFor = Exception.class)
     public String updateProductLikes(String productId) throws ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new ProductException("此帳戶未登入，請重新確認");
-        }
-
         Product product = validateProductPermission(productId);
-
         ProductLikes productLikes = productLikesRepository.findByUserIdAndProductId(userProfile.getUserId(), Integer.parseInt(productId));
         if (Objects.isNull(productLikes)) {
             ProductLikesId productLikesId = new ProductLikesId();

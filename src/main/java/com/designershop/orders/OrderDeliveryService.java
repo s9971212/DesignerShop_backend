@@ -51,11 +51,8 @@ public class OrderDeliveryService {
         if (!contactPhone.matches("^09\\d{8}$")) {
             throw new OrderException("聯絡電話格式錯誤");
         }
-        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
 
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
         String fullAddress = String.join("", validatedAddress, address);
         Matcher matcher = Pattern.compile("^\\d+").matcher(validatedAddress);
@@ -88,10 +85,6 @@ public class OrderDeliveryService {
 
     public List<ReadOrderDeliveryResponseModel> readAllOrderDelivery() throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
-
         List<ReadOrderDeliveryResponseModel> response = new ArrayList<>();
         List<OrderDelivery> orderDeliveryList = orderDeliveryRepository.findAllByUserId(userProfile.getUserId());
         for (OrderDelivery orderDelivery : orderDeliveryList) {
@@ -107,10 +100,6 @@ public class OrderDeliveryService {
     }
 
     public ReadOrderDeliveryResponseModel readOrderDelivery(String deliveryId) throws OrderException {
-        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
@@ -125,9 +114,6 @@ public class OrderDeliveryService {
 
     public ReadOrderDeliveryResponseModel readOrderDeliveryByIsDefault() throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
         OrderDelivery orderDelivery = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
@@ -158,15 +144,12 @@ public class OrderDeliveryService {
         if (!contactPhone.matches("^09\\d{8}$")) {
             throw new OrderException("聯絡電話格式錯誤");
         }
-        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
         }
 
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         String validatedAddress = AddressUtil.validateAddress(district, city, state, postalCode, nation);
         String fullAddress = String.join("", validatedAddress, address);
         Matcher matcher = Pattern.compile("^\\d+").matcher(validatedAddress);
@@ -197,15 +180,12 @@ public class OrderDeliveryService {
     }
 
     public String deleteOrderDelivery(String deliveryId) throws OrderException {
-        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
         }
 
+        UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         orderDeliveryRepository.delete(orderDelivery);
         return userProfile.getUserId();
     }

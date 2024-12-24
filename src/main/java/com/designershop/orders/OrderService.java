@@ -64,9 +64,6 @@ public class OrderService {
             throw new EmptyException("至少須選擇一個商品");
         }
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());
         if (Objects.isNull(cart)) {
             throw new OrderException("此購物車不存在，請重新確認");
@@ -211,10 +208,6 @@ public class OrderService {
     @Transactional(rollbackFor = Exception.class)
     public List<ReadOrderResponseModel> readAllOrder() throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new OrderException("此帳戶未登入，請重新確認");
-        }
-
         List<ReadOrderResponseModel> response = new ArrayList<>();
         List<Order> orderList = orderRepository.findAllByUserId(userProfile.getUserId());
         for (Order order : orderList) {

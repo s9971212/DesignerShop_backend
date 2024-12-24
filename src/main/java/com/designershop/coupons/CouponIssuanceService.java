@@ -34,10 +34,6 @@ public class CouponIssuanceService {
     @Transactional(rollbackFor = Exception.class)
     public String createCouponIssuance(String couponId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
-
         AdminCreateCouponIssuanceRequestModel adminCreateCouponIssuanceRequestModel = new AdminCreateCouponIssuanceRequestModel();
         List<String> userIds = new ArrayList<>();
         userIds.add(userProfile.getUserId());
@@ -47,10 +43,6 @@ public class CouponIssuanceService {
 
     public List<ReadCouponIssuanceResponseModel> readAllCouponIssuance(String couponId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
-
         List<ReadCouponIssuanceResponseModel> response = new ArrayList<>();
         List<CouponIssuance> couponIssuanceList = couponIssuanceRepository.findByUserIdAndCouponId(userProfile.getUserId(), Integer.parseInt(couponId));
         for (CouponIssuance couponIssuance : couponIssuanceList) {
@@ -69,9 +61,6 @@ public class CouponIssuanceService {
 
     public ReadCouponIssuanceResponseModel readCouponIssuance(String issuanceId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(userProfile)) {
-            throw new CouponException("此帳戶未登入，請重新確認");
-        }
         CouponIssuance couponIssuance = couponIssuanceRepository.findByIssuanceIdAndUserId(Integer.parseInt(issuanceId), userProfile.getUserId());
         if (Objects.isNull(couponIssuance)) {
             throw new CouponException("此優惠券發放記錄不存在，請重新確認");

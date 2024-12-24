@@ -104,12 +104,12 @@ public class UserService {
 
     public UserProfile validateUserPermission(String userId) throws UserException {
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
-        if (Objects.isNull(sessionUserProfile)) {
-            throw new UserException("此帳戶未登入，請重新確認");
-        }
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile) || !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
             throw new UserException("此帳戶不存在，請重新確認");
+        }
+        if (userProfile.isDeleted()) {
+            throw new UserException("此帳戶已被刪除，請重新確認");
         }
 
         return userProfile;
