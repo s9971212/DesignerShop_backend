@@ -11,6 +11,7 @@ import com.designershop.utils.DateTimeFormatUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class ProductService {
     //		return response;
     //	}
 
+    @Transactional(rollbackFor = Exception.class)
     public List<ReadProductResponseModel> readAllProductByUser(String userId) throws ProductException {
         List<ReadProductResponseModel> response = new ArrayList<>();
 

@@ -104,6 +104,7 @@ public class AdminProductService {
         return productName;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<AdminReadProductResponseModel> readAllProductByUser(String userId) throws ProductException {
         List<AdminReadProductResponseModel> response = new ArrayList<>();
 

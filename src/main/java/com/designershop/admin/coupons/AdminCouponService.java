@@ -42,7 +42,6 @@ public class AdminCouponService {
     private final CouponProductBrandRepository couponProductBrandRepository;
     private final CouponProductRepository couponProductRepository;
 
-    @Transactional(rollbackFor = Exception.class)
     public String createCoupon(AdminCreateCouponRequestModel request) throws EmptyException, CouponException {
         String code = request.getCode();
         String discountType = request.getDiscountType();
@@ -124,6 +123,7 @@ public class AdminCouponService {
         return code;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<AdminReadCouponResponseModel> readAllCoupon() {
         List<AdminReadCouponResponseModel> response = new ArrayList<>();
 
@@ -167,6 +167,7 @@ public class AdminCouponService {
         return response;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public AdminReadCouponResponseModel readCoupon(String couponId) throws CouponException {
         Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
         if (Objects.isNull(coupon)) {
@@ -206,7 +207,6 @@ public class AdminCouponService {
         return response;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public String updateCoupon(String couponId, AdminUpdateCouponRequestModel request) throws EmptyException, CouponException {
         String code = request.getCode();
         String discountType = request.getDiscountType();
@@ -342,8 +342,8 @@ public class AdminCouponService {
     }
 
     private void createCouponUserProfile(int couponId, List<String> userIds) throws CouponException {
-        List<UserProfile> userProfiles = userProfileRepository.findByUserIds(userIds);
-        Map<String, UserProfile> userProfileMap = userProfiles.stream().collect(Collectors.toMap(UserProfile::getUserId, userProfile -> userProfile));
+        List<UserProfile> userProfileList = userProfileRepository.findByUserIds(userIds);
+        Map<String, UserProfile> userProfileMap = userProfileList.stream().collect(Collectors.toMap(UserProfile::getUserId, userProfile -> userProfile));
         for (String userId : userIds) {
             UserProfile userProfile = userProfileMap.get(userId);
             if (Objects.isNull(userProfile)) {
@@ -363,8 +363,8 @@ public class AdminCouponService {
     }
 
     private void createCouponProductCategory(int couponId, List<String> categoryIds) throws CouponException {
-        List<ProductCategory> productCategories = productCategoryRepository.findByCategoryIds(categoryIds);
-        Map<Integer, ProductCategory> productCategoryMap = productCategories.stream().collect(Collectors.toMap(ProductCategory::getCategoryId, ProductCategory -> ProductCategory));
+        List<ProductCategory> productCategoryList = productCategoryRepository.findByCategoryIds(categoryIds);
+        Map<Integer, ProductCategory> productCategoryMap = productCategoryList.stream().collect(Collectors.toMap(ProductCategory::getCategoryId, ProductCategory -> ProductCategory));
         for (String categoryId : categoryIds) {
             ProductCategory productCategory = productCategoryMap.get(Integer.parseInt(categoryId));
             if (Objects.isNull(productCategory)) {
@@ -381,8 +381,8 @@ public class AdminCouponService {
     }
 
     private void createCouponProductBrand(int couponId, List<String> brandIds) throws CouponException {
-        List<ProductBrand> productBrands = productBrandRepository.findByBrandIds(brandIds);
-        Map<Integer, ProductBrand> productBrandMap = productBrands.stream().collect(Collectors.toMap(ProductBrand::getBrandId, ProductBrand -> ProductBrand));
+        List<ProductBrand> productBrandList = productBrandRepository.findByBrandIds(brandIds);
+        Map<Integer, ProductBrand> productBrandMap = productBrandList.stream().collect(Collectors.toMap(ProductBrand::getBrandId, ProductBrand -> ProductBrand));
         for (String brandId : brandIds) {
             ProductBrand productBrand = productBrandMap.get(Integer.parseInt(brandId));
             if (Objects.isNull(productBrand)) {
@@ -399,8 +399,8 @@ public class AdminCouponService {
     }
 
     private void createCouponProduct(int couponId, List<String> productIds) throws CouponException {
-        List<Product> products = productRepository.findByProductIds(productIds);
-        Map<Integer, Product> productMap = products.stream().collect(Collectors.toMap(Product::getProductId, Product -> Product));
+        List<Product> productList = productRepository.findByProductIds(productIds);
+        Map<Integer, Product> productMap = productList.stream().collect(Collectors.toMap(Product::getProductId, Product -> Product));
         for (String productId : productIds) {
             Product product = productMap.get(Integer.parseInt(productId));
             if (Objects.isNull(product)) {

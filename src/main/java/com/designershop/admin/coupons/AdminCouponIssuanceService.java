@@ -43,8 +43,8 @@ public class AdminCouponIssuanceService {
             throw new CouponException("此優惠券不存在，請重新確認");
         }
 
-        List<UserProfile> userProfiles = userProfileRepository.findByUserIds(userIds);
-        Map<String, UserProfile> userProfileMap = userProfiles.stream().collect(Collectors.toMap(UserProfile::getUserId, userProfile -> userProfile));
+        List<UserProfile> userProfileList = userProfileRepository.findByUserIds(userIds);
+        Map<String, UserProfile> userProfileMap = userProfileList.stream().collect(Collectors.toMap(UserProfile::getUserId, userProfile -> userProfile));
         for (String userId : userIds) {
             UserProfile userProfile = userProfileMap.get(userId);
             if (Objects.isNull(userProfile)) {

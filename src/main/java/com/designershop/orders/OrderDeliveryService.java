@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,6 @@ public class OrderDeliveryService {
     private final HttpSession session;
     private final OrderDeliveryRepository orderDeliveryRepository;
 
-    @Transactional(rollbackFor = Exception.class)
     public String createOrderDelivery(CreateOrderDeliveryRequestModel request) throws EmptyException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
@@ -142,7 +140,6 @@ public class OrderDeliveryService {
         return response;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();

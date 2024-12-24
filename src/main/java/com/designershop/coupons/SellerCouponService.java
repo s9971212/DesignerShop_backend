@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public class SellerCouponService {
         return adminCouponService.createCoupon(adminCreateCouponRequestModel);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public List<ReadCouponResponseModel> readAllCoupon() throws CouponException {
         List<ReadCouponResponseModel> response = new ArrayList<>();
 
@@ -98,6 +100,7 @@ public class SellerCouponService {
         return response;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public ReadCouponResponseModel readCoupon(String couponId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {

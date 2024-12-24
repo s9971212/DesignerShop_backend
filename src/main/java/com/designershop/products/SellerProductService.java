@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -31,6 +32,7 @@ public class SellerProductService {
     private final AdminProductService adminProductService;
     private final ProductRepository productRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public String createProduct(CreateProductRequestModel request) throws EmptyException, ProductException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
@@ -42,6 +44,7 @@ public class SellerProductService {
         return adminProductService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, ProductException {
         validateProductPermission(productId);
         AdminUpdateProductRequestModel adminUpdateProductRequestModel = new AdminUpdateProductRequestModel();

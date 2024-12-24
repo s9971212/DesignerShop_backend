@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -37,6 +38,7 @@ public class UserService {
     private final AdminUserService adminUserService;
     private final UserProfileRepository userProfileRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public String createUser(CreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
         AdminCreateUserRequestModel adminCreateUserRequestModel = new AdminCreateUserRequestModel();
         BeanUtils.copyProperties(request, adminCreateUserRequestModel);
@@ -59,6 +61,7 @@ public class UserService {
         return response;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String updateUser(String userId, UpdateUserRequestModel request) throws EmptyException, UserException {
         UserProfile userProfile = validateUserPermission(userId);
         AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
@@ -93,6 +96,7 @@ public class UserService {
         return adminUserService.updatePassword(userId, adminUpdatePasswordRequestModel);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String deleteUser(String userId) throws UserException, ProductException, MessagingException {
         validateUserPermission(userId);
         return adminUserService.deleteUser(userId);

@@ -45,6 +45,7 @@ public class AdminUserService {
     private final UserProfileRepository userProfileRepository;
     private final ProductRepository productRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public String createUser(AdminCreateUserRequestModel request) throws EmptyException, UserException, MessagingException {
         String userType = request.getUserType();
         String sellerType = request.getSellerType();
@@ -73,8 +74,8 @@ public class AdminUserService {
         if (!phoneNo.matches("^09\\d{8}$")) {
             throw new UserException("手機格式錯誤");
         }
-        List<UserProfile> userProfiles = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
-        for (UserProfile userProfile : userProfiles) {
+        List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
+        for (UserProfile userProfile : userProfileList) {
             if (StringUtils.equals(account, userProfile.getAccount())) {
                 throw new UserException("此帳號已被註冊，請使用別的帳號");
             } else if (StringUtils.equals(email, userProfile.getEmail())) {
@@ -97,7 +98,7 @@ public class AdminUserService {
         if (Objects.nonNull(sessionUserProfile)) {
             updatedUser = sessionUserProfile.getUserId();
         }
-        Set<UserRole> userRoles = userRoleService.readUserRole(userType, sellerType, designerType, adminType);
+        Set<UserRole> userRoleSet = userRoleService.readUserRole(userType, sellerType, designerType, adminType);
 
         UserProfile userProfileCreate = new UserProfile();
         userProfileCreate.setUserId(userId);
@@ -115,7 +116,7 @@ public class AdminUserService {
         userProfileCreate.setPwdExpireDate(currentDateTime.plusMonths(3));
         userProfileCreate.setUpdatedUser(updatedUser);
         userProfileCreate.setUpdatedDate(currentDateTime);
-        userProfileCreate.setUserRoles(userRoles);
+        userProfileCreate.setUserRoles(userRoleSet);
         userProfileRepository.save(userProfileCreate);
 
         String[] receivers = {userProfileCreate.getEmail()};
@@ -207,6 +208,7 @@ public class AdminUserService {
         return response;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String updateUser(String userId, AdminUpdateUserRequestModel request) throws EmptyException, UserException {
         String userType = request.getUserType();
         String sellerType = request.getSellerType();
@@ -254,7 +256,7 @@ public class AdminUserService {
         }
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
         boolean isDeleted = StringUtils.equals("Y", isDeletedString);
-        Set<UserRole> userRoles = userRoleService.readUserRole(userType, sellerType, designerType, adminType);
+        Set<UserRole> userRoleSet = userRoleService.readUserRole(userType, sellerType, designerType, adminType);
 
         userProfile.setAccount(account);
         userProfile.setEmail(email);
@@ -268,7 +270,7 @@ public class AdminUserService {
         userProfile.setUpdatedUser(sessionUserProfile.getUserId());
         userProfile.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         userProfile.setDeleted(isDeleted);
-        userProfile.setUserRoles(userRoles);
+        userProfile.setUserRoles(userRoleSet);
         userProfileRepository.save(userProfile);
         return account;
     }
