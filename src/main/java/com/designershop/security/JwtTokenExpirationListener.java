@@ -16,8 +16,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Component
 @RequiredArgsConstructor
@@ -45,8 +45,7 @@ public class JwtTokenExpirationListener {
     }
 
     private HttpSession getSessionForUser(String username) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         return request.getSession(false);
     }
 }

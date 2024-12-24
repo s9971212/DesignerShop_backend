@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -46,15 +46,13 @@ public class OrderDeliveryService {
         String contactName = request.getContactName();
         String defaultCheckBox = request.getDefaultCheckBox();
 
-        if (StringUtils.isBlank(address) || StringUtils.isBlank(nation) || StringUtils.isBlank(contactPhone)
-                || StringUtils.isBlank(contactName) || StringUtils.isBlank(defaultCheckBox)) {
+        if (StringUtils.isBlank(address) || StringUtils.isBlank(nation) || StringUtils.isBlank(contactPhone) || StringUtils.isBlank(contactName)
+                || StringUtils.isBlank(defaultCheckBox)) {
             throw new EmptyException("地址、聯絡電話、聯絡人姓名與設為預設地址不得為空");
         }
-
         if (!contactPhone.matches("^09\\d{8}$")) {
             throw new OrderException("聯絡電話格式錯誤");
         }
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new OrderException("此帳戶未登入，請重新確認");
@@ -86,9 +84,7 @@ public class OrderDeliveryService {
         orderDeliveryCreate.setContactName(contactName);
         orderDeliveryCreate.setDefault(isDefault);
         orderDeliveryCreate.setUserId(userProfile.getUserId());
-
         orderDeliveryRepository.save(orderDeliveryCreate);
-
         return fullAddress;
     }
 
@@ -99,7 +95,6 @@ public class OrderDeliveryService {
         }
 
         List<ReadOrderDeliveryResponseModel> response = new ArrayList<>();
-
         List<OrderDelivery> orderDeliveryList = orderDeliveryRepository.findAllByUserId(userProfile.getUserId());
         for (OrderDelivery orderDelivery : orderDeliveryList) {
             ReadOrderDeliveryResponseModel readOrderDeliveryResponseModel = new ReadOrderDeliveryResponseModel();
@@ -113,12 +108,11 @@ public class OrderDeliveryService {
         return response;
     }
 
-    public ReadOrderDeliveryResponseModel readOrderDelivery(String deliveryId) throws  OrderException {
+    public ReadOrderDeliveryResponseModel readOrderDelivery(String deliveryId) throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new OrderException("此帳戶未登入，請重新確認");
         }
-
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
@@ -128,16 +122,14 @@ public class OrderDeliveryService {
         BeanUtils.copyProperties(orderDelivery, response);
         response.setDeliveryId(Integer.toString(orderDelivery.getDeliveryId()));
         response.setIsDefault(orderDelivery.isDefault() ? "Y" : "N");
-
         return response;
     }
 
-    public ReadOrderDeliveryResponseModel readOrderDeliveryByIsDefault() throws  OrderException {
+    public ReadOrderDeliveryResponseModel readOrderDeliveryByIsDefault() throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new OrderException("此帳戶未登入，請重新確認");
         }
-
         OrderDelivery orderDelivery = orderDeliveryRepository.findByIsDefaultAndUserId(userProfile.getUserId());
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
@@ -147,12 +139,11 @@ public class OrderDeliveryService {
         BeanUtils.copyProperties(orderDelivery, response);
         response.setDeliveryId(Integer.toString(orderDelivery.getDeliveryId()));
         response.setIsDefault(orderDelivery.isDefault() ? "Y" : "N");
-
         return response;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException,  OrderException {
+    public String updateOrderDelivery(String deliveryId, UpdateOrderDeliveryRequestModel request) throws EmptyException, OrderException {
         String address = request.getAddress();
         String district = request.getDistrict();
         String city = request.getCity();
@@ -167,16 +158,13 @@ public class OrderDeliveryService {
                 || StringUtils.isBlank(contactName) || StringUtils.isBlank(defaultCheckBox)) {
             throw new EmptyException("地址、聯絡電話、聯絡人姓名與設為預設地址不得為空");
         }
-
         if (!contactPhone.matches("^09\\d{8}$")) {
             throw new OrderException("聯絡電話格式錯誤");
         }
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new OrderException("此帳戶未登入，請重新確認");
         }
-
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
@@ -207,25 +195,21 @@ public class OrderDeliveryService {
         orderDelivery.setContactName(contactName);
         orderDelivery.setDefault(isDefault);
         orderDelivery.setUserId(userProfile.getUserId());
-
         orderDeliveryRepository.save(orderDelivery);
-
         return fullAddress;
     }
 
-    public String deleteOrderDelivery(String deliveryId) throws  OrderException {
+    public String deleteOrderDelivery(String deliveryId) throws OrderException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new OrderException("此帳戶未登入，請重新確認");
         }
-
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
         }
 
         orderDeliveryRepository.delete(orderDelivery);
-
         return userProfile.getUserId();
     }
 }

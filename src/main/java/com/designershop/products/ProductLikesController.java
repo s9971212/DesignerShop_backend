@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @RestController
 @RequestMapping("/api/product_likes")

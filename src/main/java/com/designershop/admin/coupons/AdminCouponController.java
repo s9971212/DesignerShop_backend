@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @RestController
 @RequestMapping("/admin/coupon")
@@ -26,8 +26,7 @@ public class AdminCouponController {
     private final AdminCouponService adminCouponService;
 
     @PostMapping
-    public ResponseEntity<String> createCoupon(@RequestBody @Valid AdminCreateCouponRequestModel request)
-            throws EmptyException, CouponException {
+    public ResponseEntity<String> createCoupon(@RequestBody @Valid AdminCreateCouponRequestModel request) throws EmptyException, CouponException {
         String code = adminCouponService.createCoupon(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }

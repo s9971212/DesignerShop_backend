@@ -11,8 +11,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @RestController
 @RequestMapping("/api/coupon_issuance")
@@ -22,8 +22,7 @@ public class CouponIssuanceController {
     private final CouponIssuanceService couponIssuanceService;
 
     @PostMapping("/{couponId}")
-    public ResponseEntity<String> createCouponIssuance(@PathVariable String couponId)
-            throws CouponException {
+    public ResponseEntity<String> createCouponIssuance(@PathVariable String couponId) throws CouponException {
         String code = couponIssuanceService.createCouponIssuance(couponId);
         return ResponseEntity.status(HttpStatus.CREATED).body(code);
     }

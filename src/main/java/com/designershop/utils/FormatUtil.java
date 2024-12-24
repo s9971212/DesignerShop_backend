@@ -10,14 +10,13 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 public final class FormatUtil {
 
     public static String userIdGenerate(UserProfile userProfile) throws UserException {
-        String currentDate = DateTimeFormatUtil.currentLocalDateFormat(DateTimeFormatUtil.SIMPLE_YEAR_MONTH)
-                .substring(1);
+        String currentDate = DateTimeFormatUtil.currentLocalDateFormat(DateTimeFormatUtil.SIMPLE_YEAR_MONTH).substring(1);
 
         String maxUserId = "00000";
         if (Objects.nonNull(userProfile) && StringUtils.equals(currentDate, userProfile.getUserId().substring(2, 7))) {
@@ -34,8 +33,7 @@ public final class FormatUtil {
     }
 
     public static String orderIdGenerate(Order order) throws OrderException {
-        String currentDate = DateTimeFormatUtil.currentLocalDateFormat(DateTimeFormatUtil.SIMPLE_DATE)
-                .substring(1);
+        String currentDate = DateTimeFormatUtil.currentLocalDateFormat(DateTimeFormatUtil.SIMPLE_DATE).substring(1);
 
         String maxOrderId = "00000";
         if (Objects.nonNull(order) && StringUtils.equals(currentDate, order.getOrderId().substring(2, 9))) {

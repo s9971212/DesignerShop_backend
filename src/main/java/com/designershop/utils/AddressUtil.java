@@ -13,8 +13,8 @@ import java.util.stream.Stream;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 public final class AddressUtil {
 
@@ -32,7 +32,6 @@ public final class AddressUtil {
                 Map<String, Object> cityData = validateLocation(city, stateData, "cities");
                 Map<String, Object> districtData = validateLocation(district, cityData, "districts");
                 String validatedPostalCode = validatePostalCode(postalCode, stateData, cityData, districtData);
-
                 return String.join("", validatedPostalCode, StringUtils.isNotBlank(validatedPostalCode) ? " " : "",
                         nation, Stream.of(state, city, district).filter(StringUtils::isNotBlank).collect(Collectors.joining("")));
             }
@@ -47,7 +46,6 @@ public final class AddressUtil {
         if ((StringUtils.isBlank(location) && Objects.nonNull(locations)) || (StringUtils.isNotBlank(location) && Objects.isNull(locations))) {
             throw new OrderException("地址格式錯誤");
         }
-
         if (StringUtils.isNotBlank(location)) {
             return locations.stream().filter(locData -> StringUtils.equals(location, (String) locData.get("name"))).findFirst()
                     .orElseThrow(() -> new OrderException("地址格式錯誤"));
@@ -58,9 +56,7 @@ public final class AddressUtil {
 
     private static String validatePostalCode(String postalCode, Map<String, Object> stateData, Map<String, Object> cityData, Map<String, Object> districtData) {
         String validatedPostalCode = Stream.of(stateData, cityData, districtData).filter(data -> data.containsKey("postalCode"))
-                .map(data -> Integer.toString((Integer) data.get("postalCode"))).findFirst()
-                .orElse("");
-
+                .map(data -> Integer.toString((Integer) data.get("postalCode"))).findFirst().orElse("");
         return (StringUtils.isNotBlank(postalCode) && postalCode.startsWith(validatedPostalCode)) ? postalCode : validatedPostalCode;
     }
 }

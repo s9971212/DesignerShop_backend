@@ -22,8 +22,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -38,12 +38,10 @@ public class PasswordForgotService {
         if (StringUtils.isBlank(email)) {
             throw new EmptyException("Email不得為空");
         }
-
         UserProfile userProfile = userProfileRepository.findByEmail(email);
         if (Objects.isNull(userProfile)) {
             throw new UserException("email錯誤，請重新確認");
         }
-
         if (userProfile.isDeleted()) {
             throw new UserException("此帳戶已被刪除，請重新確認");
         }
@@ -53,7 +51,6 @@ public class PasswordForgotService {
 
         userProfile.setPwdForgotToken(token);
         userProfile.setPwdForgotTokenExpireDate(currentDateTime.plusHours(24));
-
         userProfileRepository.save(userProfile);
 
         String[] receivers = {userProfile.getEmail()};
@@ -64,7 +61,6 @@ public class PasswordForgotService {
         map.put("account", userProfile.getAccount());
         map.put("token", token);
         mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 重設密碼通知", "password-forgot", map);
-
         return userProfile.getAccount();
     }
 
@@ -75,16 +71,13 @@ public class PasswordForgotService {
         if (StringUtils.isBlank(token) || StringUtils.isBlank(password) || StringUtils.isBlank(passwordCheck)) {
             throw new EmptyException("密碼與密碼確認不得為空");
         }
-
         if (!StringUtils.equals(password, passwordCheck)) {
             throw new UserException("密碼與密碼確認不一致");
         }
-
         UserProfile userProfile = userProfileRepository.findByRefreshHash(token);
         if (Objects.isNull(userProfile)) {
             throw new UserException("token錯誤，請重新確認");
         }
-
         if (LocalDateTime.now().isAfter(userProfile.getPwdForgotTokenExpireDate())) {
             throw new UserException("token已過期，請重新申請");
         }
@@ -100,9 +93,7 @@ public class PasswordForgotService {
         userProfile.setUpdatedDate(currentDateTime);
         userProfile.setPwdForgotToken(null);
         userProfile.setPwdForgotTokenExpireDate(null);
-
         userProfileRepository.save(userProfile);
-
         return userProfile.getAccount();
     }
 }

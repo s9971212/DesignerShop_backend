@@ -4,8 +4,8 @@ import java.security.SecureRandom;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 public final class RandomTokenUtil {
 
@@ -18,6 +18,7 @@ public final class RandomTokenUtil {
         for (byte b : bytes) {
             sb.append(String.format("%02x", b));
         }
+
         return sb.toString();
     }
 }

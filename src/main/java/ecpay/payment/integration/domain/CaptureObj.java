@@ -29,7 +29,7 @@ public class CaptureObj {
 	 * UserRefundAMT
 	 * 要退款給買方的金額
 	 */
-	private String UserRefundAMT = "0";
+	private final String UserRefundAMT = "0";
 	
 	/**
 	 * PlatformID

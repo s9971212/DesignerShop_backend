@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @RestController
 @RequestMapping("/api/order")
@@ -28,7 +28,7 @@ public class OrderController {
     @PostMapping("/{deliveryId}")
     public ResponseEntity<String> createOrder(@PathVariable String deliveryId, @RequestBody @Valid CreateOrderRequestModel request)
             throws EmptyException, CartException, OrderException {
-        String form = orderService.createOrder(deliveryId,request);
+        String form = orderService.createOrder(deliveryId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(form);
     }
 

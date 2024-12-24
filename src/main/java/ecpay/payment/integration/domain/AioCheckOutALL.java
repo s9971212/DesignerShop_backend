@@ -35,7 +35,7 @@ public class AioCheckOutALL {
 	 * PaymentType
 	 * 交易類型
 	 */
-	private String PaymentType = "aio";
+	private final String PaymentType = "aio";
 	
 	/**
 	 * TotalAmount
@@ -65,7 +65,7 @@ public class AioCheckOutALL {
 	 * ChoosePayment
 	 * 選擇預設付款方式
 	 */
-	private String ChoosePayment = "ALL";
+	private final String ChoosePayment = "ALL";
 	
 	/**
 	 * ClientBackURL
@@ -155,7 +155,7 @@ public class AioCheckOutALL {
 	 * EncryptType
 	 * CheckMacValue加密類型
 	 */
-	private String EncryptType = "1";
+	private final String EncryptType = "1";
 	
 	/**
 	 * ExpireDate

@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -84,14 +85,14 @@ public class EcpayFunction {
 	 * @throws Exception
 	 */
 	public final static String AESEncode(String HashKey, String HashIV, String plaintext) throws Exception{
-		SecretKey key = new SecretKeySpec(HashKey.getBytes("UTF-8"), "AES");
+		SecretKey key = new SecretKeySpec(HashKey.getBytes(StandardCharsets.UTF_8), "AES");
 		AlgorithmParameters iv = AlgorithmParameters.getInstance("AES");
-		iv.init(new IvParameterSpec(HashIV.getBytes("UTF-8")));
+		iv.init(new IvParameterSpec(HashIV.getBytes(StandardCharsets.UTF_8)));
 		plaintext = pkcs7Padding(plaintext);
 		System.out.println(plaintext.length());
 		Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
 		cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-		byte[] encrypt = cipher.doFinal(plaintext.getBytes("UTF-8"));
+		byte[] encrypt = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
 		Base64.Encoder encoder = Base64.getEncoder();
 		String encodedText = encoder.encodeToString(encrypt);
 //		System.out.println(encodedText);
@@ -134,7 +135,7 @@ public class EcpayFunction {
 		Set<String> keySet = params.keySet();
 		TreeSet<String> treeSet = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		treeSet.addAll(keySet);
-		String name[] = treeSet.toArray(new String[treeSet.size()]);
+		String[] name = treeSet.toArray(new String[treeSet.size()]);
 		String paramStr = "";
 		for(int i = 0; i < name.length; i++){
 			if(!name[i].equals("CheckMacValue")){
@@ -208,7 +209,7 @@ public class EcpayFunction {
 		try{
 			URL obj = new URL(url);
 			HttpURLConnection connection = null;
-			if (obj.getProtocol().toLowerCase().equals("https")) {
+			if (obj.getProtocol().equalsIgnoreCase("https")) {
 				connection = (HttpsURLConnection) obj.openConnection();
 				trustAllHosts((HttpsURLConnection) connection);
 			}
@@ -324,12 +325,8 @@ public class EcpayFunction {
 	 */
 	public static String urlEncode(String data){
 		String result = "";
-		try{
-			result = URLEncoder.encode(data, "UTF-8");
-		} catch(UnsupportedEncodingException e){
-			
-		}
-		return result; 
+        result = URLEncoder.encode(data, StandardCharsets.UTF_8);
+        return result;
 	}
 	
 	/**
@@ -348,7 +345,7 @@ public class EcpayFunction {
 	 * @param isMD5
 	 * @return string
 	 */
-	private final static String hash(byte data[], String mode){
+	private final static String hash(byte[] data, String mode){
 		MessageDigest md = null;
 		try{
 			if(mode == "MD5"){

@@ -25,8 +25,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -42,7 +42,6 @@ public class CartService {
         if (Objects.isNull(userProfile)) {
             throw new CartException("此帳戶未登入，請重新確認");
         }
-
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());
         if (Objects.nonNull(cart)) {
             throw new CartException("此帳戶已有購物車，請重新確認");
@@ -54,9 +53,7 @@ public class CartService {
         cartCreate.setCreatedDate(currentDateTime);
         cartCreate.setUpdatedDate(currentDateTime);
         cartCreate.setUserId(userProfile.getUserId());
-
         cartRepository.save(cartCreate);
-
         return cartCreate;
     }
 
@@ -68,25 +65,20 @@ public class CartService {
         if (StringUtils.isBlank(quantityString)) {
             throw new EmptyException("數量不得為空");
         }
-
         if (!quantityString.matches("\\d+")) {
             throw new CartException("數量只能有數字，請重新確認");
         }
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CartException("此帳戶未登入，請重新確認");
         }
-
         Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new CartException("此商品不存在，請重新確認");
         }
-
         if (product.isDeleted()) {
             throw new CartException("此商品已被刪除，請重新確認");
         }
-
         int quantity = Integer.parseInt(quantityString);
         if (product.getStockQuantity() < quantity) {
             throw new CartException("庫存數量不足，請重新確認");
@@ -112,14 +104,12 @@ public class CartService {
         cartItem.setAddedDate(currentDateTime);
         cartItem.setProductId(product.getProductId());
         cartItem.setCart(cart);
-
         cartItemRepository.save(cartItem);
-
         return userProfile.getUserId();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public List<ReadCartItemResponseModel> readAllCartItem() throws  CartException {
+    public List<ReadCartItemResponseModel> readAllCartItem() throws CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CartException("此帳戶未登入，請重新確認");
@@ -131,27 +121,22 @@ public class CartService {
         }
 
         List<ReadCartItemResponseModel> response = new ArrayList<>();
-
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cart.getCartId());
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
             BeanUtils.copyProperties(cartItem, readCartItemResponseModel);
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
             readCartItemResponseModel.setUserName(userProfile.getName());
-
             Product product = productRepository.findByProductId(cartItem.getProductId());
             readCartItemResponseModel.setProductName(product.getName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
-
             List<String> images = new ArrayList<>();
             for (ProductImage productImage : product.getProductImages()) {
                 images.add(productImage.getImage());
             }
             readCartItemResponseModel.setImages(images);
-
             readCartItemResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
-
             int quantity = cartItem.getQuantity();
             if (product.getStockQuantity() < quantity) {
                 quantity = product.getStockQuantity();
@@ -159,7 +144,6 @@ public class CartService {
                 cartItemRepository.save(cartItem);
             }
             readCartItemResponseModel.setQuantity(Integer.toString(quantity));
-
             response.add(readCartItemResponseModel);
         }
 
@@ -185,27 +169,22 @@ public class CartService {
         }
 
         List<ReadCartItemResponseModel> response = new ArrayList<>();
-
         List<CartItem> cartItemList = cartItemRepository.findByItemIds(itemIds);
         for (CartItem cartItem : cartItemList) {
             ReadCartItemResponseModel readCartItemResponseModel = new ReadCartItemResponseModel();
             BeanUtils.copyProperties(cartItem, readCartItemResponseModel);
             readCartItemResponseModel.setItemId(Integer.toString(cartItem.getItemId()));
             readCartItemResponseModel.setUserName(userProfile.getName());
-
             Product product = productRepository.findByProductId(cartItem.getProductId());
             readCartItemResponseModel.setProductName(product.getName());
             readCartItemResponseModel.setPrice(product.getPrice().toString());
             readCartItemResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
-
             List<String> images = new ArrayList<>();
             for (ProductImage productImage : product.getProductImages()) {
                 images.add(productImage.getImage());
             }
             readCartItemResponseModel.setImages(images);
-
             readCartItemResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
-
             int quantity = cartItem.getQuantity();
             if (product.getStockQuantity() < quantity) {
                 quantity = product.getStockQuantity();
@@ -213,7 +192,6 @@ public class CartService {
                 cartItemRepository.save(cartItem);
             }
             readCartItemResponseModel.setQuantity(Integer.toString(quantity));
-
             response.add(readCartItemResponseModel);
         }
 
@@ -227,25 +205,20 @@ public class CartService {
         if (StringUtils.isBlank(quantityString)) {
             throw new EmptyException("數量不得為空");
         }
-
         if (!quantityString.matches("\\d+")) {
             throw new CartException("數量只能有數字，請重新確認");
         }
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CartException("此帳戶未登入，請重新確認");
         }
-
         Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new CartException("此商品不存在，請重新確認");
         }
-
         if (product.isDeleted()) {
             throw new CartException("此商品已被刪除，請重新確認");
         }
-
         int quantity = Integer.parseInt(quantityString);
         if (product.getStockQuantity() < quantity) {
             throw new CartException("庫存數量不足，請重新確認");
@@ -264,12 +237,11 @@ public class CartService {
 
         cartItem.setQuantity(quantity);
         cartItemRepository.save(cartItem);
-
         return userProfile.getUserId();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String deleteCartItem(String itemId) throws  CartException {
+    public String deleteCartItem(String itemId) throws CartException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CartException("此帳戶未登入，請重新確認");
@@ -287,7 +259,6 @@ public class CartService {
         }
 
         cartItemRepository.delete(cartItem);
-
         return userProfile.getUserId();
     }
 }

@@ -18,8 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Configuration
 @EnableWebSecurity
@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/error/**", "/api/auth", "/api/user", "/api/password_forgot", "/api/product/**",
                                 "/api/product_likes").permitAll()
                         .requestMatchers("/api/user/**", "/api/product_likes/**", "/api/cart/**", "/api/order/**",
-                                "/api/order_delivery/**","/api/coupon_issuance/**").hasAuthority("ROLE_USER")
+                                "/api/order_delivery/**", "/api/coupon_issuance/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/seller/**").hasAuthority("ROLE_SELLER")
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()

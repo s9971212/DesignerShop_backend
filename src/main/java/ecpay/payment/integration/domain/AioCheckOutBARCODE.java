@@ -29,7 +29,7 @@ public class AioCheckOutBARCODE {
 	 * PaymentType
 	 * 交易類型
 	 */
-	private String PaymentType = "aio";
+	private final String PaymentType = "aio";
 	
 	/**
 	 * TotalAmount
@@ -59,7 +59,7 @@ public class AioCheckOutBARCODE {
 	 * ChoosePayment
 	 * 選擇預設付款方式
 	 */
-	private String ChoosePayment = "BARCODE";
+	private final String ChoosePayment = "BARCODE";
 	
 	/**
 	 * ClientBackURL
@@ -125,7 +125,7 @@ public class AioCheckOutBARCODE {
 	 * EncryptType
 	 * CheckMacValue加密類型
 	 */
-	private String EncryptType = "1";
+	private final String EncryptType = "1";
 	
 	/**
 	 * StoreExpireDate

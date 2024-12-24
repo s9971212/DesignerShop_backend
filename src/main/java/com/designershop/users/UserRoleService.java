@@ -10,8 +10,8 @@ import java.util.Set;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,6 @@ public class UserRoleService {
         roleIds.add(sellerType);
         roleIds.add(designerType);
         roleIds.add(adminType);
-
         return userRoleRepository.findByRoleIds(roleIds);
     }
 }

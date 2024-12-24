@@ -22,8 +22,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Component
 @RequiredArgsConstructor
@@ -33,27 +33,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MyUserDetailsService myUserDetailsService;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
 
-        String username = null;
         String jwt = null;
+        String username = null;
         if (ObjectUtils.isNotEmpty(authHeader) && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             username = JwtUtil.parseToken(jwt).getSubject();
         }
 
-        if (StringUtils.isNotBlank(username)
-                && ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
+        if (StringUtils.isNotBlank(username) && ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
             MyUser myUser = myUserDetailsService.loadUserByUsername(username);
-            UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
 
             if (JwtUtil.validateToken(jwt, myUser)) {
-                if (Objects.nonNull(userProfile) && StringUtils.equals(userProfile.getSignOnToken(), jwt)
-                        && !userProfile.isLock() && !userProfile.isDeleted()) {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                            myUser, null, myUser.getAuthorities());
+                UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+                if (Objects.nonNull(userProfile) && StringUtils.equals(userProfile.getSignOnToken(), jwt) && !userProfile.isLock()
+                        && !userProfile.isDeleted()) {
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(myUser, null, myUser.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }

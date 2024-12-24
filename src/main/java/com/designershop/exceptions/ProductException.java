@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Level;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Getter
 public class ProductException extends Exception implements IBaseException {

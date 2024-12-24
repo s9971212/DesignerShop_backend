@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @RestController
 @RequestMapping("/api/order_delivery")
@@ -26,8 +26,7 @@ public class OrderDeliveryController {
     private final OrderDeliveryService orderDeliveryService;
 
     @PostMapping
-    public ResponseEntity<String> createOrderDelivery(@RequestBody @Valid CreateOrderDeliveryRequestModel request)
-            throws EmptyException, OrderException {
+    public ResponseEntity<String> createOrderDelivery(@RequestBody @Valid CreateOrderDeliveryRequestModel request) throws EmptyException, OrderException {
         String address = orderDeliveryService.createOrderDelivery(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(address);
     }
@@ -39,15 +38,13 @@ public class OrderDeliveryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDelivery(@PathVariable String id)
-            throws  OrderException {
+    public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDelivery(@PathVariable String id) throws OrderException {
         ReadOrderDeliveryResponseModel response = orderDeliveryService.readOrderDelivery(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDeliveryByIsDefault()
-            throws  OrderException {
+    public ResponseEntity<ReadOrderDeliveryResponseModel> readOrderDeliveryByIsDefault() throws OrderException {
         ReadOrderDeliveryResponseModel response = orderDeliveryService.readOrderDeliveryByIsDefault();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -60,7 +57,7 @@ public class OrderDeliveryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrderDelivery(@PathVariable String id) throws  OrderException {
+    public ResponseEntity<String> deleteOrderDelivery(@PathVariable String id) throws OrderException {
         String userId = orderDeliveryService.deleteOrderDelivery(id);
         return ResponseEntity.status(HttpStatus.OK).body(userId);
     }

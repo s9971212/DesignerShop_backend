@@ -10,8 +10,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {

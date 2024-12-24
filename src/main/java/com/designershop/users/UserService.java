@@ -26,8 +26,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -48,7 +48,6 @@ public class UserService {
         UserProfile userProfile = validateUserPermission(userId);
         ReadUserResponseModel response = new ReadUserResponseModel();
         BeanUtils.copyProperties(userProfile, response);
-
         if (Objects.nonNull(userProfile.getBirthday())) {
             response.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
@@ -57,15 +56,13 @@ public class UserService {
             response.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
         response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
-
         return response;
     }
 
     public String updateUser(String userId, UpdateUserRequestModel request) throws EmptyException, UserException {
+        UserProfile userProfile = validateUserPermission(userId);
         AdminUpdateUserRequestModel adminUpdateUserRequestModel = new AdminUpdateUserRequestModel();
         BeanUtils.copyProperties(request, adminUpdateUserRequestModel);
-
-        UserProfile userProfile = validateUserPermission(userId);
         for (UserRole userRole : userProfile.getUserRoles()) {
             switch (userRole.getCategory()) {
                 case "buyer":
@@ -86,14 +83,13 @@ public class UserService {
         }
 
         adminUpdateUserRequestModel.setIsDeleted("N");
-
         return adminUserService.updateUser(userId, adminUpdateUserRequestModel);
     }
 
     public String updatePassword(String userId, UpdatePasswordRequestModel request) throws EmptyException, UserException, MessagingException {
+        validateUserPermission(userId);
         AdminUpdatePasswordRequestModel adminUpdatePasswordRequestModel = new AdminUpdatePasswordRequestModel();
         BeanUtils.copyProperties(request, adminUpdatePasswordRequestModel);
-        validateUserPermission(userId);
         return adminUserService.updatePassword(userId, adminUpdatePasswordRequestModel);
     }
 
@@ -107,10 +103,8 @@ public class UserService {
         if (Objects.isNull(sessionUserProfile)) {
             throw new UserException("此帳戶未登入，請重新確認");
         }
-
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
-        if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile)
-                || !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
+        if (Objects.isNull(userProfile) || !sessionUserProfile.equals(userProfile) || !StringUtils.equals(sessionUserProfile.getPassword(), userProfile.getPassword())) {
             throw new UserException("此帳戶不存在，請重新確認");
         }
 

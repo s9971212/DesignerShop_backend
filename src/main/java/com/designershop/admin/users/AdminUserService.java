@@ -31,8 +31,8 @@ import java.util.*;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -63,21 +63,17 @@ public class AdminUserService {
         String userImage = request.getImage();
         String termsCheckBox = request.getTermsCheckBox();
 
-        if (StringUtils.isBlank(account) || StringUtils.isBlank(password) || StringUtils.isBlank(passwordCheck)
-                || StringUtils.isBlank(email) || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(termsCheckBox)) {
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(password) || StringUtils.isBlank(passwordCheck) || StringUtils.isBlank(email)
+                || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("帳號、密碼、密碼確認、Email、手機與條款確認不得為空");
         }
-
         if (!StringUtils.equals(password, passwordCheck)) {
             throw new UserException("密碼與密碼確認不一致");
         }
-
         if (!phoneNo.matches("^09\\d{8}$")) {
             throw new UserException("手機格式錯誤");
         }
-
-        List<UserProfile> userProfiles = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email,
-                phoneNo);
+        List<UserProfile> userProfiles = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
         for (UserProfile userProfile : userProfiles) {
             if (StringUtils.equals(account, userProfile.getAccount())) {
                 throw new UserException("此帳號已被註冊，請使用別的帳號");
@@ -101,7 +97,7 @@ public class AdminUserService {
         if (Objects.nonNull(sessionUserProfile)) {
             updatedUser = sessionUserProfile.getUserId();
         }
-        Set<UserRole> userRoles = userRoleService.readUserRole(userType,sellerType,designerType,adminType);
+        Set<UserRole> userRoles = userRoleService.readUserRole(userType, sellerType, designerType, adminType);
 
         UserProfile userProfileCreate = new UserProfile();
         userProfileCreate.setUserId(userId);
@@ -120,7 +116,6 @@ public class AdminUserService {
         userProfileCreate.setUpdatedUser(updatedUser);
         userProfileCreate.setUpdatedDate(currentDateTime);
         userProfileCreate.setUserRoles(userRoles);
-
         userProfileRepository.save(userProfileCreate);
 
         String[] receivers = {userProfileCreate.getEmail()};
@@ -131,7 +126,6 @@ public class AdminUserService {
         map.put("account", userProfileCreate.getAccount());
         map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfileCreate.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 註冊成功通知", "register", map);
-
         return account;
     }
 
@@ -142,7 +136,6 @@ public class AdminUserService {
         for (UserProfile userProfile : userProfileList) {
             AdminReadUserResponseModel adminReadUserResponseModel = new AdminReadUserResponseModel();
             BeanUtils.copyProperties(userProfile, adminReadUserResponseModel);
-
             for (UserRole userRole : userProfile.getUserRoles()) {
                 switch (userRole.getCategory()) {
                     case "buyer":
@@ -162,19 +155,14 @@ public class AdminUserService {
                 }
             }
             if (Objects.nonNull(userProfile.getBirthday())) {
-                adminReadUserResponseModel
-                        .setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+                adminReadUserResponseModel.setBirthday(DateTimeFormatUtil.localDateTimeFormat(userProfile.getBirthday(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
-            adminReadUserResponseModel
-                    .setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+            adminReadUserResponseModel.setRegisterDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getRegisterDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             if (Objects.nonNull(userProfile.getPwdChangedDate())) {
-                adminReadUserResponseModel
-                        .setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+                adminReadUserResponseModel.setPwdChangedDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdChangedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
-            adminReadUserResponseModel
-                    .setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+            adminReadUserResponseModel.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             adminReadUserResponseModel.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
-
             response.add(adminReadUserResponseModel);
         }
 
@@ -189,7 +177,6 @@ public class AdminUserService {
 
         AdminReadUserResponseModel response = new AdminReadUserResponseModel();
         BeanUtils.copyProperties(userProfile, response);
-
         for (UserRole userRole : userProfile.getUserRoles()) {
             switch (userRole.getCategory()) {
                 case "buyer":
@@ -217,7 +204,6 @@ public class AdminUserService {
         }
         response.setPwdExpireDate(DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setIsDeleted(userProfile.isDeleted() ? "Y" : "N");
-
         return response;
     }
 
@@ -238,16 +224,13 @@ public class AdminUserService {
         String isDeletedString = request.getIsDeleted();
         String termsCheckBox = request.getTermsCheckBox();
 
-        if (StringUtils.isBlank(userId) || StringUtils.isBlank(account) || StringUtils.isBlank(email)
-                || StringUtils.isBlank(phoneNo) || StringUtils.isBlank(isDeletedString)
-                || StringUtils.isBlank(termsCheckBox)) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(account) || StringUtils.isBlank(email) || StringUtils.isBlank(phoneNo)
+                || StringUtils.isBlank(isDeletedString) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("帳號、Email、手機與條款確認不得為空");
         }
-
         if (!phoneNo.matches("^09\\d{8}$")) {
             throw new UserException("手機格式錯誤");
         }
-
         List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
         for (UserProfile userProfile : userProfileList) {
             if (!StringUtils.equals(userId, userProfile.getUserId())) {
@@ -260,18 +243,18 @@ public class AdminUserService {
                 }
             }
         }
-
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶不存在，請重新確認");
         }
+
         LocalDateTime birthday = userProfile.getBirthday();
         if (StringUtils.isNotBlank(birthdayString)) {
             birthday = DateTimeFormatUtil.localDateTimeFormat(birthdayString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         }
         UserProfile sessionUserProfile = (UserProfile) session.getAttribute("userProfile");
         boolean isDeleted = StringUtils.equals("Y", isDeletedString);
-        Set<UserRole> userRoles = userRoleService.readUserRole(userType,sellerType,designerType,adminType);
+        Set<UserRole> userRoles = userRoleService.readUserRole(userType, sellerType, designerType, adminType);
 
         userProfile.setAccount(account);
         userProfile.setEmail(email);
@@ -286,9 +269,7 @@ public class AdminUserService {
         userProfile.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         userProfile.setDeleted(isDeleted);
         userProfile.setUserRoles(userRoles);
-
         userProfileRepository.save(userProfile);
-
         return account;
     }
 
@@ -297,20 +278,16 @@ public class AdminUserService {
         String password = request.getPassword();
         String passwordCheck = request.getPasswordCheck();
 
-        if (StringUtils.isBlank(userId) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(password)
-                || StringUtils.isBlank(passwordCheck)) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(oldPassword) || StringUtils.isBlank(password) || StringUtils.isBlank(passwordCheck)) {
             throw new EmptyException("舊密碼、密碼與密碼確認不得為空");
         }
-
         if (!StringUtils.equals(password, passwordCheck)) {
             throw new UserException("密碼與密碼確認不一致");
         }
-
         UserProfile userProfile = userProfileRepository.findByUserId(userId);
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶不存在，請重新確認");
         }
-
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         if (!bcryptPasswordEncoder.matches(oldPassword, userProfile.getPassword())) {
             throw new UserException("舊密碼錯誤，請重新確認");
@@ -328,7 +305,6 @@ public class AdminUserService {
         userProfile.setPwdExpireDate(currentDateTime.plusMonths(3));
         userProfile.setUpdatedUser(sessionUserProfile.getUserId());
         userProfile.setUpdatedDate(currentDateTime);
-
         userProfileRepository.save(userProfile);
 
         String[] receivers = {userProfile.getEmail()};
@@ -339,7 +315,6 @@ public class AdminUserService {
         map.put("account", userProfile.getAccount());
         map.put("pwdExpireDate", DateTimeFormatUtil.localDateTimeFormat(userProfile.getPwdExpireDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 密碼變更通知", "password-changed", map);
-
         return userProfile.getAccount();
     }
 
@@ -369,7 +344,6 @@ public class AdminUserService {
         map.put("email", userProfile.getEmail());
         map.put("account", userProfile.getAccount());
         mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 帳戶刪除通知", "account-deleted", map);
-
         return userProfile.getAccount();
     }
 }

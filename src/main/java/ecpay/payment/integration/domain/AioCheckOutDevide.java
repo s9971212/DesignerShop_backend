@@ -29,7 +29,7 @@ public class AioCheckOutDevide {
 	 * PaymentType
 	 * 交易類型
 	 */
-	private String PaymentType = "aio";
+	private final String PaymentType = "aio";
 	
 	/**
 	 * TotalAmount
@@ -59,7 +59,7 @@ public class AioCheckOutDevide {
 	 * ChoosePayment
 	 * 選擇預設付款方式
 	 */
-	private String ChoosePayment = "Credit";
+	private final String ChoosePayment = "Credit";
 	
 	/**
 	 * ClientBackURL
@@ -125,7 +125,7 @@ public class AioCheckOutDevide {
 	 * EncryptType
 	 * CheckMacValue加密類型
 	 */
-	private String EncryptType = "1";
+	private final String EncryptType = "1";
 	
 	/**
 	 * CreditInstallment

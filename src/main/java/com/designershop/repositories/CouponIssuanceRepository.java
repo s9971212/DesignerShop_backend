@@ -10,8 +10,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Repository
 public interface CouponIssuanceRepository extends JpaRepository<CouponIssuance, Long> {
@@ -26,5 +26,5 @@ public interface CouponIssuanceRepository extends JpaRepository<CouponIssuance, 
     CouponIssuance findByIssuanceId(@Param("issuanceId") int issuanceId);
 
     @Query(value = "SELECT * FROM coupon_issuance WHERE issuance_id =:issuanceId AND user_id =:userId", nativeQuery = true)
-    CouponIssuance findByIssuanceIdAndUserId(@Param("issuanceId") int issuanceId,@Param("userId") String userId);
+    CouponIssuance findByIssuanceIdAndUserId(@Param("issuanceId") int issuanceId, @Param("userId") String userId);
 }

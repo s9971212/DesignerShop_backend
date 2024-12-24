@@ -32,7 +32,7 @@ public class PaymentVerifyBase{
 		}
 		if(type.equals("String")){
 			if(ele.getElementsByTagName("pattern") != null){
-				Pattern r = Pattern.compile(ele.getElementsByTagName("pattern").item(0).getTextContent().toString());
+				Pattern r = Pattern.compile(ele.getElementsByTagName("pattern").item(0).getTextContent());
 				Matcher m = r.matcher(objValue);
 				if(!m.find())
 					throw new EcpayException(ele.getAttribute("name")+ErrorMessage.COLUMN_RULE_ERROR);
@@ -41,7 +41,7 @@ public class PaymentVerifyBase{
 			List<String> opt = new ArrayList<String>();
 			NodeList n = ele.getElementsByTagName("option");
 			for(int i=0; i < n.getLength(); i++){
-				opt.add(n.item(i).getTextContent().toString());
+				opt.add(n.item(i).getTextContent());
 			}
 			if(!opt.contains(objValue))
 				throw new EcpayException(ele.getAttribute("name")+ErrorMessage.COLUMN_RULE_ERROR);

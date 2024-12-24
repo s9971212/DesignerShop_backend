@@ -22,8 +22,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -48,7 +48,6 @@ public class SellerCouponService {
         List<String> userIds = new ArrayList<>();
         userIds.add(userProfile.getUserId());
         adminCreateCouponRequestModel.setUserIds(userIds);
-
         return adminCouponService.createCoupon(adminCreateCouponRequestModel);
     }
 
@@ -84,7 +83,6 @@ public class SellerCouponService {
             readCouponResponseModel.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             readCouponResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             readCouponResponseModel.setIsActive(coupon.isActive() ? "Y" : "N");
-
             List<CouponProductCategory> couponProductCategoryList = couponProductCategoryRepository.findAllByCouponId(couponId);
             List<String> categoryIds = couponProductCategoryList.stream().map(couponProductCategory -> Integer.toString(couponProductCategory.getId().getCategoryId())).toList();
             readCouponResponseModel.setCategoryIds(categoryIds);
@@ -94,24 +92,21 @@ public class SellerCouponService {
             List<CouponProduct> couponProductList = couponProductRepository.findAllByCouponId(couponId);
             List<String> productIds = couponProductList.stream().map(couponProduct -> Integer.toString(couponProduct.getId().getProductId())).toList();
             readCouponResponseModel.setProductIds(productIds);
-
             response.add(readCouponResponseModel);
         }
 
         return response;
     }
 
-    public ReadCouponResponseModel readCoupon(String couponId) throws  CouponException {
+    public ReadCouponResponseModel readCoupon(String couponId) throws CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CouponException("此帳戶未登入，請重新確認");
         }
-
         CouponUserProfile couponUserProfile = couponUserProfileRepository.findByCouponIdAndUserId(Integer.parseInt(couponId), userProfile.getUserId());
         if (Objects.isNull(couponUserProfile)) {
             throw new CouponException("此優惠券不存在，請重新確認");
         }
-
         Coupon coupon = couponRepository.findByCouponId(Integer.parseInt(couponId));
         if (Objects.isNull(coupon)) {
             throw new CouponException("此優惠券不存在，請重新確認");
@@ -135,7 +130,6 @@ public class SellerCouponService {
         response.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setIsActive(coupon.isActive() ? "Y" : "N");
-
         List<CouponProductCategory> couponProductCategoryList = couponProductCategoryRepository.findAllByCouponId(Integer.parseInt(couponId));
         List<String> categoryIds = couponProductCategoryList.stream().map(couponProductCategory -> Integer.toString(couponProductCategory.getId().getCategoryId())).toList();
         response.setCategoryIds(categoryIds);
@@ -145,11 +139,10 @@ public class SellerCouponService {
         List<CouponProduct> couponProductList = couponProductRepository.findAllByCouponId(Integer.parseInt(couponId));
         List<String> productIds = couponProductList.stream().map(couponProduct -> Integer.toString(couponProduct.getId().getProductId())).toList();
         response.setProductIds(productIds);
-
         return response;
     }
 
-    public String updateCoupon(String couponId, UpdateCouponRequestModel request) throws EmptyException,  CouponException {
+    public String updateCoupon(String couponId, UpdateCouponRequestModel request) throws EmptyException, CouponException {
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new CouponException("此帳戶未登入，請重新確認");
@@ -160,7 +153,6 @@ public class SellerCouponService {
         List<String> userIds = new ArrayList<>();
         userIds.add(userProfile.getUserId());
         adminUpdateCouponRequestModel.setUserIds(userIds);
-
         return adminCouponService.updateCoupon(couponId, adminUpdateCouponRequestModel);
     }
 }

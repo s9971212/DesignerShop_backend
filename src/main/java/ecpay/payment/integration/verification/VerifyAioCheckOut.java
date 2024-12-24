@@ -58,7 +58,7 @@ public class VerifyAioCheckOut extends PaymentVerifyBase {
 					throw new EcpayException(ErrorMessage.OBJ_MISSING_FIELD);
 				}
 				if(!(obj instanceof InvoiceObj))
-					requireCheck(tmpEle.getAttribute("name"), objValue, tmpEle.getAttribute("require").toString());
+					requireCheck(tmpEle.getAttribute("name"), objValue, tmpEle.getAttribute("require"));
 				valueCheck(tmpEle.getAttribute("type"), objValue, tmpEle);
 			} else{
 				continue;

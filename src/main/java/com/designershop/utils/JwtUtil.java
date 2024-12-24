@@ -16,8 +16,8 @@ import java.util.Map;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Component
 public class JwtUtil {
@@ -29,11 +29,9 @@ public class JwtUtil {
     // 生成 JWT
     public static String generateToken(Authentication authentication) {
         MyUser myUser = (MyUser) authentication.getPrincipal();
-
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder().setClaims(claims).setSubject(myUser.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).setIssuer(ISSUER)
-                .setIssuedAt(new Date()).signWith(SECRET_KEY, SignatureAlgorithm.HS512).compact();
+        return Jwts.builder().setClaims(claims).setSubject(myUser.getUsername()).setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setIssuer(ISSUER).setIssuedAt(new Date()).signWith(SECRET_KEY, SignatureAlgorithm.HS512).compact();
     }
 
     // 解析 JWT

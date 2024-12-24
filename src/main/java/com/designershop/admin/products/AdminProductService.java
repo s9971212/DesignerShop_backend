@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -54,32 +54,26 @@ public class AdminProductService {
         List<String> images = request.getImages();
         String termsCheckBox = request.getTermsCheckBox();
 
-        if (StringUtils.isBlank(userId) || StringUtils.isBlank(categoryId) || StringUtils.isBlank(brand)
-                || StringUtils.isBlank(productName) || StringUtils.isBlank(priceString)
-                || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
+        if (StringUtils.isBlank(userId) || StringUtils.isBlank(categoryId) || StringUtils.isBlank(brand) || StringUtils.isBlank(productName)
+                || StringUtils.isBlank(priceString) || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
         }
-
         if (images.isEmpty()) {
             throw new EmptyException("商品圖片至少須有一張");
         }
-
         // 因應綠界價格只能正整數修改正規表示式，允許小數點可使用\d+(\.\d+)?
         if (!priceString.matches("\\d+")) {
             throw new ProductException("價格只能有數字，請重新確認");
         }
-
         if (!stockQuantityString.matches("\\d+")) {
             throw new ProductException("庫存數量只能有數字，請重新確認");
         }
 
         ProductCategory productCategory = productCategoryService.readProductCategory(categoryId);
         ProductBrand productBrand = productBrandService.readProductBrand(brand);
-
         BigDecimal price = new BigDecimal(priceString);
         int stockQuantity = Integer.parseInt(stockQuantityString);
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         String updatedUser = userProfile.getUserId();
         if (!StringUtils.equals(updatedUser, userId)) {
@@ -98,7 +92,6 @@ public class AdminProductService {
         productCreate.setUserId(userProfile.getUserId());
         productCreate.setProductCategory(productCategory);
         productCreate.setProductBrand(productBrand);
-
         productRepository.save(productCreate);
 
         for (String image : images) {
@@ -131,16 +124,13 @@ public class AdminProductService {
             adminReadProductResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
             adminReadProductResponseModel.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
             adminReadProductResponseModel.setLikes(Integer.toString(product.getLikes()));
-
             List<String> images = new ArrayList<>();
             for (ProductImage productImage : product.getProductImages()) {
                 images.add(productImage.getImage());
             }
             adminReadProductResponseModel.setImages(images);
-
             adminReadProductResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             adminReadProductResponseModel.setIsDeleted(product.isDeleted() ? "Y" : "N");
-
             response.add(adminReadProductResponseModel);
         }
 
@@ -163,22 +153,18 @@ public class AdminProductService {
         response.setStockQuantity(Integer.toString(product.getStockQuantity()));
         response.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
         response.setLikes(Integer.toString(product.getLikes()));
-
         List<String> images = new ArrayList<>();
         for (ProductImage productImage : product.getProductImages()) {
             images.add(productImage.getImage());
         }
         response.setImages(images);
-
         response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setIsDeleted(product.isDeleted() ? "Y" : "N");
-
         return response;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String updateProduct(String productId, AdminUpdateProductRequestModel request)
-            throws EmptyException, ProductException {
+    public String updateProduct(String productId, AdminUpdateProductRequestModel request) throws EmptyException, ProductException {
         String categoryId = request.getCategoryId();
         String brand = request.getBrand();
         String name = request.getName();
@@ -189,26 +175,21 @@ public class AdminProductService {
         List<String> images = request.getImages();
         String termsCheckBox = request.getTermsCheckBox();
 
-        if (StringUtils.isBlank(productId) || StringUtils.isBlank(categoryId) || StringUtils.isBlank(brand)
-                || StringUtils.isBlank(name) || StringUtils.isBlank(priceString)
-                || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString)
+        if (StringUtils.isBlank(productId) || StringUtils.isBlank(categoryId) || StringUtils.isBlank(brand) || StringUtils.isBlank(name)
+                || StringUtils.isBlank(priceString) || StringUtils.isBlank(stockQuantityString) || StringUtils.isBlank(isDeletedString)
                 || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("商品類別、品牌、商品名稱、價格、庫存數量與條款確認不得為空");
         }
-
         if (images.isEmpty()) {
             throw new EmptyException("商品圖片至少須有一張");
         }
-
         // 因應綠界價格只能正整數修改正規表示式，允許小數點可使用\d+(\.\d+)?
         if (!priceString.matches("\\d+")) {
             throw new ProductException("價格只能有數字，請重新確認");
         }
-
         if (!stockQuantityString.matches("\\d+")) {
             throw new ProductException("庫存數量只能有數字，請重新確認");
         }
-
         Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
@@ -216,13 +197,10 @@ public class AdminProductService {
 
         ProductCategory productCategory = productCategoryService.readProductCategory(categoryId);
         ProductBrand productBrand = productBrandService.readProductBrand(brand);
-
         BigDecimal price = new BigDecimal(priceString);
         int priceCompare = product.getOriginalPrice().compareTo(price);
         int stockQuantity = Integer.parseInt(stockQuantityString);
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
-
         boolean isDeleted = StringUtils.equals("Y", isDeletedString);
 
         product.setName(name);
@@ -237,11 +215,10 @@ public class AdminProductService {
         product.setDeleted(isDeleted);
         product.setProductCategory(productCategory);
         product.setProductBrand(productBrand);
-
         productRepository.save(product);
 
-        Set<String> productImages = productImageRepository.findAllByProductId(Integer.parseInt(productId)).stream()
-                .map(ProductImage::getImage).collect(Collectors.toSet());
+        Set<String> productImages = productImageRepository.findAllByProductId(Integer.parseInt(productId)).stream().map(ProductImage::getImage)
+                .collect(Collectors.toSet());
         for (String image : images) {
             if (!productImages.contains(image)) {
                 ProductImage productImage = new ProductImage();
@@ -266,7 +243,6 @@ public class AdminProductService {
         product.setUpdatedDate(DateTimeFormatUtil.currentDateTime());
         product.setDeleted(true);
         productRepository.save(product);
-
         return product.getName();
     }
 }

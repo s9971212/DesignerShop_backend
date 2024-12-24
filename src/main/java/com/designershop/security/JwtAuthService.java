@@ -24,8 +24,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -44,7 +44,6 @@ public class JwtAuthService {
         if (Objects.isNull(userProfile)) {
             throw new UserException("此帳戶不存在，請重新確認");
         }
-
         if (userProfile.isDeleted()) {
             throw new UserException("此帳戶已被刪除，請重新確認");
         }
@@ -64,14 +63,12 @@ public class JwtAuthService {
                 userProfile.setUnlockDate(null);
                 userProfileRepository.save(userProfile);
             } else {
-                throw new UserException(
-                        "帳號已被鎖定，直到" + userProfile.getUnlockDate().format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+                throw new UserException("帳號已被鎖定，直到" + userProfile.getUnlockDate().format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
         }
 
         try {
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
-                    password);
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             String token = JwtUtil.generateToken(authentication);
 
@@ -88,7 +85,6 @@ public class JwtAuthService {
             map.put("email", userProfile.getEmail());
             map.put("account", userProfile.getAccount());
             mailService.sendEmailWithTemplate(receivers, cc, bcc, "DesignerShop 帳戶登入通知", "account-sign-on", map);
-
             return token;
         } catch (AuthenticationException e) {
             int pwdErrorCount = userProfile.getPwdErrorCount();
@@ -97,14 +93,12 @@ public class JwtAuthService {
             userProfileRepository.save(userProfile);
 
             if (pwdErrorCount == 5) {
-
                 userProfile.setPwdErrorCount(0);
                 userProfile.setLock(true);
                 userProfile.setLockDate(currentDateTime);
                 userProfile.setUnlockDate(currentDateTime.plusMinutes(5));
                 userProfileRepository.save(userProfile);
-                throw new UserException("密碼輸入錯誤次數過多，帳號已被鎖定，直到"
-                        + currentDateTime.plusMinutes(5).format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+                throw new UserException("密碼輸入錯誤次數過多，帳號已被鎖定，直到" + currentDateTime.plusMinutes(5).format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
 
             throw new BadCredentialsException("Authentication failed", e);

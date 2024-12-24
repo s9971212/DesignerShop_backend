@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -60,21 +60,17 @@ public class OrderService {
         if (StringUtils.isBlank(deliveryId)) {
             throw new EmptyException("地址、聯絡電話與聯絡人姓名不得為空");
         }
-
         if (itemIds.isEmpty()) {
             throw new EmptyException("至少須選擇一個商品");
         }
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new OrderException("此帳戶未登入，請重新確認");
         }
-
         Cart cart = cartRepository.findByUserId(userProfile.getUserId());
         if (Objects.isNull(cart)) {
             throw new OrderException("此購物車不存在，請重新確認");
         }
-
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));
         if (Objects.isNull(orderDelivery)) {
             throw new OrderException("此訂單配送不存在，請重新確認");
@@ -140,10 +136,9 @@ public class OrderService {
             for (Map.Entry<Product, BigDecimal> productEntry : productPriceMap.entrySet()) {
                 Product product = productEntry.getKey();
 
-                if ((!userIds.isEmpty() && !userIds.contains(product.getUserId())) ||
-                        (!categoryIds.isEmpty() && !categoryIds.contains(product.getProductCategory().getCategoryId())) ||
-                        (!brandIds.isEmpty() && !brandIds.contains(product.getProductBrand().getBrandId())) ||
-                        (!productIds.isEmpty() && !productIds.contains(product.getProductId()))) {
+                if ((!userIds.isEmpty() && !userIds.contains(product.getUserId())) || (!categoryIds.isEmpty() && !categoryIds.contains(product.getProductCategory().getCategoryId()))
+                        || (!brandIds.isEmpty() && !brandIds.contains(product.getProductBrand().getBrandId()))
+                        || (!productIds.isEmpty() && !productIds.contains(product.getProductId()))) {
                     continue;
                 }
 
@@ -164,7 +159,6 @@ public class OrderService {
             if (discount.compareTo(price) > 0) {
                 discount = price;
             }
-
             totalDiscount = totalDiscount.add(discount);
 
             List<CouponIssuance> couponIssuanceList = couponIssuanceRepository.findByUserIdAndCouponId(userProfile.getUserId(), coupon.getCouponId());
@@ -182,7 +176,6 @@ public class OrderService {
             couponUsage.setUserId(userProfile.getUserId());
             couponUsage.setOrderId(orderId);
             couponUsage.setCoupon(coupon);
-
             couponUsageRepository.save(couponUsage);
         }
 
@@ -200,7 +193,6 @@ public class OrderService {
         orderCreate.setContactName(orderDelivery.getContactName());
         orderCreate.setUserId(userProfile.getUserId());
         orderCreate.setOrderDelivery(orderDelivery);
-
         orderRepository.save(orderCreate);
 
         for (OrderItem orderItem : orderItemList) {
@@ -224,7 +216,6 @@ public class OrderService {
         }
 
         List<ReadOrderResponseModel> response = new ArrayList<>();
-
         List<Order> orderList = orderRepository.findAllByUserId(userProfile.getUserId());
         for (Order order : orderList) {
             ReadOrderResponseModel readOrderResponseModel = new ReadOrderResponseModel();
@@ -232,7 +223,6 @@ public class OrderService {
             readOrderResponseModel.setTotalPrice(order.getTotalPrice().toString());
 
             List<ReadOrderItemResponseModel> orderItems = new ArrayList<>();
-
             List<OrderItem> orderItemList = orderItemRepository.findAllByOrderId(order.getOrderId());
             for (OrderItem orderItem : orderItemList) {
                 ReadOrderItemResponseModel readOrderItemResponseModel = new ReadOrderItemResponseModel();
@@ -240,17 +230,15 @@ public class OrderService {
                 readOrderItemResponseModel.setPriceAtPurchase(orderItem.getPriceAtPurchase().toString());
                 readOrderItemResponseModel.setQuantity(Integer.toString(orderItem.getQuantity()));
                 readOrderItemResponseModel.setProductId(Integer.toString(orderItem.getProductId()));
-
                 Product product = productRepository.findByProductId(orderItem.getProductId());
                 BeanUtils.copyProperties(product, readOrderItemResponseModel);
                 readOrderItemResponseModel.setPrice(product.getPrice().toString());
                 readOrderItemResponseModel.setOriginalPrice(product.getOriginalPrice().toString());
                 readOrderItemResponseModel.setImage(product.getProductImages().get(0).getImage());
-
                 orderItems.add(readOrderItemResponseModel);
             }
-            readOrderResponseModel.setOrderItems(orderItems);
 
+            readOrderResponseModel.setOrderItems(orderItems);
             response.add(readOrderResponseModel);
         }
 

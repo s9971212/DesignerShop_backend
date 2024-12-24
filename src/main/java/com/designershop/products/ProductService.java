@@ -18,8 +18,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -31,7 +31,6 @@ public class ProductService {
     // TODO 未來改成首頁顯示的商品
     //	public List<ReadProductRequestModel> readAllProduct() {
     //		List<ReadProductRequestModel> response = new ArrayList<>();
-    //
     //		List<Product> productList = productRepository.findAll();
     //		for (Product product : productList) {
     //			ReadProductRequestModel readProductRequestModel = new ReadProductRequestModel();
@@ -55,7 +54,6 @@ public class ProductService {
         if (Objects.isNull(userProfile)) {
             throw new ProductException("此帳戶不存在，請重新確認");
         }
-
         if (userProfile.isDeleted()) {
             throw new ProductException("此帳戶已被刪除，請重新確認");
         }
@@ -73,7 +71,6 @@ public class ProductService {
                 readProductResponseModel.setStockQuantity(Integer.toString(product.getStockQuantity()));
                 readProductResponseModel.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
                 readProductResponseModel.setLikes(Integer.toString(product.getLikes()));
-
                 List<String> images = new ArrayList<>();
                 for (ProductImage productImage : product.getProductImages()) {
                     images.add(productImage.getImage());
@@ -92,7 +89,6 @@ public class ProductService {
         if (Objects.isNull(product)) {
             throw new ProductException("此商品不存在，請重新確認");
         }
-
         if (product.isDeleted()) {
             throw new ProductException("此商品已被刪除，請重新確認");
         }
@@ -107,14 +103,12 @@ public class ProductService {
         response.setStockQuantity(Integer.toString(product.getStockQuantity()));
         response.setSoldQuantity(Integer.toString(product.getSoldQuantity()));
         response.setLikes(Integer.toString(product.getLikes()));
-
         List<String> images = new ArrayList<>();
         for (ProductImage productImage : product.getProductImages()) {
             images.add(productImage.getImage());
         }
         response.setImages(images);
         response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(product.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
-
         return response;
     }
 }

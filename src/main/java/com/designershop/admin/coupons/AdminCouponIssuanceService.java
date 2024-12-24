@@ -23,8 +23,8 @@ import java.util.stream.Collectors;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -105,7 +105,6 @@ public class AdminCouponIssuanceService {
             response.setUsedDate(DateTimeFormatUtil.localDateTimeFormat(couponIssuance.getUsedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         }
         response.setUserId(couponIssuance.getUserId());
-
         return response;
     }
 }

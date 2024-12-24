@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @RestController
 @RequestMapping("/seller/coupon")
@@ -32,7 +32,7 @@ public class SellerCouponController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadCouponResponseModel>> readAllCoupon() throws CouponException{
+    public ResponseEntity<List<ReadCouponResponseModel>> readAllCoupon() throws CouponException {
         List<ReadCouponResponseModel> response = sellerCouponService.readAllCoupon();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

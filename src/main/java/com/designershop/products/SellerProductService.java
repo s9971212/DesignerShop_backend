@@ -20,8 +20,8 @@ import java.util.Objects;
 
 /**
  * @author Ivan Wang
- * @date 2024/12/22
  * @version 1.0
+ * @date 2024/12/22
  */
 @Service
 @RequiredArgsConstructor
@@ -32,21 +32,20 @@ public class SellerProductService {
     private final ProductRepository productRepository;
 
     public String createProduct(CreateProductRequestModel request) throws EmptyException, ProductException {
-        AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
-        BeanUtils.copyProperties(request, adminCreateProductRequestModel);
-
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         if (Objects.isNull(userProfile)) {
             throw new ProductException("此帳戶未登入，請重新確認");
         }
 
+        AdminCreateProductRequestModel adminCreateProductRequestModel = new AdminCreateProductRequestModel();
+        BeanUtils.copyProperties(request, adminCreateProductRequestModel);
         return adminProductService.createProduct(userProfile.getUserId(), adminCreateProductRequestModel);
     }
 
     public String updateProduct(String productId, UpdateProductRequestModel request) throws EmptyException, ProductException {
+        validateProductPermission(productId);
         AdminUpdateProductRequestModel adminUpdateProductRequestModel = new AdminUpdateProductRequestModel();
         BeanUtils.copyProperties(request, adminUpdateProductRequestModel);
-        validateProductPermission(productId);
         adminUpdateProductRequestModel.setIsDeleted("N");
         return adminProductService.updateProduct(productId, adminUpdateProductRequestModel);
     }
@@ -61,12 +60,10 @@ public class SellerProductService {
         if (Objects.isNull(userProfile)) {
             throw new ProductException("此帳戶未登入，請重新確認");
         }
-
         Product product = productRepository.findByProductId(Integer.parseInt(productId));
         if (!StringUtils.equals(userProfile.getUserId(), product.getUserId())) {
             throw new ProductException("此帳戶不存在，請重新確認");
         }
-
         if (product.isDeleted()) {
             throw new ProductException("此商品已被刪除，請重新確認");
         }
