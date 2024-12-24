@@ -33,8 +33,8 @@ public class JwtTokenExpirationListener {
             if (session != null) {
                 UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
                 if (Objects.nonNull(userProfile)) {
-                    userProfile.setSignOnStatus("N");
                     userProfile.setSignOnToken(null);
+                    userProfile.setSignOnStatus("N");
                     userProfileRepository.save(userProfile);
                     session.removeAttribute("userProfile");
                 }

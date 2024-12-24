@@ -15,6 +15,10 @@ import java.util.List;
 @Setter
 public class UpdateCouponRequestModel {
 
+    private String description;
+
+    private String image;
+
     @NotBlank
     private String discountType;
 
@@ -23,19 +27,15 @@ public class UpdateCouponRequestModel {
 
     private String minimumOrderPrice;
 
-    private String issuanceLimit;
-
-    private String usageLimit;
-
-    private String description;
-
-    private String image;
-
     @NotBlank
     private String startDate;
 
     @NotBlank
     private String endDate;
+
+    private String issuanceLimit;
+
+    private String usageLimit;
 
     @NotBlank
     private String isActive;

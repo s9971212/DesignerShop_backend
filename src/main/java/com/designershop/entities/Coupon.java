@@ -42,6 +42,18 @@ public class Coupon {
     private String code;
 
     /**
+     * 優惠券描述
+     */
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    /**
+     * 優惠券圖片
+     */
+    @Column(name = "image", columnDefinition = "TEXT")
+    private String image;
+
+    /**
      * 優惠券的折扣類型
      */
     @Enumerated(EnumType.STRING)
@@ -61,30 +73,6 @@ public class Coupon {
     private BigDecimal minimumOrderPrice;
 
     /**
-     * 優惠券的發放次數限制
-     */
-    @Column(name = "issuance_limit")
-    private Integer issuanceLimit;
-
-    /**
-     * 優惠券的使用次數限制
-     */
-    @Column(name = "usage_limit")
-    private Integer usageLimit;
-
-    /**
-     * 優惠券描述
-     */
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
-    /**
-     * 優惠券圖片
-     */
-    @Column(name = "image", columnDefinition = "TEXT")
-    private String image;
-
-    /**
      * 優惠券開始時間
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -97,6 +85,18 @@ public class Coupon {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
+
+    /**
+     * 優惠券的發放次數限制
+     */
+    @Column(name = "issuance_limit")
+    private Integer issuanceLimit;
+
+    /**
+     * 優惠券的使用次數限制
+     */
+    @Column(name = "usage_limit")
+    private Integer usageLimit;
 
     /**
      * 創建該優惠券的時間

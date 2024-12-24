@@ -44,15 +44,15 @@ public class AdminCouponService {
 
     public String createCoupon(AdminCreateCouponRequestModel request) throws EmptyException, CouponException {
         String code = request.getCode();
+        String couponDescription = request.getDescription();
+        String image = request.getImage();
         String discountType = request.getDiscountType();
         String discountValueString = request.getDiscountValue();
         String minimumOrderPriceString = request.getMinimumOrderPrice();
-        String issuanceLimitString = request.getIssuanceLimit();
-        String usageLimitString = request.getUsageLimit();
-        String couponDescription = request.getDescription();
-        String image = request.getImage();
         String startDateString = request.getStartDate();
         String endDateString = request.getEndDate();
+        String issuanceLimitString = request.getIssuanceLimit();
+        String usageLimitString = request.getUsageLimit();
         String isActiveString = request.getIsActive();
         List<String> userIds = request.getUserIds();
         List<String> categoryIds = request.getCategoryIds();
@@ -89,6 +89,8 @@ public class AdminCouponService {
         if (StringUtils.isNotBlank(minimumOrderPriceString)) {
             minimumOrderPrice = new BigDecimal(minimumOrderPriceString);
         }
+        LocalDateTime startDate = DateTimeFormatUtil.localDateTimeFormat(startDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
+        LocalDateTime endDate = DateTimeFormatUtil.localDateTimeFormat(endDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         Integer issuanceLimit = null;
         if (StringUtils.isNotBlank(issuanceLimitString)) {
             issuanceLimit = Integer.parseInt(issuanceLimitString);
@@ -97,23 +99,21 @@ public class AdminCouponService {
         if (StringUtils.isNotBlank(usageLimitString)) {
             usageLimit = Integer.parseInt(usageLimitString);
         }
-        LocalDateTime startDate = DateTimeFormatUtil.localDateTimeFormat(startDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
-        LocalDateTime endDate = DateTimeFormatUtil.localDateTimeFormat(endDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
         boolean isActive = StringUtils.equals("Y", isActiveString);
 
         Coupon couponCreate = new Coupon();
         couponCreate.setCode(code);
+        couponCreate.setDescription(couponDescription);
+        couponCreate.setImage(image);
         couponCreate.setDiscountType(DiscountTypeEnum.valueOf(discountType.toUpperCase()));
         couponCreate.setDiscountValue(discountValue);
         couponCreate.setMinimumOrderPrice(minimumOrderPrice);
-        couponCreate.setIssuanceLimit(issuanceLimit);
-        couponCreate.setUsageLimit(usageLimit);
-        couponCreate.setDescription(couponDescription);
-        couponCreate.setImage(image);
         couponCreate.setStartDate(startDate);
         couponCreate.setEndDate(endDate);
+        couponCreate.setIssuanceLimit(issuanceLimit);
+        couponCreate.setUsageLimit(usageLimit);
         couponCreate.setCreatedDate(currentDateTime);
         couponCreate.setUpdatedUser(userProfile.getUserId());
         couponCreate.setUpdatedDate(currentDateTime);
@@ -139,14 +139,14 @@ public class AdminCouponService {
             if (Objects.nonNull(coupon.getMinimumOrderPrice())) {
                 adminReadCouponResponseModel.setMinimumOrderPrice(coupon.getMinimumOrderPrice().toString());
             }
+            adminReadCouponResponseModel.setStartDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getStartDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+            adminReadCouponResponseModel.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             if (Objects.nonNull(coupon.getIssuanceLimit())) {
                 adminReadCouponResponseModel.setIssuanceLimit(Integer.toString(coupon.getIssuanceLimit()));
             }
             if (Objects.nonNull(coupon.getUsageLimit())) {
                 adminReadCouponResponseModel.setUsageLimit(Integer.toString(coupon.getUsageLimit()));
             }
-            adminReadCouponResponseModel.setStartDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getStartDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
-            adminReadCouponResponseModel.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             adminReadCouponResponseModel.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             adminReadCouponResponseModel.setIsActive(coupon.isActive() ? "Y" : "N");
             List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(couponId);
@@ -182,14 +182,14 @@ public class AdminCouponService {
         if (Objects.nonNull(coupon.getMinimumOrderPrice())) {
             response.setMinimumOrderPrice(coupon.getMinimumOrderPrice().toString());
         }
+        response.setStartDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getStartDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
+        response.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         if (Objects.nonNull(coupon.getIssuanceLimit())) {
             response.setIssuanceLimit(Integer.toString(coupon.getIssuanceLimit()));
         }
         if (Objects.nonNull(coupon.getUsageLimit())) {
             response.setUsageLimit(Integer.toString(coupon.getUsageLimit()));
         }
-        response.setStartDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getStartDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
-        response.setEndDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getEndDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setCreatedDate(DateTimeFormatUtil.localDateTimeFormat(coupon.getCreatedDate(), DateTimeFormatUtil.FULL_DATE_DASH_TIME));
         response.setIsActive(coupon.isActive() ? "Y" : "N");
         List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(Integer.parseInt(couponId));
@@ -209,15 +209,15 @@ public class AdminCouponService {
 
     public String updateCoupon(String couponId, AdminUpdateCouponRequestModel request) throws EmptyException, CouponException {
         String code = request.getCode();
+        String couponDescription = request.getDescription();
+        String image = request.getImage();
         String discountType = request.getDiscountType();
         String discountValueString = request.getDiscountValue();
         String minimumOrderPriceString = request.getMinimumOrderPrice();
-        String issuanceLimitString = request.getIssuanceLimit();
-        String usageLimitString = request.getUsageLimit();
-        String couponDescription = request.getDescription();
-        String image = request.getImage();
         String startDateString = request.getStartDate();
         String endDateString = request.getEndDate();
+        String issuanceLimitString = request.getIssuanceLimit();
+        String usageLimitString = request.getUsageLimit();
         String isActiveString = request.getIsActive();
         List<String> userIds = request.getUserIds();
         List<String> categoryIds = request.getCategoryIds();
@@ -258,6 +258,8 @@ public class AdminCouponService {
         if (StringUtils.isNotBlank(minimumOrderPriceString)) {
             minimumOrderPrice = new BigDecimal(minimumOrderPriceString);
         }
+        LocalDateTime startDate = DateTimeFormatUtil.localDateTimeFormat(startDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
+        LocalDateTime endDate = DateTimeFormatUtil.localDateTimeFormat(endDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
         Integer issuanceLimit = null;
         if (StringUtils.isNotBlank(issuanceLimitString)) {
             issuanceLimit = Integer.parseInt(issuanceLimitString);
@@ -266,22 +268,20 @@ public class AdminCouponService {
         if (StringUtils.isNotBlank(usageLimitString)) {
             usageLimit = Integer.parseInt(usageLimitString);
         }
-        LocalDateTime startDate = DateTimeFormatUtil.localDateTimeFormat(startDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
-        LocalDateTime endDate = DateTimeFormatUtil.localDateTimeFormat(endDateString, DateTimeFormatUtil.FULL_DATE_DASH_TIME);
-        LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
         UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
+        LocalDateTime currentDateTime = DateTimeFormatUtil.currentDateTime();
         boolean isActive = StringUtils.equals("Y", isActiveString);
 
         coupon.setCode(code);
+        coupon.setDescription(couponDescription);
+        coupon.setImage(image);
         coupon.setDiscountType(DiscountTypeEnum.valueOf(discountType.toUpperCase()));
         coupon.setDiscountValue(discountValue);
         coupon.setMinimumOrderPrice(minimumOrderPrice);
-        coupon.setIssuanceLimit(issuanceLimit);
-        coupon.setUsageLimit(usageLimit);
-        coupon.setDescription(couponDescription);
-        coupon.setImage(image);
         coupon.setStartDate(startDate);
         coupon.setEndDate(endDate);
+        coupon.setIssuanceLimit(issuanceLimit);
+        coupon.setUsageLimit(usageLimit);
         coupon.setUpdatedUser(userProfile.getUserId());
         coupon.setUpdatedDate(currentDateTime);
         coupon.setActive(isActive);

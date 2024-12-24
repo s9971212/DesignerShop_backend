@@ -119,6 +119,10 @@ public class OrderService {
             if (Objects.isNull(coupon) || !coupon.isActive() || LocalDateTime.now().isBefore(coupon.getStartDate()) || LocalDateTime.now().isAfter(coupon.getEndDate())) {
                 throw new OrderException("此優惠券不存在，請重新確認");
             }
+            long usages = couponUsageRepository.findCountByCouponId(Integer.parseInt(couponId));
+            if (Objects.nonNull(coupon.getUsageLimit()) && usages >= coupon.getUsageLimit()) {
+                throw new OrderException("此優惠券已達使用次數限制，請重新確認");
+            }
 
             List<CouponUserProfile> couponUserProfileList = couponUserProfileRepository.findAllByCouponId(Integer.parseInt(couponId));
             Set<String> userIds = couponUserProfileList.stream().map(CouponUserProfile -> CouponUserProfile.getId().getUserId()).collect(Collectors.toSet());

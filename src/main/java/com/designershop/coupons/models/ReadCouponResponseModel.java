@@ -20,6 +20,10 @@ public class ReadCouponResponseModel {
 
     private String code;
 
+    private String description;
+
+    private String image;
+
     @NotBlank
     private String discountType;
 
@@ -28,19 +32,15 @@ public class ReadCouponResponseModel {
 
     private String minimumOrderPrice;
 
-    private String issuanceLimit;
-
-    private String usageLimit;
-
-    private String description;
-
-    private String image;
-
     @NotBlank
     private String startDate;
 
     @NotBlank
     private String endDate;
+
+    private String issuanceLimit;
+
+    private String usageLimit;
 
     @NotBlank
     private String createdDate;

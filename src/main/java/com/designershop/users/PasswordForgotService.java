@@ -89,10 +89,10 @@ public class PasswordForgotService {
         userProfile.setPassword(encodePwd);
         userProfile.setPwdChangedDate(currentDateTime);
         userProfile.setPwdExpireDate(currentDateTime.plusMonths(3));
-        userProfile.setUpdatedUser(userProfile.getUserId());
-        userProfile.setUpdatedDate(currentDateTime);
         userProfile.setPwdForgotToken(null);
         userProfile.setPwdForgotTokenExpireDate(null);
+        userProfile.setUpdatedUser(userProfile.getUserId());
+        userProfile.setUpdatedDate(currentDateTime);
         userProfileRepository.save(userProfile);
         return userProfile.getAccount();
     }

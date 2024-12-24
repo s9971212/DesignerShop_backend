@@ -101,18 +101,10 @@ public class UserProfile {
     private LocalDateTime registerDate;
 
     /**
-     * 上次修改使用者密碼的時間
+     * 使用者登錄過程中的驗證令牌
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "pwd_changed_date")
-    private LocalDateTime pwdChangedDate;
-
-    /**
-     * 使用者密碼過期的時間
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "pwd_expire_date", nullable = false)
-    private LocalDateTime pwdExpireDate;
+    @Column(name = "sign_on_token", length = 1024)
+    private String signOnToken;
 
     /**
      * 使用者登錄狀態
@@ -131,19 +123,6 @@ public class UserProfile {
      */
     @Column(name = "pwd_error_count", nullable = false)
     private int pwdErrorCount = 0;
-
-    /**
-     * 上次更新該使用者資料的使用者ID
-     */
-    @Column(name = "updated_user", length = 12)
-    private String updatedUser;
-
-    /**
-     * 上次更新該使用者資料的時間
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "updated_date")
-    private LocalDateTime updatedDate;
 
     /**
      * 使用者是否被鎖定
@@ -166,10 +145,18 @@ public class UserProfile {
     private LocalDateTime unlockDate;
 
     /**
-     * 使用者登錄過程中的驗證令牌
+     * 上次修改使用者密碼的時間
      */
-    @Column(name = "sign_on_token", length = 1024)
-    private String signOnToken;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Column(name = "pwd_changed_date")
+    private LocalDateTime pwdChangedDate;
+
+    /**
+     * 使用者密碼過期的時間
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Column(name = "pwd_expire_date", nullable = false)
+    private LocalDateTime pwdExpireDate;
 
     /**
      * 使用者的密碼重設令牌
@@ -183,6 +170,19 @@ public class UserProfile {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "pwd_forgot_token_expire_date")
     private LocalDateTime pwdForgotTokenExpireDate;
+
+    /**
+     * 上次更新該使用者資料的使用者ID
+     */
+    @Column(name = "updated_user", length = 12)
+    private String updatedUser;
+
+    /**
+     * 上次更新該使用者資料的時間
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 
     /**
      * 使用者是否已被刪除
