@@ -13,7 +13,7 @@
 ![JSON Web Token (JWT)](https://img.shields.io/badge/JSON%20Web%20Token%20(JWT)-0.12.6-orange)  
 ![MySQL](https://img.shields.io/badge/MySQL-8.0.33-green)
 
-English | [中文](./README-zh-TW.md)
+English | [中文](./README_zh-TW)
 
 ## <br/> 📋 Table of Contents
 
