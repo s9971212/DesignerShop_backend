@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.designershop</groupId>
-    <artifactId>designershop-backend</artifactId>
+    <artifactId>DesignerShop_backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>designershop-backend</name>
+    <name>DesignerShop_backend</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>

@@ -4,7 +4,7 @@ server:
 
 spring:
   application:
-    name: designershop-backend
+    name: DesignerShop_backend
   #mysql server setting
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
