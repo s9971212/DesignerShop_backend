@@ -1,4 +1,4 @@
-# DesignerShop
+# DesignerShop_backend
 
 ![LICENSE](https://img.shields.io/badge/license-MIT-blue)
 ![Java JDK](https://img.shields.io/badge/Java%20JDK-17.0.11-blue)
