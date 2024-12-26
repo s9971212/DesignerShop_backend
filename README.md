@@ -51,6 +51,7 @@ Follow these steps to set up the project locally on your machine.
 
 Make sure you have the following installed on your machine:
 
+- [Java](https://www.java.com/zh-TW/download/)
 - Java JDK
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) | [Eclipse](https://www.eclipse.org/downloads/)
 - [MySQL](https://www.mysql.com/downloads/)
