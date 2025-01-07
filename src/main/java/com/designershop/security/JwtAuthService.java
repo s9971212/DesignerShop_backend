@@ -11,7 +11,6 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -42,7 +41,7 @@ public class JwtAuthService {
 
         UserProfile userProfile = userProfileRepository.findByLogin(username);
         if (Objects.isNull(userProfile)) {
-            throw new UserException("此帳戶不存在，請重新確認");
+            throw new UserException("登入失敗，請稍後再試或使用其他登入方法");
         }
         if (userProfile.isDeleted()) {
             throw new UserException("此帳戶已被刪除，請重新確認");
@@ -101,7 +100,7 @@ public class JwtAuthService {
                 throw new UserException("密碼輸入錯誤次數過多，帳號已被鎖定，直到" + currentDateTime.plusMinutes(5).format(DateTimeFormatUtil.FULL_DATE_DASH_TIME));
             }
 
-            throw new BadCredentialsException("Authentication failed", e);
+            throw new UserException("你的帳號或密碼不正確，請再試一次");
         }
     }
 }
