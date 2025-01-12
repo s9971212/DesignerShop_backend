@@ -26,7 +26,7 @@ public class ReadUserResponseModel {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^09\\d{8}$")
+    @Pattern(regexp = "^0?9\\d{8}$")
     private String phoneNo;
 
     private String name;

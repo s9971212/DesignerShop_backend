@@ -48,7 +48,7 @@ public class OrderDeliveryService {
                 || StringUtils.isBlank(defaultCheckBox)) {
             throw new EmptyException("地址、聯絡電話、聯絡人姓名與設為預設地址不得為空");
         }
-        if (!contactPhone.matches("^09\\d{8}$")) {
+        if (!contactPhone.matches("^0?9\\d{8}$")) {
             throw new OrderException("聯絡電話格式錯誤");
         }
 
@@ -141,7 +141,7 @@ public class OrderDeliveryService {
                 || StringUtils.isBlank(contactName) || StringUtils.isBlank(defaultCheckBox)) {
             throw new EmptyException("地址、聯絡電話、聯絡人姓名與設為預設地址不得為空");
         }
-        if (!contactPhone.matches("^09\\d{8}$")) {
+        if (!contactPhone.matches("^0?9\\d{8}$")) {
             throw new OrderException("聯絡電話格式錯誤");
         }
         OrderDelivery orderDelivery = orderDeliveryRepository.findByDeliveryId(Integer.parseInt(deliveryId));

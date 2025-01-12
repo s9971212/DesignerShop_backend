@@ -71,7 +71,7 @@ public class AdminUserService {
         if (!StringUtils.equals(password, passwordCheck)) {
             throw new UserException("密碼與密碼確認不一致");
         }
-        if (!phoneNo.matches("^09\\d{8}$")) {
+        if (!phoneNo.matches("^0?9\\d{8}$")) {
             throw new UserException("手機格式錯誤");
         }
         List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
@@ -230,7 +230,7 @@ public class AdminUserService {
                 || StringUtils.isBlank(isDeletedString) || StringUtils.isBlank(termsCheckBox)) {
             throw new EmptyException("帳號、Email、手機與條款確認不得為空");
         }
-        if (!phoneNo.matches("^09\\d{8}$")) {
+        if (!phoneNo.matches("^0?9\\d{8}$")) {
             throw new UserException("手機格式錯誤");
         }
         List<UserProfile> userProfileList = userProfileRepository.findByAccountOrEmailOrPhoneNo(account, email, phoneNo);
