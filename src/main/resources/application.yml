@@ -5,6 +5,7 @@ server:
 #使用openssl rand -base64 64指令在bash產生金鑰
 jwt:
   secret: YOUR_SECRET_KEY
+  expiration: 864000000  # 10 days
 
 spring:
   application:

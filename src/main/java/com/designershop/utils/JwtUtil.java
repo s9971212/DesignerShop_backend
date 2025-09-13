@@ -24,18 +24,20 @@ import java.util.Map;
 public class JwtUtil {
 
     private final Key secretKey;
+    private final long expirationTime;
     private static final String ISSUER = "DesignerShop";
-    private static final long EXPIRATION_TIME = 864_000_000; // 10 days
 
-    public JwtUtil(@Value("${jwt.secret}") String secret) {
+    public JwtUtil(@Value("${jwt.secret}") String secret,
+                   @Value("${jwt.expiration}") long expirationTime) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationTime = expirationTime;
     }
 
     // 生成 JWT
     public String generateToken(Authentication authentication) {
         MyUser myUser = (MyUser) authentication.getPrincipal();
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder().setClaims(claims).setSubject(myUser.getUsername()).setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+        return Jwts.builder().setClaims(claims).setSubject(myUser.getUsername()).setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .setIssuer(ISSUER).setIssuedAt(new Date()).signWith(secretKey, SignatureAlgorithm.HS512).compact();
     }
 
