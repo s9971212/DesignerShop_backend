@@ -2,6 +2,10 @@
 server:
   port: "8080"
 
+#使用openssl rand -base64 64指令在bash產生金鑰
+jwt:
+  secret: YOUR_SECRET_KEY
+
 spring:
   application:
     name: DesignerShop_backend

@@ -34,6 +34,7 @@ public class JwtAuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final UserProfileRepository userProfileRepository;
+    private final JwtUtil jwtUtil;
 
     public String auth(Map<String, Object> request) throws UserException, PasswordExpiredException, MessagingException {
         String username = (String) request.get("username");
@@ -69,7 +70,7 @@ public class JwtAuthService {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            String token = JwtUtil.generateToken(authentication);
+            String token = jwtUtil.generateToken(authentication);
 
             userProfile.setSignOnToken(token);
             userProfile.setSignOnStatus("Y");

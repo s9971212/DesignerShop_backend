@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final HttpSession session;
     private final MyUserDetailsService myUserDetailsService;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
@@ -41,13 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
         if (ObjectUtils.isNotEmpty(authHeader) && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            username = JwtUtil.parseToken(jwt).getSubject();
+            username = jwtUtil.parseToken(jwt).getSubject();
         }
 
         if (StringUtils.isNotBlank(username) && ObjectUtils.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
             MyUser myUser = myUserDetailsService.loadUserByUsername(username);
 
-            if (JwtUtil.validateToken(jwt, myUser)) {
+            if (jwtUtil.validateToken(jwt, myUser)) {
                 UserProfile userProfile = (UserProfile) session.getAttribute("userProfile");
                 if (Objects.nonNull(userProfile) && StringUtils.equals(userProfile.getSignOnToken(), jwt) && !userProfile.isLock()
                         && !userProfile.isDeleted()) {
