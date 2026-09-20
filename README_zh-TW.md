@@ -49,7 +49,7 @@ JavaMail 可用於帳戶驗證、密碼重設和訂單確認等需要電子郵�
 
 <br/>**必備條件**
 
-確保您的電腦已安裝下列軟體：
+確保您的電腦已安裝以下軟體：
 
 - [Java](https://www.java.com/zh-TW/download/)
 - Java JDK
