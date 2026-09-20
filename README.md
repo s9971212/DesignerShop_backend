@@ -57,7 +57,7 @@ Make sure you have the following installed on your machine:
 - [MySQL](https://www.mysql.com/downloads/)
 - [Git](https://git-scm.com/)
 
-<br/>**Cloning the Repository**
+<br/>**Cloning Repository**
 
 ```bash
 git clone {git remote url}
