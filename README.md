@@ -62,3 +62,15 @@ Make sure you have the following installed on your machine:
 ```bash
 git clone {git remote url}
 ```
+
+<br/>**Start application**
+
+macOS / Linux
+```bash
+./mvnw spring-boot:run
+```
+
+Windows
+```bash
+.\mvnw.cmd spring-boot:run
+```
