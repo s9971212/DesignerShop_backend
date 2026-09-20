@@ -62,3 +62,15 @@ JavaMail 可用於帳戶驗證、密碼重設和訂單確認等需要電子郵�
 ```bash
 git clone {git remote url}
 ```
+
+<br/>**啟動應用程式**
+
+macOS / Linux
+```bash
+./mvnw spring-boot:run
+```
+
+Windows
+```bash
+.\mvnw.cmd spring-boot:run
+```
