@@ -29,7 +29,7 @@ Spring Boot provides the foundation for the application’s back-end, enabling r
 
 JavaMail has been integrated with email features such as account verification, password reset and order confirmation. This increases user engagement and simplifies customer interaction with the platform.
 
-For data storage, MySQL is used as the Relational Database Management System (RDBMS) to handle product information, user profiles, order history and payment details. the high reliability and efficiency of MySQL ensures that large datasets can be managed and queried efficiently.
+For data storage, MySQL is used as the Relational Database Management System (RDBMS) to handle product information, user profiles, order history and payment details. The high reliability and efficiency of MySQL ensures that large datasets can be managed and queried efficiently.
 
 Together, these technologies provide a comprehensive and robust back-end architecture to build a secure and user-friendly online shopping experience.
 
