@@ -36,7 +36,7 @@ Together, these technologies provide a comprehensive and robust back-end archite
 ## <br/> <a name="tech-stack">⚙️ Tech Stack</a>
 
 - Java
-- Spring Boot [📄](https://spring.io/projects/spring-boot) 
+- Spring Boot [📄](https://spring.io/projects/spring-boot)
 - Spring Security
 - JavaMail
 - Thymeleaf [📄](https://www.thymeleaf.org/)
