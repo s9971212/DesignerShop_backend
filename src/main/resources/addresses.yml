@@ -1,3 +1,5 @@
+#地址格式依序為：國家、州/省、城市、行政區、郵遞區號
+#Address format order: Nation, State/Province, City, District, Postal Code
 nations:
   - name: 中華民國
     cities:
